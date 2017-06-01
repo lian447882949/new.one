@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Project>
+  <Desktop>
+    <Static>
+      <Debug-Log>
+        
+        
+      <PreferedWindows><Position>3</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows/></PreferedWindows><ColumnWidth0>20</ColumnWidth0><ColumnWidth1>1541</ColumnWidth1></Debug-Log>
+      <Build>
+        
+        
+        
+        
+      <PreferedWindows><Position>3</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows/></PreferedWindows><ColumnWidth0>20</ColumnWidth0><ColumnWidth1>1155</ColumnWidth1><ColumnWidth2>308</ColumnWidth2><ColumnWidth3>77</ColumnWidth3></Build>
+      <Workspace>
+        <ColumnWidths>
+          
+          
+          
+          
+        <Column0>230</Column0><Column1>27</Column1><Column2>27</Column2><Column3>27</Column3></ColumnWidths>
+      <PreferedWindows><Position>4</Position><ScreenPosX>7</ScreenPosX><ScreenPosY>121</ScreenPosY><Windows/></PreferedWindows></Workspace>
+      <Disassembly>
+        <PreferedWindows>
+          
+          
+          
+          
+        <Position>2</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows/></PreferedWindows>
+        
+        
+        <col-names>
+          
+          
+        <item>Disassembly</item><item>_I0</item></col-names>
+        <col-widths>
+          
+          
+        <item>500</item><item>20</item></col-widths>
+        <DisasmHistory/>
+      <ShowCodeCoverage>0</ShowCodeCoverage><ShowInstrProfiling>0</ShowInstrProfiling></Disassembly>
+      <StaticWatch>
+        <expressions>
+          
+          
+          
+        <item>System_Power_Status</item><item>Powerwork_init_Status</item><item>u32Systick</item><item>myRxMessage</item><item>sendfg</item><item>ARM_Rec_temp</item><item>i2ctest</item><item>mytest</item><item>Touch_status</item><item>X_POS</item><item>Y_POS</item><item>byTouchStatus</item><item>gtImageHeader</item><item>gucSpiFlashVendor</item><item>gManufacturerID</item><item>gMemoryType</item><item>gMemoryDensity</item><item>flasherr</item><item>gtRLE2Header</item><item>KeyNumber</item><item>TxMessage</item><item>gCanStatus</item><item>EEPROM_DATA.byte_buf.Main_Source</item><item>Can_key_cmd</item><item>count_byte</item><item>touch_I2C_buff</item><item>byTouchStatus</item><item>PreTouchStatus</item><item>FS_key_num</item><item>g_mouse</item><item>u32Systick</item><item>Time_Bus_Cnt</item><item>IWDG_load_Count</item><item>FS_key_mouse_index</item><item>EEPROM_DATA.byte_buf.wPowerOnByCanTimer2</item><item>m_BMW_CAN.AudioPwr</item><item>g_GPS_DATA.uSoundFlag</item><item>EEPROM_DATA.byte_buf.u8can_back_status</item><item>m_BMW_CAN.benze_Steering_angle</item><item>EEPROM_DATA.byte_buf.Main_Source</item><item>EEPROM_DATA.byte_buf.u8can_back_status</item><item>m_RADAR</item><item>FS_key_mouse_index</item><item>m_BMW_CAN.benze_Steering_angle_index</item><item>m_BMW_CAN.benze_Steering_angle</item><item>m_BMW_CAN.benze_air_Disp</item><item>m_BMW_CAN</item><item>System_Power_Status</item><item>Powerwork_init_Status</item><item>EEPROM_DATA.byte_buf.wPowerOnByCanTimer2</item><item>m_BMW_CAN.benze_Pwr_acc</item><item>m_BMW_CAN.benze_air_Disp</item><item>EEPROM_DATA.byte_buf.u8back_mode_status</item><item>wBounceCnt</item><item>EEPROM_DATA.byte_buf.u8back_exit_auto</item><item>press_timer</item><item>EEPROM_DATA.byte_buf.Bright</item><item>Sys_CAN_light</item><item>can_touch_buff</item><item>EEPROM_DATA.byte_buf.lcd_type</item><item>EEPROM_DATA.byte_buf.show_TFT_p</item><item>m_CarDoorInfo</item><item>door_show_buff</item><item>EEPROM_DATA.byte_buf.main_osd_last</item><item>EEPROM_DATA.byte_buf.Car_Main_Source</item><item>press_timer</item><item>touch_I2C_buff</item><item>EEPROM_DATA.byte_buf.Main_Source</item><item>EEPROM_DATA.byte_buf.sub_osd</item><item>sendfg</item><item>m_BMW_CAN.uAuxSendSn</item><item>can_touch_buff</item><item>EEPROM_DATA.byte_buf.FS_select</item><item>fs_code_buff.index</item><item>FS_key_mouse_index</item><item>EEPROM_DATA.byte_buf.light_value</item><item>Sys_CAN_light.sun_mode</item><item>byTouchStatus</item><item>X_POS_count</item><item>PreTouchStatus</item><item>byTouch_moveStatus</item><item>EEPROM_DATA.byte_buf.Car_Main_Source</item><item>mytest</item><item>g_GPS_DATA</item><item>gNaviSystemOn</item><item>gNaviCnt</item><item>EEPROM_DATA.byte_buf</item><item>connect_press</item><item>connect_press_one</item><item>U8Tiemr_connect_press</item><item>byTouch_moveStatus</item><item>X_POS_count</item><item>EEPROM_DATA.byte_buf.valide_id</item><item>g_mouse</item><item>EEPROM_DATA.byte_buf.main_osd_last</item><item/></expressions>
+        <col-names>
+          
+          
+          
+          
+        <item>Expression</item><item>Location</item><item>Type</item><item>Value</item></col-names>
+        <col-widths>
+          
+          
+          
+          
+        <item>250</item><item>150</item><item>100</item><item>162</item></col-widths>
+      <PreferedWindows><Position>4</Position><ScreenPosX>7</ScreenPosX><ScreenPosY>121</ScreenPosY><Windows/></PreferedWindows></StaticWatch>
+    <Register><PreferedWindows><Position>0</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows/></PreferedWindows></Register><Statics><PreferedWindows><Position>2</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows/></PreferedWindows><excluded-vars/><col-names><item>Location</item><item>Type</item><item>Value</item><item>Variable</item></col-names><col-widths><item>150</item><item>100</item><item>100</item><item>100</item></col-widths></Statics><Auto><PreferedWindows><Position>2</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows/></PreferedWindows><col-names><item>Expression</item><item>Location</item><item>Type</item><item>Value</item></col-names><col-widths><item>100</item><item>150</item><item>100</item><item>100</item></col-widths></Auto><Locals><PreferedWindows><Position>2</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows/></PreferedWindows><col-names><item>Location</item><item>Type</item><item>Value</item><item>Variable</item></col-names><col-widths><item>150</item><item>100</item><item>100</item><item>172</item></col-widths></Locals><WATCH_1><expressions><item>temp</item><item>temp</item><item>temp</item><item/></expressions><col-names><item>Expression</item><item>Location</item><item>Type</item><item>Value</item></col-names><col-widths><item>100</item><item>150</item><item>100</item><item>100</item></col-widths><PreferedWindows><Position>2</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows><Window><Factory>QuickWatch</Factory></Window></Windows></PreferedWindows></WATCH_1><QuickWatch><PreferedWindows><Position>2</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows><Window><Factory>WATCH_1</Factory></Window></Windows></PreferedWindows><col-names><item>Expression</item><item>Location</item><item>Type</item><item>Value</item></col-names><col-widths><item>100</item><item>150</item><item>100</item><item>100</item></col-widths><QWatchHistory/></QuickWatch><Find-in-Files><ColumnWidth0>553</ColumnWidth0><ColumnWidth1>79</ColumnWidth1><ColumnWidth2>949</ColumnWidth2><PreferedWindows><Position>4</Position><ScreenPosX>238</ScreenPosX><ScreenPosY>444</ScreenPosY><Windows/></PreferedWindows></Find-in-Files></Static>
+    <Windows>
+      
+      
+      
+    <Wnd0><Tabs><Tab><Identity>TabID-11601-30864</Identity><TabName>Workspace</TabName><Factory>Workspace</Factory><Session><NodeDict><ExpandedNode>project</ExpandedNode><ExpandedNode>project/CANBUS</ExpandedNode><ExpandedNode>project/Common</ExpandedNode><ExpandedNode>project/TW8836</ExpandedNode><ExpandedNode>project/project</ExpandedNode></NodeDict></Session></Tab></Tabs><SelectedTab>0</SelectedTab></Wnd0><Wnd1><Tabs><Tab><Identity>TabID-6373-30962</Identity><TabName>Live Watch</TabName><Factory>StaticWatch</Factory></Tab></Tabs><SelectedTab>0</SelectedTab></Wnd1><Wnd2><Tabs><Tab><Identity>TabID-19174-14359</Identity><TabName>Debug Log</TabName><Factory>Debug-Log</Factory><Session/></Tab></Tabs><SelectedTab>0</SelectedTab></Wnd2></Windows>
+    <Editor>
+      
+      
+      
+      
+    <Pane><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\Common\com.c</Filename><XPos>0</XPos><YPos>464</YPos><SelStart>10470</SelStart><SelEnd>10470</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\TW8836\menu.c</Filename><XPos>0</XPos><YPos>4805</YPos><SelStart>285023</SelStart><SelEnd>285023</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\main.c</Filename><XPos>0</XPos><YPos>287</YPos><SelStart>8829</SelStart><SelEnd>8829</SelEnd></Tab><ActiveTab>2</ActiveTab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\benci_newC\benci_newC_V40\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_gpio.c</Filename><XPos>0</XPos><YPos>281</YPos><SelStart>9603</SelStart><SelEnd>9603</SelEnd></Tab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
+    <Positions>
+      
+      
+      
+      
+      
+    <Top><Row0><Sizes><Toolbar-00f028f0><key>iaridepm.enu1</key></Toolbar-00f028f0></Sizes></Row0><Row1><Sizes><Toolbar-09e77710><key>debuggergui.enu1</key></Toolbar-09e77710></Sizes></Row1></Top><Left><Row0><Sizes><Wnd0><Rect><Top>-2</Top><Left>-2</Left><Bottom>530</Bottom><Right>321</Right><x>-2</x><y>-2</y><xscreen>2230</xscreen><yscreen>4043</yscreen><sizeHorzCX>1393750</sizeHorzCX><sizeHorzCY>4882850</sizeHorzCY><sizeVertCX>201875</sizeVertCX><sizeVertCY>642512</sizeVertCY></Rect></Wnd0></Sizes></Row0></Left><Right><Row0><Sizes><Wnd1><Rect><Top>-2</Top><Left>-2</Left><Bottom>530</Bottom><Right>500</Right><x>-2</x><y>-2</y><xscreen>2230</xscreen><yscreen>4043</yscreen><sizeHorzCX>1393750</sizeHorzCX><sizeHorzCY>4882850</sizeHorzCY><sizeVertCX>313750</sizeVertCX><sizeVertCY>642512</sizeVertCY></Rect></Wnd1></Sizes></Row0></Right><Bottom><Row0><Sizes><Wnd2><Rect><Top>-2</Top><Left>-2</Left><Bottom>229</Bottom><Right>1602</Right><x>-2</x><y>-2</y><xscreen>1604</xscreen><yscreen>231</yscreen><sizeHorzCX>1002500</sizeHorzCX><sizeHorzCY>278986</sizeHorzCY><sizeVertCX>310625</sizeVertCX><sizeVertCY>740338</sizeVertCY></Rect></Wnd2></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
+  </Desktop>
+</Project>
+
+

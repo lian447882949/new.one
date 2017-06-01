@@ -1,0 +1,350 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V6.30.1.53127/W32 for ARM     10/Jul/2015  16:01:16 #
+# Copyright 1999-2011 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\code\T102\STM32_TZ_T102\Project\TW8836\tw8823_func.c  #
+#    Command line =  F:\code\T102\STM32_TZ_T102\Project\TW8836\tw8823_func.c  #
+#                    -D USE_STDPERIPH_DRIVER -D USE_STM32100B_EVAL -D         #
+#                    STM32F10X_CL -lc F:\code\T102\STM32_TZ_T102\Project\STM3 #
+#                    2F10x_StdPeriph_Template\EWARM\Debug\List\ -lA           #
+#                    F:\code\T102\STM32_TZ_T102\Project\STM32F10x_StdPeriph_T #
+#                    emplate\EWARM\Debug\List\ -o                             #
+#                    F:\code\T102\STM32_TZ_T102\Project\STM32F10x_StdPeriph_T #
+#                    emplate\EWARM\Debug\Obj\ --no_cse --no_unroll            #
+#                    --no_inline --no_code_motion --no_tbaa --no_clustering   #
+#                    --no_scheduling --debug --endian=little --cpu=Cortex-M3  #
+#                    -e --fpu=None --dlib_config "C:\Program Files\IAR        #
+#                    Systems\Embedded Workbench 6.0\arm\INC\c\DLib_Config_Ful #
+#                    l.h" -I F:\code\T102\STM32_TZ_T102\Project\STM32F10x_Std #
+#                    Periph_Template\EWARM\ -I F:\code\T102\STM32_TZ_T102\Pro #
+#                    ject\STM32F10x_StdPeriph_Template\EWARM\..\ -I           #
+#                    F:\code\T102\STM32_TZ_T102\Project\STM32F10x_StdPeriph_T #
+#                    emplate\EWARM\..\..\..\Libraries\STM32F10x_StdPeriph_Dri #
+#                    ver\inc\ -I F:\code\T102\STM32_TZ_T102\Project\STM32F10x #
+#                    _StdPeriph_Template\EWARM\..\..\..\Libraries\STM32F10x_S #
+#                    tdPeriph_Driver\src\ -I F:\code\T102\STM32_TZ_T102\Proje #
+#                    ct\STM32F10x_StdPeriph_Template\EWARM\..\..\..\Project/C #
+#                    ommon\ -I F:\code\T102\STM32_TZ_T102\Project\STM32F10x_S #
+#                    tdPeriph_Template\EWARM\..\..\..\Project/TW8836\ -I      #
+#                    F:\code\T102\STM32_TZ_T102\Project\STM32F10x_StdPeriph_T #
+#                    emplate\EWARM\..\..\..\Libraries\CMSIS\CM3\DeviceSupport #
+#                    \ST\STM32F10x\ -Ol -I "C:\Program Files\IAR              #
+#                    Systems\Embedded Workbench 6.0\arm\CMSIS\Include\"       #
+#    List file    =  F:\code\T102\STM32_TZ_T102\Project\STM32F10x_StdPeriph_T #
+#                    emplate\EWARM\Debug\List\tw8823_func.lst                 #
+#    Object file  =  F:\code\T102\STM32_TZ_T102\Project\STM32F10x_StdPeriph_T #
+#                    emplate\EWARM\Debug\Obj\tw8823_func.o                    #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\code\T102\STM32_TZ_T102\Project\TW8836\tw8823_func.c
+      1          #define _REG_C_
+      2          
+      3          #include "compile.h"
+      4          #include "tw8823_const.h"
+      5          
+      6          #include "i2c_driver.h"
+      7          #include "tw8823_func.h"
+      8          #include "tw8823_spi.h"
+      9          #include "osd_driv.h"
+     10          #include "pannel.h"
+     11          
+     12          #include "main.h"
+
+  __MAIN_EXTERN__ vu16 CCR1_Val;
+                  ^
+"F:\code\T102\STM32_TZ_T102\Project\STM32F10x_StdPeriph_Template\main.h",112  Error[Pe020]: 
+          identifier "vu16" is undefined
+
+  __MAIN_EXTERN__ vu16 CCR2_Val;
+                  ^
+"F:\code\T102\STM32_TZ_T102\Project\STM32F10x_StdPeriph_Template\main.h",113  Error[Pe020]: 
+          identifier "vu16" is undefined
+
+  __MAIN_EXTERN__ vu16 CCR3_Val;
+                  ^
+"F:\code\T102\STM32_TZ_T102\Project\STM32F10x_StdPeriph_Template\main.h",114  Error[Pe020]: 
+          identifier "vu16" is undefined
+
+  __MAIN_EXTERN__ vu16 CCR4_Val;
+                  ^
+"F:\code\T102\STM32_TZ_T102\Project\STM32F10x_StdPeriph_Template\main.h",115  Error[Pe020]: 
+          identifier "vu16" is undefined
+
+  __MAIN_EXTERN__ void GPIO_I2C_Config(bool bInput);
+                                       ^
+"F:\code\T102\STM32_TZ_T102\Project\STM32F10x_StdPeriph_Template\main.h",133  Error[Pe020]: 
+          identifier "bool" is undefined
+     13          
+     14          
+     15          #include "libr.h"
+     16          #include "port.h"
+     17          
+     18          
+     19          //=============================================================================
+     20          //初始化端口状态
+     21          //=============================================================================
+     22          void	InitGPIO()
+     23          {
+     24          	WriteTW88(0xFF,0);			
+     25          	WriteTW88(0x40 +0,0x03);		//Enable
+     26          	WriteTW88(0x50 + 0,0x07);	//OUT
+     27          	WriteTW88(0x90 + 0,0x07);		//PU	
+     28          
+     29          	WriteTW88(0x40 +8,0x30);		//Enable
+     30          	WriteTW88(0x50 + 8,0x30);	//OUT
+     31          	WriteTW88(0x90 + 8,0x30);		//PU	
+     32          	
+     33          }
+     34          void	Write_GPIO(WORD pins,BYTE val)
+     35          {
+     36           	BYTE port,index;
+     37          	BYTE reg,reg_val;
+     38          
+     39          	port = (BYTE)(pins >> 8);
+     40          	index = (BYTE)(pins%256);
+     41          
+     42          	if(port > 0){
+     43          	 	//GPIO
+     44          		WriteTW88(0xFF,0);
+     45          		reg = 0x70 + port - 1;
+     46          		reg_val = ReadTW88(reg);
+     47          		if(val)
+     48          			reg_val |= index;
+     49          		else
+     50          			reg_val &= (~index);
+     51          
+     52          		WriteTW88(reg,reg_val);
+     53          	}
+     54          
+     55          }
+     56          BYTE	Read_GPIO(WORD pins)
+     57          {
+     58           	BYTE port,index;
+     59          	BYTE reg,reg_val = 0;
+     60          
+     61          	port = (BYTE)(pins >> 8);
+     62          	index = (BYTE)(pins%256);
+     63          
+     64          	if(port > 0){
+     65          	 	//GPIO
+     66          		WriteTW88(0xFF,0);
+     67          		reg = 0x60 + port - 1;
+     68          		reg_val = ReadTW88(reg);
+     69          
+     70          		reg_val	&= index;
+     71          	}
+     72          	if(reg_val)
+     73          		return 1;
+     74          	else
+     75          		return 0;
+     76          }
+     77          //=============================================================================
+     78          //初始化屏
+     79          //=============================================================================
+     80          void	InitPanel()
+     81          {
+     82          	SET_PANEL_VOL;
+     83          	Delay_1ms(30);
+     84          	SET_PANEL_MIRROR;
+     85          	CLR_PANEL_UPDOWN;
+     86          	SET_PANEL_PWM;
+     87          }
+     88          
+     89          
+     90          
+     91           void Init_TW8823_Variables(void)
+     92           {
+     93          	CVBS_Status=NTSC;
+     94          	CSYNC_Status=HAS_CSYNC;
+     95          	MainIsCvbs_ID=1;
+     96          
+     97          	main_signal_Status=HAS_SIGNAL;
+     98          	pip1_signal_Status=HAS_SIGNAL;
+     99          	pip2_signal_Status=HAS_SIGNAL;	
+    100          	main_signal_last_Status=HAS_SIGNAL;
+    101          	pip1_signal_last_Status=HAS_SIGNAL;
+    102          	pip2_signal_last_Status=HAS_SIGNAL;	
+    103          
+    104          	has_signal_Count=0;
+    105          	no_signal_Count=0;
+    106          	
+    107           }
+    108          void TW8823_Reset(void)
+    109          {
+    110          	//GPIO_ResetBits(GPIOD, P_TW8823_RST);
+    111          	Delay_1ms(100);
+    112          	//GPIO_SetBits(GPIOD, P_TW8823_RST);
+    113          }
+    114          void TW8823_init(void)
+    115          {
+    116          	BYTE i;
+    117          	WORD Delay_count=0;
+    118          
+    119          	Init_TW8823_Variables();
+    120          
+    121          	while(ReadTW88_Page( 0x00 ) !=0x4c)
+    122          	{
+    123          		Delay_count++;
+    124          		if(Delay_count>1000)
+    125          		{
+    126          			//WavePlayer_Warning(warn_open_type);	//test		
+    127          			//WavePlayer_Warning(warn_open_type);			
+    128          			//WavePlayer_Warning(warn_open_type);		
+    129          			break;
+    130          		}
+    131          		Delay_1ms(5);
+    132          	}
+    133          	if(Delay_count>1000)
+    134          	{				
+    135          		TW8823_Reset();
+    136          		Delay_1ms(500);
+    137          		Delay_count=0;
+    138          		while(ReadTW88_Page( 0x00 ) !=0x4c)
+    139          		{
+    140          			Delay_count++;
+    141          			if(Delay_count>1000)
+    142          			{
+    143          				//WavePlayer_Warning(warn_open_type);	//test		
+    144          				//WavePlayer_Warning(warn_open_type);			
+    145          				//WavePlayer_Warning(warn_open_type);		
+    146          				break;
+    147          			}
+    148          			Delay_1ms(5);
+    149          		}	
+    150          	}
+    151          	IWDG_ReloadCounter();//清狗
+                 	^
+Warning[Pe223]: function "IWDG_ReloadCounter" declared implicitly
+    152          	
+    153          	WritePannelData_Func(Pannel_poweroff);
+    154          	WritePannelData_Func(Pannel_init_tw8823);
+    155          	WritePannelData_Func(Pannel_NTSC_type);
+    156          	DownLoadGamma();
+    157          	WritePannelData_Func(Pannel_DTV_888_type);
+    158          	WritePannelData_Func(Pannel_Poweron);
+    159          	//DownLoadGamma();//LOAD GAMA 要在模拟信号下
+    160          	//Vidoe_InputType=VIDEO_DTV;
+    161          	//PIP_InputType=VIDEO_NO_PIP;						
+    162          	//PannelType_last=Pannel_DTV_888_type;
+    163          	
+    164                 TW8823_SPI_Init();
+    165          	//----- Enable MCU Busy Check 0x403[6]=1
+    166          	WriteTW88( 0xff, OSD_PAGE );
+    167          	i = ReadTW88( 0x03 ) | 0x40;
+    168          	WriteTW88( 0x03, i );
+    169          	
+    170          	Delay_1ms(10);	
+    171          	SPI_QUADInit();
+    172          	SPI_TurboInit();
+    173          
+    174          	//Sys.VideoType=NODECODER;
+    175          	//Vidoe_InputType=VIDEO_CVBS;
+    176          		
+    177          	CLR_BACKLIGHT;
+    178          	InitGPIO();
+    179          	InitPanel();
+    180          	//背光
+    181          	PanelBlack(0);
+    182          	//if(System_BackOpenSys==1)//倒车开机会先显示LOGO再转镜头；
+    183          	//	System_BackOpenSys=0;
+    184          	//else
+    185          		if(System_openlogo_init_ok == 1)
+    186          		{//等待ARM LOGO初始化完成
+    187          		if(Canbus_power_on_id==0)
+    188          			BackLight(1);
+    189          			System_openlogo_init_ok=0;
+    190          		}
+    191                  
+    192                  
+    193                  
+    194                  
+    195                  
+    196          	WritePannelData_Func(Pannel_TW8823_SWRST);		
+    197          }																		
+    198          void	BackLight(BYTE on)
+    199          {
+    200          	//背光
+    201          	if(on){
+    202          //		WriteTW88(0xff, 0x09);
+    203          //		WriteTW88( 0xF5, 0x02);		
+    204          //		Delay_1ms(200);
+    205          //		WriteTW88( 0xF5, 0x03);		
+    206          //		Delay_1ms(200);
+    207          
+    208          		SET_BACKLIGHT;
+    209          		//GPIO_SetBits(GPIOB, P_8823_SPI_CS);
+    210          
+    211          /*		WriteTW88(0xff, 0x00);
+    212          		WriteTW88( 0x40, ReadTW88(0x40)|0x01 );
+    213          		WriteTW88( 0x50, ReadTW88(0x40)|0x01 );
+    214          		WriteTW88( 0x60, ReadTW88(0x40)|0x01 );
+    215          		WriteTW88( 0x70, ReadTW88(0x40)|0x01 );	 */
+    216          
+    217          //		WriteTW88(0xff, 0x09);
+    218          //		WriteTW88( 0xF5, 0x07);
+    219          //		Delay_1ms(20);
+    220          	}else{
+    221          		CLR_BACKLIGHT;
+    222          /*		WriteTW88(0xff, 0x00);
+    223          		WriteTW88( 0x40, ReadTW88(0x40)&0xFE );
+    224          		WriteTW88( 0x50, ReadTW88(0x40)&0xFE );
+    225          		WriteTW88( 0x60, ReadTW88(0x40)&0xFE );
+    226          		WriteTW88( 0x70, ReadTW88(0x40)&0xFE );	*/
+    227          
+    228          //		WriteTW88(0xff, 0x09);
+    229          //		WriteTW88( 0xF5, 0x00);
+    230          		//GPIO_ResetBits(GPIOB, P_8823_SPI_CS);
+    231          	}
+    232          }
+    233          
+    234          //FREERUN
+    235          void	PanelMute(BYTE on)
+    236          {
+    237          	BYTE page;
+    238          	page = ReadTW88(0xFF);
+    239          	if(on){
+    240          		//WriteTW88(0xff, 0x01);
+    241          		//WriteTW88(0x06, 0x0F);
+    242          		WriteTW88(0xff, 0x04);
+    243          		WriteTW88(0x8A, 0x04);//ReadTW88(0x8A)|0x0C);
+    244          		WriteTW88(0x70, 0x20);//ReadTW88(0x70)|0x20);
+    245          	}else{
+    246          		//WriteTW88(0xff, 0x01);
+    247          		//WriteTW88(0x06, 0x00);
+    248          
+    249          		WriteTW88(0xff, 0x04);
+    250          		//WriteTW88(0x8A, ReadTW88(0x8A)&0xf3);
+    251          		//delay(200);
+    252          		//WriteTW88(0x70, ReadTW88(0x70)&0xdd);
+    253          		WriteTW88(0x8A, 0x00);
+    254          		WriteTW88(0x70, 0x00);
+    255          	}
+    256          
+    257          	WriteTW88(0xFF,page);
+    258          }
+    259          void	PanelBlack(BYTE on)
+    260          {
+    261          	if(on)
+    262          	{
+    263          		WriteTW88(0xff, 0x04);
+    264          		WriteTW88(0x70, ReadTW88(0x70)|0x20);
+    265          	}
+    266          	else
+    267          	{
+    268          		WriteTW88(0xff, 0x04);
+    269          		WriteTW88(0x70, ReadTW88(0x70)&0xDF);
+    270          	}
+    271          }
+    272          
+    273          
+    274          
+    275          
+    276          
+
+Errors: 5
+Warnings: 1

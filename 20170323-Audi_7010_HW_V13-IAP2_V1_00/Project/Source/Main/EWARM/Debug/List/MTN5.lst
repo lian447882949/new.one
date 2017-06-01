@@ -1,0 +1,357 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V6.30.1.53127/W32 for ARM     22/Jun/2016  13:18:40 #
+# Copyright 1999-2011 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\Common\MTN5.c                        #
+#    Command line =  F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\Common\MTN5.c -D                     #
+#                    USE_STDPERIPH_DRIVER -D USE_STM32100B_EVAL -D            #
+#                    STM32F10X_CL -lc F:\软件工程\平台正式代码001\Benze_MainB #
+#                    oard\baoma_36\benci_newC_V45\Project\STM32F10x_StdPeriph #
+#                    _Template\EWARM\Debug\List\ -lA                          #
+#                    F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\STM32F10x_StdPeriph_Template\EWARM\D #
+#                    ebug\List\ -o F:\软件工程\平台正式代码001\Benze_MainBoar #
+#                    d\baoma_36\benci_newC_V45\Project\STM32F10x_StdPeriph_Te #
+#                    mplate\EWARM\Debug\Obj\ --no_cse --no_unroll             #
+#                    --no_inline --no_code_motion --no_tbaa --no_clustering   #
+#                    --no_scheduling --debug --endian=little --cpu=Cortex-M3  #
+#                    -e --fpu=None --dlib_config "C:\Program Files\IAR        #
+#                    Systems\Embedded Workbench 6.0_2\arm\INC\c\DLib_Config_F #
+#                    ull.h" -I F:\软件工程\平台正式代码001\Benze_MainBoard\ba #
+#                    oma_36\benci_newC_V45\Project\STM32F10x_StdPeriph_Templa #
+#                    te\EWARM\ -I F:\软件工程\平台正式代码001\Benze_MainBoard #
+#                    \baoma_36\benci_newC_V45\Project\STM32F10x_StdPeriph_Tem #
+#                    plate\EWARM\..\ -I F:\软件工程\平台正式代码001\Benze_Mai #
+#                    nBoard\baoma_36\benci_newC_V45\Project\STM32F10x_StdPeri #
+#                    ph_Template\EWARM\..\..\..\Libraries\STM32F10x_StdPeriph #
+#                    _Driver\inc\ -I F:\软件工程\平台正式代码001\Benze_MainBo #
+#                    ard\baoma_36\benci_newC_V45\Project\STM32F10x_StdPeriph_ #
+#                    Template\EWARM\..\..\..\Libraries\STM32F10x_StdPeriph_Dr #
+#                    iver\src\ -I F:\软件工程\平台正式代码001\Benze_MainBoard #
+#                    \baoma_36\benci_newC_V45\Project\STM32F10x_StdPeriph_Tem #
+#                    plate\EWARM\..\..\..\Project/Common\ -I                  #
+#                    F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\STM32F10x_StdPeriph_Template\EWARM\. #
+#                    .\..\..\Project/TW8836\ -I F:\软件工程\平台正式代码001\B #
+#                    enze_MainBoard\baoma_36\benci_newC_V45\Project\STM32F10x #
+#                    _StdPeriph_Template\EWARM\..\..\..\Project/CAN\ -I       #
+#                    F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\STM32F10x_StdPeriph_Template\EWARM\. #
+#                    .\..\..\Project/FM\ -I F:\软件工程\平台正式代码001\Benze #
+#                    _MainBoard\baoma_36\benci_newC_V45\Project\STM32F10x_Std #
+#                    Periph_Template\EWARM\..\..\..\Project/ARM\ -I           #
+#                    F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\STM32F10x_StdPeriph_Template\EWARM\. #
+#                    .\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\  #
+#                    -On -I "C:\Program Files\IAR Systems\Embedded Workbench  #
+#                    6.0_2\arm\CMSIS\Include\"                                #
+#    List file    =  F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\STM32F10x_StdPeriph_Template\EWARM\D #
+#                    ebug\List\MTN5.lst                                       #
+#    Object file  =  F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\STM32F10x_StdPeriph_Template\EWARM\D #
+#                    ebug\Obj\MTN5.o                                          #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\benci_newC_V45\Project\Common\MTN5.c
+      1          /*
+      2          this file is to define the functions using uart port
+      3          
+      4          by Miller.Tao
+      5          date :20150730
+      6          
+      7          */
+      8          #define _MTN5_C_
+      9          #include "includes.h"
+     10          
+     11          
+     12          void MTN5_i2cSetSCL(BYTE is_hl)
+     13          {
+     14          if(is_hl)
+     15          	GPIO_SetBits(MTN5_CLK_PORT,MTN5_CLK_PIN);
+     16          else
+     17          	GPIO_ResetBits(MTN5_CLK_PORT,MTN5_CLK_PIN);
+     18          }
+     19          
+     20          void MTN5_i2cSetSDA(BYTE is_hl)
+     21          {
+     22          	if(is_hl)
+     23          		GPIO_SetBits(MTN5_DATA_PORT,MTN5_DATA_PIN);
+     24          	else
+     25          		GPIO_ResetBits(MTN5_DATA_PORT,MTN5_DATA_PIN);
+     26          }
+     27          
+     28          
+     29           void MTN5_i2cSetSCL_Chk(BYTE bSet)
+     30          {
+     31              WORD ucDummy; // loop dummy
+     32             // touch_i2cSetSCL(bSet); // set SCL pin
+     33              if (bSet == _HIGH)
+     34                  // if set pin high
+     35              {
+     36                  ucDummy = I2C_CHECK_PIN_DUMMY; // initialize dummy
+     37                  while ((!touch_i2cSCL_PIN_STATUS()) && (ucDummy--))
+     38                      ;
+     39                  // check SCL pull high
+     40              }
+     41          }
+     42          
+     43          /////////////////////////////////////////
+     44          // Set I2C SDA pin high/low
+     45          //
+     46          // Arguments: bSet - high/low bit
+     47          /////////////////////////////////////////
+     48           void MTN5_i2cSetSDA_Chk(BYTE bSet)
+     49          {
+     50              WORD ucDummy; // loop dummy
+     51              //touch_i2cSetSDA(bSet); // set SDA pin
+     52              if (bSet == _HIGH)
+     53                  // if set pin high
+     54              {
+     55                  ucDummy = I2C_CHECK_PIN_DUMMY; // initialize dummy
+     56                  while ((!touch_i2cSDA_PIN_STATUS()) && (ucDummy--))
+     57                      ;
+     58                  // check SDA pull high
+     59              }
+     60          }
+     61          
+     62          //////////////////////////////////////////////////////////////
+     63          // Delay 4us
+     64          //////////////////////////////////////////////////////////////
+     65           void MTN5_i2c_Delay(void)
+     66          {
+     67              u32 i = 50;//,k=0;
+     68          	//for(;k<10;k++)
+     69              while (i--) {}
+     70          	Delay_1ms(1);
+     71          }
+     72          
+     73          
+     74          //////////////////////////////////////////////////////////////////////////
+     75          // I2C send byte to device.
+     76          //
+     77          // Arguments: ucVal - send byte
+     78          // Return value: I2C acknowledge bit
+     79          //               I2C_ACKNOWLEDGE/I2C_NON_ACKNOWLEDGE
+     80          //////////////////////////////////////////////////////////////////////////
+     81          BYTE MTN5_i2c_SendByte(BYTE ucVal)
+     82          {
+     83              BYTE ucMask = 0x01;
+     84              BYTE bAck; // acknowledge bit
+                          ^
+Warning[Pe177]: variable "bAck" was declared but never referenced
+     85          		//	SET_SDA_OUT();
+     86          
+     87          	MTN5_i2cSetSDA(_HIGH);
+     88              MTN5_i2c_Delay();
+     89              MTN5_i2cSetSCL(_HIGH);
+     90          	
+     91          	MTN5_i2cSetSCL(_LOW);
+     92          	Delay_1ms(5);
+     93              while (ucMask)
+     94              {
+     95             		 MTN5_i2cSetSCL(_LOW);
+     96                  if (ucVal & ucMask)
+     97                  {
+     98                      MTN5_i2cSetSDA(_HIGH);
+     99                  }
+    100                  else
+    101                  {
+    102                      MTN5_i2cSetSDA(_LOW);
+    103                  }
+    104                  MTN5_i2c_Delay();
+    105                  MTN5_i2cSetSCL(_HIGH); // clock
+    106                  MTN5_i2c_Delay();
+    107          		
+    108                  ucMask <<= 1; // next
+    109              } // while
+    110              // recieve acknowledge
+    111              MTN5_i2cSetSDA(_HIGH);
+    112              MTN5_i2cSetSCL(_HIGH);
+    113          	//touch_SET_SDA_IN();
+    114              
+    115              return 0;
+    116          }
+    117          
+    118          void MTN5_init(void)
+    119          {
+    120          	//MTN5_i2c_SendByte(0xef);
+    121          	IR_HD_StartIrSend(0xef);
+    122          
+    123          }
+    124          
+    125          void IR_HD_StartIrSend(u8 pData)
+    126          {
+    127          	//if(g_stuIR_CNTR.u8SendProgress != IR_SEND_DATA_end)
+    128          	//	return;
+    129          	
+    130              g_stuIR_CNTR.u8SendProgress = IR_SEND_HEAD_5MS;
+    131              g_stuIR_CNTR.u8PulseLenCnt = 0;
+    132              g_stuIR_CNTR.u8SendBitIndex = 0;
+    133          
+    134              g_stuIR_CNTR.u8SendBuff[0] = pData;
+    135             // g_stuIR_CNTR.u8SendBuff[1] = HD_USER_CODE_2;
+    136             // g_stuIR_CNTR.u8SendBuff[2] = pData;
+    137             // g_stuIR_CNTR.u8SendBuff[3] = 0xFF ^ pData;
+    138             // MTN5_i2cSetSDA(0); //'1'
+    139          	//Delay_1ms(5);
+    140          	//MTN5_i2cSetSDA(1);
+    141          	
+    142          	//capture = TIM_GetCapture1(TIM2);
+    143          	TIM_SetCompare1(TIM2, TIM_GetCapture1(TIM2) + CCR1_Val);
+    144              TIM_ITConfig(TIM2, TIM_IT_CC1, ENABLE);
+    145              //TIM_ITConfig(TIM2, TIM_IT_CC2, ENABLE);
+    146          
+    147              //SysDelay(100);
+    148          }
+    149          
+    150          void IN_MTN5_IRSendCodeTask(void)
+    151          {
+    152              switch (g_stuIR_CNTR.u8SendProgress)
+    153              {
+    154              case IR_SEND_HEAD_5MS:
+    155          		
+    156          		MTN5_i2cSetSDA(0); //'1'
+    157          		#if 1
+    158          		if(g_stuIR_CNTR.u8PulseLenCnt>=25)
+    159          			{
+    160          			//MTN5_i2cSetSDA(1);
+    161          			 g_stuIR_CNTR.u8PulseLenCnt = 0;
+    162                      g_stuIR_CNTR.u8SendBitIndex = 0;
+    163          			g_stuIR_CNTR.u8SendProgress = IR_SEND_DATA_SURE;
+    164          			}
+    165          		g_stuIR_CNTR.u8PulseLenCnt++;
+    166          		#endif
+    167                  break;
+    168              case IR_SEND_DATA_SURE:
+    169                  //
+    170                  if (g_stuIR_CNTR.u8SendBitIndex >= 8)
+    171                  {
+    172                      //send finish
+    173                      g_stuIR_CNTR.u8PulseLenCnt = 0;
+    174                      g_stuIR_CNTR.u8SendBitIndex = 0;
+    175                      MTN5_i2cSetSDA(1);
+    176                      //TIM_ITConfig(TIM2, TIM_IT_CC1, DISABLE);
+    177          			g_stuIR_CNTR.u8SendProgress = IR_SEND_DATA_end;
+    178                      break;
+    179                  }
+    180                  if (g_stuIR_CNTR.u8SendBuff[g_stuIR_CNTR.u8SendBitIndex / 8] &(1 <<
+    181                          (g_stuIR_CNTR.u8SendBitIndex % 8)))
+    182                  {
+    183                      g_stuIR_CNTR.u8SendProgress = IR_SEND_DATA_1; //
+    184                      g_stuIR_CNTR.u8PulseLenCnt = 0;
+    185                      MTN5_i2cSetSDA(1);
+    186                  }
+    187                  else
+    188                  {
+    189                      g_stuIR_CNTR.u8SendProgress = IR_SEND_DATA_0;
+    190                      g_stuIR_CNTR.u8PulseLenCnt = 0;
+    191                      MTN5_i2cSetSDA(1);
+    192                  }
+    193                  break;
+    194              case IR_SEND_DATA_1:
+    195                  if (g_stuIR_CNTR.u8PulseLenCnt >= 2)
+    196                  {
+    197                      MTN5_i2cSetSDA(0);
+    198                      g_stuIR_CNTR.u8SendProgress = IR_SEND_DATA_SURE;
+    199                      g_stuIR_CNTR.u8PulseLenCnt = 0;
+    200                      g_stuIR_CNTR.u8SendBitIndex++;
+    201                     // break;
+    202                  }
+    203                  else
+    204                  {
+    205                      MTN5_i2cSetSDA(1);
+    206                  }
+    207                  g_stuIR_CNTR.u8PulseLenCnt++;
+    208                  break;
+    209              case IR_SEND_DATA_0:
+    210          			if(g_stuIR_CNTR.u8PulseLenCnt>=2)
+    211          				{
+    212                      g_stuIR_CNTR.u8SendProgress = IR_SEND_DATA_SURE;
+    213                      g_stuIR_CNTR.u8PulseLenCnt = 0;
+    214                      g_stuIR_CNTR.u8SendBitIndex++;
+    215          				}
+    216                   else
+    217          		 	MTN5_i2cSetSDA(0);
+    218          		 
+    219                  	g_stuIR_CNTR.u8PulseLenCnt++;
+    220                  break;
+    221              default:
+    222          		g_stuIR_CNTR.u8SendProgress = IR_SEND_DATA_end;
+    223                  break;
+    224              }
+    225          }
+    226          
+    227          //////////////////////////////////////////////////////////////////////////
+    228          // I2C receive byte from device.
+    229          //
+    230          // Return value: receive byte
+    231          //////////////////////////////////////////////////////////////////////////
+    232          
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+        8  IN_MTN5_IRSendCodeTask
+              8 -> MTN5_i2cSetSDA
+        8  IR_HD_StartIrSend
+              8 -> TIM_GetCapture1
+              8 -> TIM_ITConfig
+              8 -> TIM_SetCompare1
+        8  MTN5_i2cSetSCL
+              8 -> GPIO_ResetBits
+              8 -> GPIO_SetBits
+       16  MTN5_i2cSetSCL_Chk
+             16 -> GPIO_ReadInputDataBit
+        8  MTN5_i2cSetSDA
+              8 -> GPIO_ResetBits
+              8 -> GPIO_SetBits
+       16  MTN5_i2cSetSDA_Chk
+             16 -> GPIO_ReadInputDataBit
+        8  MTN5_i2c_Delay
+              8 -> Delay_1ms
+       16  MTN5_i2c_SendByte
+             16 -> Delay_1ms
+             16 -> MTN5_i2cSetSCL
+             16 -> MTN5_i2cSetSDA
+             16 -> MTN5_i2c_Delay
+        8  MTN5_init
+              8 -> IR_HD_StartIrSend
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable5
+       4  ??DataTable5_1
+       4  ??DataTable5_2
+       4  ??DataTable5_3
+     294  IN_MTN5_IRSendCodeTask
+      64  IR_HD_StartIrSend
+      34  MTN5_i2cSetSCL
+      40  MTN5_i2cSetSCL_Chk
+      34  MTN5_i2cSetSDA
+      40  MTN5_i2cSetSDA_Chk
+      20  MTN5_i2c_Delay
+     102  MTN5_i2c_SendByte
+      10  MTN5_init
+      28  g_stuIR_CNTR
+
+ 
+  28 bytes in section .bss
+ 654 bytes in section .text
+ 
+ 654 bytes of CODE memory
+  28 bytes of DATA memory
+
+Errors: none
+Warnings: 1

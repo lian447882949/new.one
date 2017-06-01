@@ -1,0 +1,533 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V6.30.1.53127/W32 for ARM     22/Jun/2016  13:18:45 #
+# Copyright 1999-2011 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\TW8836\pannel.c                      #
+#    Command line =  F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\TW8836\pannel.c -D                   #
+#                    USE_STDPERIPH_DRIVER -D USE_STM32100B_EVAL -D            #
+#                    STM32F10X_CL -lc F:\软件工程\平台正式代码001\Benze_MainB #
+#                    oard\baoma_36\benci_newC_V45\Project\STM32F10x_StdPeriph #
+#                    _Template\EWARM\Debug\List\ -lA                          #
+#                    F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\STM32F10x_StdPeriph_Template\EWARM\D #
+#                    ebug\List\ -o F:\软件工程\平台正式代码001\Benze_MainBoar #
+#                    d\baoma_36\benci_newC_V45\Project\STM32F10x_StdPeriph_Te #
+#                    mplate\EWARM\Debug\Obj\ --no_cse --no_unroll             #
+#                    --no_inline --no_code_motion --no_tbaa --no_clustering   #
+#                    --no_scheduling --debug --endian=little --cpu=Cortex-M3  #
+#                    -e --fpu=None --dlib_config "C:\Program Files\IAR        #
+#                    Systems\Embedded Workbench 6.0_2\arm\INC\c\DLib_Config_F #
+#                    ull.h" -I F:\软件工程\平台正式代码001\Benze_MainBoard\ba #
+#                    oma_36\benci_newC_V45\Project\STM32F10x_StdPeriph_Templa #
+#                    te\EWARM\ -I F:\软件工程\平台正式代码001\Benze_MainBoard #
+#                    \baoma_36\benci_newC_V45\Project\STM32F10x_StdPeriph_Tem #
+#                    plate\EWARM\..\ -I F:\软件工程\平台正式代码001\Benze_Mai #
+#                    nBoard\baoma_36\benci_newC_V45\Project\STM32F10x_StdPeri #
+#                    ph_Template\EWARM\..\..\..\Libraries\STM32F10x_StdPeriph #
+#                    _Driver\inc\ -I F:\软件工程\平台正式代码001\Benze_MainBo #
+#                    ard\baoma_36\benci_newC_V45\Project\STM32F10x_StdPeriph_ #
+#                    Template\EWARM\..\..\..\Libraries\STM32F10x_StdPeriph_Dr #
+#                    iver\src\ -I F:\软件工程\平台正式代码001\Benze_MainBoard #
+#                    \baoma_36\benci_newC_V45\Project\STM32F10x_StdPeriph_Tem #
+#                    plate\EWARM\..\..\..\Project/Common\ -I                  #
+#                    F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\STM32F10x_StdPeriph_Template\EWARM\. #
+#                    .\..\..\Project/TW8836\ -I F:\软件工程\平台正式代码001\B #
+#                    enze_MainBoard\baoma_36\benci_newC_V45\Project\STM32F10x #
+#                    _StdPeriph_Template\EWARM\..\..\..\Project/CAN\ -I       #
+#                    F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\STM32F10x_StdPeriph_Template\EWARM\. #
+#                    .\..\..\Project/FM\ -I F:\软件工程\平台正式代码001\Benze #
+#                    _MainBoard\baoma_36\benci_newC_V45\Project\STM32F10x_Std #
+#                    Periph_Template\EWARM\..\..\..\Project/ARM\ -I           #
+#                    F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\STM32F10x_StdPeriph_Template\EWARM\. #
+#                    .\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\  #
+#                    -On -I "C:\Program Files\IAR Systems\Embedded Workbench  #
+#                    6.0_2\arm\CMSIS\Include\"                                #
+#    List file    =  F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\STM32F10x_StdPeriph_Template\EWARM\D #
+#                    ebug\List\pannel.lst                                     #
+#    Object file  =  F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\STM32F10x_StdPeriph_Template\EWARM\D #
+#                    ebug\Obj\pannel.o                                        #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\benci_newC_V45\Project\TW8836\pannel.c
+      1          #define _PANNEL_C_
+      2          
+      3          #include "compile.h"
+      4          #include "pannel.h"
+      5          #include "pannel_includ.h"
+      6          
+      7          #include "libr.h"
+      8          //#include "main.h"
+      9          
+     10          #include "tw8836_func.h"
+     11          
+     12          
+     13          
+     14          #include "i2c_driver.h"
+     15          void SetAutoDetectStd(void)
+     16          {
+     17          	BYTE val;
+     18          	BYTE page;
+     19          
+     20          	page = ReadTW88(0xFF);
+     21          	
+     22          	val = ReadTW88_Page(0xb09);	
+     23          	WriteTW88(0x09,val|0x01);		// SDTR
+     24          
+     25          	WriteTW88(0xFF,page);
+     26          }
+     27          
+     28          
+     29          void Pannel_include(void)
+     30          {
+     31          
+     32          }
+     33          
+     34          void WritePannelData(BYTE sys)
+     35          {	
+     36          
+     37          			
+     38          			switch(sys)
+     39          			{			
+     40          			               	case	Pannel_init_tw8836:					
+     41          					case	Pannel_Poweron:					
+     42          					case	Pannel_poweroff:					
+     43          					case	Pannel_init_osd:		
+     44          					case Pannel_TW8836_SWRST:
+     45          							WritePannelData_Func(sys);	
+     46          							break;	
+     47          					//case	Pannel_init_tw8836:					
+     48          		                        case Pannel_ARM_type:
+     49          					case Pannel_CarMedia_type:
+     50          					case Pannel_CVBS_type:
+     51          							WritePannelData_Func(sys);	
+     52          							//Delay_1ms(100);//
+     53          							//BackLight(1);
+     54          							break;	
+     55          					default:
+     56          							return;							
+     57          			}	
+     58          }
+     59          
+     60          void WritePannelData_Func(BYTE sys)
+     61          {	
+     62          		UINT j ;	
+     63          		BYTE index,val;
+     64          
+     65          		if(Sys.show_TFT_p!=sys)
+     66          		{
+     67          		Sys.show_TFT_p=sys;
+     68          		BackLight(0);
+     69          		}
+     70          
+     71          
+     72          		for(j = 0;j<8194;j += 2)
+     73          		{		
+     74          			switch(Sys.lcd_type)
+     75          			{
+     76          
+     77          
+     78          				case Panelhannstar09_DT:
+     79          						switch(sys)
+     80          						{				
+     81          								case	Pannel_init_tw8836:					
+     82          										index =tInit_tw8836_9inch[j];
+     83          										val =tInit_tw8836_9inch[j+1];
+     84          										break;
+     85          								case	Pannel_Poweron:					
+     86          										index =tw8836_Poweron_9inch[j];
+     87          										val =tw8836_Poweron_9inch[j+1];
+     88          										break;
+     89          								case	Pannel_poweroff:					
+     90          										index =tw8836_poweroff_9inch[j];
+     91          										val =tw8836_poweroff_9inch[j+1];
+     92          										break;	
+     93          								case	Pannel_TW8836_SWRST:		///20120528	TEST				
+     94          										index =TW8836_SWRST_9inch[j];
+     95          										val =TW8836_SWRST_9inch[j+1];
+     96          										break;								
+     97          								case	Pannel_init_osd:					
+     98          										index =tInit_osd_9inch[j];
+     99          										val =tInit_osd_9inch[j+1];
+    100          										break;			
+    101          
+    102          								//-----------------SIGNAL------------
+    103          								case	Pannel_NTSC_type:
+    104          										index =tInit_ntsc_9inch[j];
+    105          										val =tInit_ntsc_9inch[j + 1]; 
+    106          										break;
+    107          								case	Pannel_PAL_type:					
+    108          										index =tInit_pal_9inch[j];
+    109          										val =tInit_pal_9inch[j + 1]; 
+    110          										break;
+    111          								case	Pannel_SECAM_type:				
+    112          										index =tInit_secam_9inch[j];
+    113          										val =tInit_secam_9inch[j + 1]; 
+    114          										break;		
+    115          
+    116          								case	Pannel_RGB_dvd_type:				 
+    117          										index =tInit_RGB_forDVD_9inch[j];
+    118          										val =tInit_RGB_forDVD_9inch[j+1];
+    119          										break;
+    120          								case	Pannel_DTV_888_type:	
+    121          										index =tInit_DTV_9inch[j];
+    122          										val =tInit_DTV_9inch[j+1];
+    123          										break;	
+    124          
+    125          								//---------------DVD SET--------------		
+    126          								case	Pannel_DVD_SET_PIP:	
+    127          										index =tInit_DVD_SET_PIP_9inch[j];
+    128          										val =tInit_DVD_SET_PIP_9inch[j+1];
+    129          										break;	
+    130          								case	Pannel_TV_PAL_SET_PIP:	
+    131          										index =tInit_TV_PAL_SET_PIP_9inch[j];
+    132          										val =tInit_TV_PAL_SET_PIP_9inch[j+1];
+    133          										break;	
+    134          								case	Pannel_AUX_PAL_SET_PIP:	
+    135          										index =tInit_AUX_PAL_SET_PIP_9inch[j];
+    136          										val =tInit_AUX_PAL_SET_PIP_9inch[j+1];
+    137          										break;	
+    138          								case	Pannel_Video_PAL_SET_PIP:	
+    139          										index =tInit_Video_PAL_SET_PIP_9inch[j];
+    140          										val =tInit_Video_PAL_SET_PIP_9inch[j+1];
+    141          										break;							
+    142          								case	Pannel_PARK_PAL_SET_PIP:	
+    143          										index =tInit_PARK_PAL_SET_PIP_9inch[j];
+    144          										val =tInit_PARK_PAL_SET_PIP_9inch[j+1];
+    145          										break;							
+    146          
+    147          								//------pip  vide  switch----------
+    148          			                                   case	Pannel_2PIP_CVBS_PAL_DTV:
+    149          										index =tInit_2PIP_CVBS_PAL_DTV_9inch[j];
+    150          										val =tInit_2PIP_CVBS_PAL_DTV_9inch[j+1];
+    151          										break;
+    152          			                                   case	Pannel_2PIP_CVBS_PAL_YUV:
+    153          										index =tInit_2PIP_CVBS_PAL_YUV_9inch[j];
+    154          										val =tInit_2PIP_CVBS_PAL_YUV_9inch[j+1];
+    155          										break;
+    156          			                                  case	Pannel_2PIP_DTV_YUV:
+    157          										index =tInit_2PIP_DTV_YUV_9inch[j];
+    158          										val =tInit_2PIP_DTV_YUV_9inch[j+1];
+    159          										break;
+    160          			                                  case	Pannel_2PIP_DTV_CVBS_PAL:
+    161          										index =tInit_2PIP_DTV_CVBS_PAL_9inch[j];
+    162          										val =tInit_2PIP_DTV_CVBS_PAL_9inch[j+1];
+    163          										break;
+    164          			                                  case	Pannel_2PIP_YUV_DTV:
+    165          										index =tInit_2PIP_YUV_DTV_9inch[j];
+    166          										val =tInit_2PIP_YUV_DTV_9inch[j+1];
+    167          										break;
+    168          			                                  case	Pannel_2PIP_YUV_CVBS_PAL:	
+    169          										index =tInit_2PIP_YUV_CVBS_PAL_9inch[j];
+    170          										val =tInit_2PIP_YUV_CVBS_PAL_9inch[j+1];
+    171          										break;	
+    172          
+    173          			                                  case	Pannel_3PIP_YUV_CVBS_PAL_DTV:
+    174          			 							index = tInit_3PIP_YUV_CVBS_PAL_DTV_9inch[j];
+    175          										val = tInit_3PIP_YUV_CVBS_PAL_DTV_9inch[j+1];
+    176          										break;	
+    177          			                                 case	Pannel_3PIP_YUV_DTV_CVBS_PAL:
+    178          			 							index = tInit_3PIP_YUV_DTV_CVBS_PAL_9inch[j];
+    179          										val = tInit_3PIP_YUV_DTV_CVBS_PAL_9inch[j+1];
+    180          										break;	
+    181          			                                  case	Pannel_3PIP_DTV_CVBS_PAL_YUV:
+    182          			  							index = tInit_3PIP_DTV_CVBS_PAL_YUV_9inch[j];
+    183          										val = tInit_3PIP_DTV_CVBS_PAL_YUV_9inch[j+1];
+    184          										break;	
+    185          			                                 case	Pannel_3PIP_DTV_YUV_CVBS_PAL:		
+    186          			  							index = tInit_3PIP_DTV_YUV_CVBS_PAL_9inch[j];
+    187          										val = tInit_3PIP_DTV_YUV_CVBS_PAL_9inch[j+1];
+    188          										break;	
+    189          			                                 case	Pannel_3PIP_CVBS_PAL_DTV_YUV:
+    190          			  							index = tInit_3PIP_CVBS_PAL_DTV_YUV_9inch[j];
+    191          										val = tInit_3PIP_CVBS_PAL_DTV_YUV_9inch[j+1];
+    192          										break;	
+    193          			                                 case	Pannel_3PIP_CVBS_PAL_YUV_DTV:							
+    194          			 							index = tInit_3PIP_CVBS_PAL_YUV_DTV_9inch[j];
+    195          										val = tInit_3PIP_CVBS_PAL_YUV_DTV_9inch[j+1];
+    196          										break;	
+    197          			///////////////////////////////////////////////////////////////////////////////////////////		
+    198          				
+    199          								case	Pannel_TV_NTSC_SET_PIP:	
+    200          										index =tInit_TV_NTSC_SET_PIP_9inch[j];
+    201          										val =tInit_TV_NTSC_SET_PIP_9inch[j+1];
+    202          										break;	
+    203          								case	Pannel_AUX_NTSC_SET_PIP:	
+    204          										index =tInit_AUX_NTSC_SET_PIP_9inch[j];
+    205          										val =tInit_AUX_NTSC_SET_PIP_9inch[j+1];
+    206          										break;	
+    207          								case	Pannel_Video_NTSC_SET_PIP:	
+    208          										index =tInit_Video_NTSC_SET_PIP_9inch[j];
+    209          										val =tInit_Video_NTSC_SET_PIP_9inch[j+1];
+    210          										break;							
+    211          								case	Pannel_PARK_NTSC_SET_PIP:	
+    212          										index =tInit_PARK_NTSC_SET_PIP_9inch[j];
+    213          										val =tInit_PARK_NTSC_SET_PIP_9inch[j+1];
+    214          										break;							
+    215          
+    216          								//------pip  vide  switch----------
+    217          			                                   case	Pannel_2PIP_CVBS_NTSC_DTV:
+    218          										index =tInit_2PIP_CVBS_NTSC_DTV_9inch[j];
+    219          										val =tInit_2PIP_CVBS_NTSC_DTV_9inch[j+1];
+    220          										break;
+    221          			                                   case	Pannel_2PIP_CVBS_NTSC_YUV:
+    222          										index =tInit_2PIP_CVBS_NTSC_YUV_9inch[j];
+    223          										val =tInit_2PIP_CVBS_NTSC_YUV_9inch[j+1];
+    224          										break;
+    225          			                                  case	Pannel_2PIP_DTV_CVBS_NTSC:
+    226          										index =tInit_2PIP_DTV_CVBS_NTSC_9inch[j];
+    227          										val =tInit_2PIP_DTV_CVBS_NTSC_9inch[j+1];
+    228          										break;
+    229          			                                  case	Pannel_2PIP_YUV_CVBS_NTSC:	
+    230          										index =tInit_2PIP_YUV_CVBS_NTSC_9inch[j];
+    231          										val =tInit_2PIP_YUV_CVBS_NTSC_9inch[j+1];
+    232          										break;	
+    233          
+    234          			                                  case	Pannel_3PIP_YUV_CVBS_NTSC_DTV:
+    235          			 							index = tInit_3PIP_YUV_CVBS_NTSC_DTV_9inch[j];
+    236          										val = tInit_3PIP_YUV_CVBS_NTSC_DTV_9inch[j+1];
+    237          										break;	
+    238          			                                 case	Pannel_3PIP_YUV_DTV_CVBS_NTSC:
+    239          			 							index = tInit_3PIP_YUV_DTV_CVBS_NTSC_9inch[j];
+    240          										val = tInit_3PIP_YUV_DTV_CVBS_NTSC_9inch[j+1];
+    241          										break;	
+    242          			                                  case	Pannel_3PIP_DTV_CVBS_NTSC_YUV:
+    243          			  							index = tInit_3PIP_DTV_CVBS_NTSC_YUV_9inch[j];
+    244          										val = tInit_3PIP_DTV_CVBS_NTSC_YUV_9inch[j+1];
+    245          										break;	
+    246          			                                 case	Pannel_3PIP_DTV_YUV_CVBS_NTSC:		
+    247          			  							index = tInit_3PIP_DTV_YUV_CVBS_NTSC_9inch[j];
+    248          										val = tInit_3PIP_DTV_YUV_CVBS_NTSC_9inch[j+1];
+    249          										break;	
+    250          			                                 case	Pannel_3PIP_CVBS_NTSC_DTV_YUV:
+    251          			  							index = tInit_3PIP_CVBS_NTSC_DTV_YUV_9inch[j];
+    252          										val = tInit_3PIP_CVBS_NTSC_DTV_YUV_9inch[j+1];
+    253          										break;	
+    254          			                                 case	Pannel_3PIP_CVBS_NTSC_YUV_DTV:							
+    255          			 							index = tInit_3PIP_CVBS_NTSC_YUV_DTV_9inch[j];
+    256          										val = tInit_3PIP_CVBS_NTSC_YUV_DTV_9inch[j+1];
+    257          										break;	
+    258          							case Pannel_ARM_type:
+    259                                                                                         	index = tInit_ARM_9inch[j];
+    260          										val = tInit_ARM_9inch[j+1];
+    261          								               break;
+    262                                                                  case Pannel_CarMedia_type:
+    263                                                                                          index = tInit_CarMedia_9inch[j];
+    264          										val = tInit_CarMedia_9inch[j+1];
+    265          								               break;		
+    266          							case Pannel_CVBS_type:
+    267                                                  index = tInit_CVBS_9inch[j];
+    268          										val = tInit_CVBS_9inch[j+1];
+    269          								               break;
+    270          							case Pannel_DTV_type:
+    271          								index = tInit_DTV_9inch[j];
+    272          								val = tInit_DTV_9inch[j+1];
+    273          								break;
+    274          								default:
+    275          										return;							
+    276          						}					
+    277          						break;
+    278          	
+    279          				default:
+    280          						
+    281          											
+    282          						break;
+    283          			}				
+    284          
+    285          
+    286          			if(val == 0xFF && index == 0xFF)
+    287          				break;	
+    288          			
+    289          			WriteTW88(index, val);		
+    290          
+    291          		}
+    292          		
+    293          		//SetAutoDetectStd();//自动制式检测
+    294          
+    295          		
+    296          		WriteTW88(0xff, 0x00);		// set page 0
+    297          		//PannelType_last=sys;
+    298          }
+    299          void DownLoadGamma(void)
+    300          {}
+    301          
+    302          void  Set_PIP_Zoom(BYTE type,BYTE zoom)
+    303          {
+    304          }
+    305          void  Set_PIP_Position(BYTE winno,UINT xpos,UINT ypos)
+    306          {	
+    307          }
+    308          void  Set_PIP_Window(BYTE winno,BYTE on_off)
+    309          {
+    310          	WORD index = 0x616;
+    311          	BYTE dat;
+    312          	
+    313          	if(winno==PIP_WINDOW1)
+    314          	{
+    315          		index = 0x616;	
+    316          
+    317          	}
+    318          	else// if(winno==PIP_WINDOW2)
+    319          	{
+    320          		index = 0x646;	
+    321          	}
+    322          	dat = ReadTW88_Page(index);
+    323          	if(on_off==PIP_ON) WriteTW88(index, dat | 0x20);
+    324          	else     WriteTW88(index, dat & 0xdf);	
+    325          }
+    326          
+    327          void Clear_all_PIP(void)
+    328          {
+    329          	Set_PIP_Window(PIP_WINDOW1,PIP_OFF);
+    330          	Set_PIP_Window(PIP_WINDOW2,PIP_OFF);
+    331          }
+    332          
+    333          
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+        8  Clear_all_PIP
+              8 -> Set_PIP_Window
+        0  DownLoadGamma
+        0  Pannel_include
+       16  SetAutoDetectStd
+             16 -> ReadTW88
+             16 -> ReadTW88_Page
+             16 -> WriteTW88
+        0  Set_PIP_Position
+       24  Set_PIP_Window
+             24 -> ReadTW88_Page
+             24 -> WriteTW88
+        0  Set_PIP_Zoom
+        8  WritePannelData
+              8 -> WritePannelData_Func
+       24  WritePannelData_Func
+             24 -> BackLight
+             24 -> WriteTW88
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable0
+       4  ??DataTable0_1
+       4  ??DataTable0_10
+       4  ??DataTable0_11
+       4  ??DataTable0_12
+       4  ??DataTable0_13
+       4  ??DataTable0_14
+       4  ??DataTable0_15
+       4  ??DataTable0_16
+       4  ??DataTable0_17
+       4  ??DataTable0_18
+       4  ??DataTable0_19
+       4  ??DataTable0_2
+       4  ??DataTable0_20
+       4  ??DataTable0_21
+       4  ??DataTable0_22
+       4  ??DataTable0_23
+       4  ??DataTable0_24
+       4  ??DataTable0_25
+       4  ??DataTable0_26
+       4  ??DataTable0_27
+       4  ??DataTable0_28
+       4  ??DataTable0_29
+       4  ??DataTable0_3
+       4  ??DataTable0_30
+       4  ??DataTable0_31
+       4  ??DataTable0_32
+       4  ??DataTable0_33
+       4  ??DataTable0_34
+       4  ??DataTable0_35
+       4  ??DataTable0_36
+       4  ??DataTable0_37
+       4  ??DataTable0_38
+       4  ??DataTable0_39
+       4  ??DataTable0_4
+       4  ??DataTable0_40
+       4  ??DataTable0_41
+       4  ??DataTable0_42
+       4  ??DataTable0_43
+       4  ??DataTable0_44
+       4  ??DataTable0_5
+       4  ??DataTable0_6
+       4  ??DataTable0_7
+       4  ??DataTable0_8
+       4  ??DataTable0_9
+      20  Clear_all_PIP
+       2  DownLoadGamma
+       2  Pannel_include
+      44  SetAutoDetectStd
+       2  Set_PIP_Position
+      74  Set_PIP_Window
+       2  Set_PIP_Zoom
+      16  TW8836_SWRST_9inch
+      50  WritePannelData
+    1042  WritePannelData_Func
+       2  tInit_2PIP_CVBS_NTSC_DTV_9inch
+       2  tInit_2PIP_CVBS_NTSC_YUV_9inch
+       2  tInit_2PIP_CVBS_PAL_DTV_9inch
+       2  tInit_2PIP_CVBS_PAL_YUV_9inch
+       2  tInit_2PIP_DTV_CVBS_NTSC_9inch
+       2  tInit_2PIP_DTV_CVBS_PAL_9inch
+       2  tInit_2PIP_DTV_YUV_9inch
+       2  tInit_2PIP_YUV_CVBS_NTSC_9inch
+       2  tInit_2PIP_YUV_CVBS_PAL_9inch
+       2  tInit_2PIP_YUV_DTV_9inch
+       2  tInit_3PIP_CVBS_NTSC_DTV_YUV_9inch
+       2  tInit_3PIP_CVBS_NTSC_YUV_DTV_9inch
+       2  tInit_3PIP_CVBS_PAL_DTV_YUV_9inch
+       2  tInit_3PIP_CVBS_PAL_YUV_DTV_9inch
+       2  tInit_3PIP_DTV_CVBS_NTSC_YUV_9inch
+       2  tInit_3PIP_DTV_CVBS_PAL_YUV_9inch
+       2  tInit_3PIP_DTV_YUV_CVBS_NTSC_9inch
+       2  tInit_3PIP_DTV_YUV_CVBS_PAL_9inch
+       2  tInit_3PIP_YUV_CVBS_NTSC_DTV_9inch
+       2  tInit_3PIP_YUV_CVBS_PAL_DTV_9inch
+       2  tInit_3PIP_YUV_DTV_CVBS_NTSC_9inch
+       2  tInit_3PIP_YUV_DTV_CVBS_PAL_9inch
+     436  tInit_ARM_9inch
+     464  tInit_AUX_NTSC_SET_PIP_9inch
+     464  tInit_AUX_PAL_SET_PIP_9inch
+     452  tInit_CVBS_9inch
+     452  tInit_CarMedia_9inch
+     456  tInit_DTV_9inch
+     532  tInit_DVD_SET_PIP_9inch
+     488  tInit_PARK_NTSC_SET_PIP_9inch
+     352  tInit_PARK_PAL_SET_PIP_9inch
+     336  tInit_RGB_forDVD_9inch
+     464  tInit_TV_NTSC_SET_PIP_9inch
+     468  tInit_TV_PAL_SET_PIP_9inch
+     540  tInit_Video_NTSC_SET_PIP_9inch
+     540  tInit_Video_PAL_SET_PIP_9inch
+     368  tInit_ntsc_9inch
+       2  tInit_osd_9inch
+     368  tInit_pal_9inch
+       2  tInit_secam_9inch
+     440  tInit_tw8836_9inch
+      20  tw8836_Poweron_9inch
+      20  tw8836_poweroff_9inch
+
+ 
+ 7 724 bytes in section .rodata
+ 1 418 bytes in section .text
+ 
+ 1 418 bytes of CODE  memory
+ 7 724 bytes of CONST memory
+
+Errors: none
+Warnings: none

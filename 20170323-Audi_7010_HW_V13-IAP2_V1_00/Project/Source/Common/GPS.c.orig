@@ -1,0 +1,1159 @@
+#define __GPS_C__
+#include "includes.h"
+
+void Navi_Controll_Send(BYTE cmd)
+{
+     BYTE temp;
+	 BYTE checksum=0;
+	 temp=cmd;
+
+    USART_SendData(USART3, 0x51);
+    while (USART_GetFlagStatus(USART3, USART_FLAG_TXE) == RESET);
+    USART_SendData(USART3, 0);
+    while (USART_GetFlagStatus(USART3, USART_FLAG_TXE) == RESET);
+    USART_SendData(USART3, temp);
+    while (USART_GetFlagStatus(USART3, USART_FLAG_TXE) == RESET);
+    USART_SendData(USART3, 0);
+    while (USART_GetFlagStatus(USART3, USART_FLAG_TXE) == RESET);
+    USART_SendData(USART3, 0);
+    while (USART_GetFlagStatus(USART3, USART_FLAG_TXE) == RESET);
+    checksum = 0x51 + temp;
+    checksum = ~checksum;
+    USART_SendData(USART3, checksum);
+    while (USART_GetFlagStatus(USART3, USART_FLAG_TXE) == RESET);
+}
+
+
+void Init_Navi_Variable(void)
+{
+     BYTE i;
+	 gGPSInitOk=0;
+
+     gGPSCmdRdIndex=0;
+     gGPSCmdWrtIndex=0;
+	 
+	 for(i=0;i<GPSCMDBUFFMAX;i++)
+	 {
+        gGPSCmdBuffer[i][2]=0xff;
+	 }
+	 //gNaviVoiceStatus=0;
+	 gNaviVoiceCnt=0;
+
+
+           {
+                  // BYTE i;
+	for(i=0;i<TW88_VER_LEN ;i++)
+	Tw88_version[i]=0;//g_stuIPC_DATA.Rx[g_stuIPC_DATA.RxReadIndex][1+i];
+      }
+}
+
+void Navi_Cmd_Proc(void)
+{
+   if(!gNaviCnt)
+   {
+            if(gNaviSystemOn)
+        {
+          // gNaviSystemOn=0;
+           //gNaviCnt=600;
+		}
+       if(gNaviSendFlag)
+       {
+               
+	       Navi_Controll_Send(CMD_RT_BTGPS_on_GPS);//miller.tao20160323
+	       gNaviSendFlag = 0;
+	
+	   }
+   }
+}
+
+
+/*========================
+void Mcu2Navi_Com()
+
+=========================*/
+void Mcu2Navi_Com(BYTE * buff,BYTE len)
+{
+       BYTE i;
+        for(i=0;i<len;i++)
+        {
+               	USART_SendData(USART3, *(buff+i));
+               while (USART_GetFlagStatus(USART3, USART_FLAG_TXE) == RESET)
+	        ;
+
+	}
+
+}
+#define CMD_SEND_FROM_ARM 0x00
+#define CMD_SEND_FROM_MCU 0x01 
+
+
+#define CMD_HEAD_CODE 0xA0
+//define CMD ID with communication between arm and mcu
+
+
+#define CMD_ID_COM_NOTIFY 0x00
+
+#define CMD_ID_PANAL 0x00
+   #define DATA_ID_CAMERA 0x01
+   #define DATA_ID_PANAL 0x02
+    #define DATA_ID_VERSION 0x04
+    #define DATA_ID_SIGNAL 0x06
+   #define DATA_ID_SCREENSIZE 0x12
+
+   
+#define CMD_ID_SETTING 0x80
+    #define DATA_ID_DISPLAY 0x00
+    #define DATA_ID_NAVI_SET 0x01
+    #define DATA_ID_FACTORY 0x02
+    #define DATA_ID_LANG 0x03
+    #define DATA_ID_SYS_RESET 0x04
+    #define DATA_ID_Center_CTRL 0x05
+    #define DATA_ID_SYS_SRC 0x06
+    #define DATA_ID_TV_CTRL 0x07
+     #define DATA_ID_DVD_CTRL 0x08
+     #define DATA_ID_BL_Switch_CTRL 0x09
+     #define DATA_ID_SRC_Switch_CTRL 0x0C //0x0B
+/*=========================
+Panel key send funtion
+By Miller.Tao,20151126
+==========================*/
+void Panel_Key_Send(BYTE keycode)
+{
+       BYTE buffer[10],i;
+       BYTE checksum=0;
+		   
+	   buffer[0] =  CMD_HEAD_CODE;
+	   buffer[1] = 4;//length
+	   buffer[2] = CMD_ID_SETTING;// CMD_ID_PANAL;//cmd tye :here is 0x00, a common id
+	   buffer[3] =  DATA_ID_Center_CTRL;//data type
+	   buffer[4] = CMD_SEND_FROM_MCU;//send from 
+       buffer[5] = keycode ;//data 0
+       //calculation the checksum
+       for(i=1;i<=(buffer[1]+1);i++)
+	  {
+           checksum += buffer[i];
+
+	  }
+	  buffer[buffer[1] +2] = checksum;
+
+      Mcu2Navi_Com(buffer,buffer[1]+3);
+	  
+}
+
+/*==========================
+void Init_navi_send(BYTE status)
+parameter:status = 0,close system
+                          = 1,init ok
+
+
+===========================*/
+void Init_navi_send(BYTE status)
+{
+           BYTE buffer[10],i;
+           BYTE checksum=0;
+		   
+	   buffer[0] =  CMD_HEAD_CODE;
+	   buffer[1] = 4;//length
+	   buffer[2] =  CMD_ID_PANAL;//cmd tye :here is 0x00, a common id
+	   buffer[3] =  DATA_ID_PANAL;//data type
+	   buffer[4] = CMD_SEND_FROM_MCU;//send from 
+           buffer[5] = status ;//data 0
+           //calculation the checksum
+           for(i=1;i<=(buffer[1]+1);i++)
+	  {
+                 checksum += buffer[i];
+
+	  }
+	  buffer[buffer[1] +2] = checksum;
+
+          Mcu2Navi_Com(buffer,buffer[1]+3);
+	  
+
+}
+
+void camera_sel_send(BYTE camera)
+{
+           BYTE buffer[10],i;
+           BYTE checksum=0;
+		   
+	   buffer[0] =  CMD_HEAD_CODE;
+	   buffer[1] = 4;//length
+	   buffer[2] =  CMD_ID_COM_NOTIFY;//cmd tye :here is 0x00, a common id
+	   buffer[3] =  DATA_ID_CAMERA;//data type
+	   buffer[4] = CMD_SEND_FROM_MCU;//send from 
+           buffer[5] = camera ;//data 0
+           //calculation the checksum
+           for(i=1;i<=(buffer[1]+1);i++)
+	  {
+                 checksum += buffer[i];
+
+	  }
+	  buffer[buffer[1] +2] = checksum;
+
+          Mcu2Navi_Com(buffer,buffer[1]+3);
+	  
+
+}
+
+void Set_Display_Send(BYTE bright,BYTE contrast)
+{
+           BYTE buffer[10],i;
+           BYTE checksum=0;
+		   
+	   buffer[0] =  CMD_HEAD_CODE;
+	   buffer[1] = 5;//length
+	   buffer[2] =  CMD_ID_SETTING;//cmd tye :here is 0x00, a common id
+	   buffer[3] =  DATA_ID_DISPLAY;//data type
+	   buffer[4] = CMD_SEND_FROM_MCU;//send from 
+           buffer[5] = bright ;//data 0
+           buffer[6] = contrast;
+           //calculation the checksum
+           for(i=1;i<=(buffer[1]+1);i++)
+	  {
+                 checksum += buffer[i];
+
+	  }
+	  buffer[buffer[1] +2] = checksum;
+
+          Mcu2Navi_Com(buffer,buffer[1]+3);
+	  
+
+}
+
+void Set_NaviSet_Send(BYTE type,BYTE para)
+{
+           BYTE buffer[10],i;
+           BYTE checksum=0;
+		   
+	   buffer[0] =  CMD_HEAD_CODE;
+	   buffer[1] = 5;//length
+	   buffer[2] =  CMD_ID_SETTING;//cmd tye :here is 0x00, a common id
+	   buffer[3] =  DATA_ID_NAVI_SET;//data type
+	   buffer[4] = CMD_SEND_FROM_MCU;//send from 
+           buffer[5] = type ;//data 0
+           buffer[6] = para;
+           //calculation the checksum
+           for(i=1;i<=(buffer[1]+1);i++)
+	  {
+                 checksum += buffer[i];
+
+	  }
+	  buffer[buffer[1] +2] = checksum;
+
+          Mcu2Navi_Com(buffer,buffer[1]+3);
+	  
+
+}
+
+void Set_SuitSet_Send(BYTE akey,BYTE warn,BYTE find,BYTE radar)
+{
+           BYTE buffer[16],i;
+           BYTE checksum=0;
+		   
+	   buffer[0] =  CMD_HEAD_CODE;
+	   buffer[1] = 8;//length
+	   buffer[2] =  CMD_ID_SETTING;//cmd tye :here is 0x00, a common id
+	   buffer[3] =  DATA_ID_FACTORY;//data type
+	   buffer[4] = CMD_SEND_FROM_MCU;//send from
+	   buffer[5] = 0x00;//ÊæÊÊÉèÖÃ
+           buffer[6] = akey ;//data 0
+           buffer[7] = warn;
+	   buffer[8] =find;
+	   buffer[9] = radar;
+	   
+           //calculation the checksum
+           for(i=1;i<=(buffer[1]+1);i++)
+	  {
+                 checksum += buffer[i];
+
+	  }
+	  buffer[buffer[1] +2] = checksum;
+
+          Mcu2Navi_Com(buffer,buffer[1]+3);
+	  
+
+}
+
+void Set_CarSet_Send(BYTE car)
+{
+           BYTE buffer[10],i;
+           BYTE checksum=0;
+		   
+	   buffer[0] =  CMD_HEAD_CODE;
+	   buffer[1] = 5;//length
+	   buffer[2] =  CMD_ID_SETTING;//cmd tye :here is 0x00, a common id
+	   buffer[3] =  DATA_ID_FACTORY;//data type
+	   buffer[4] = CMD_SEND_FROM_MCU;//send from 
+           buffer[5] = 0x01 ;//data 0
+           buffer[6] = car;
+           //calculation the checksum
+           for(i=1;i<=(buffer[1]+1);i++)
+	  {
+                 checksum += buffer[i];
+
+	  }
+	  buffer[buffer[1] +2] = checksum;
+
+          Mcu2Navi_Com(buffer,buffer[1]+3);
+	  
+
+}
+
+
+void Set_RearViewSet_Send(BYTE viewmode)
+{
+           BYTE buffer[10],i;
+           BYTE checksum=0;
+		   
+	   buffer[0] =  CMD_HEAD_CODE;
+	   buffer[1] = 5;//length
+	   buffer[2] =  CMD_ID_SETTING;//cmd tye :here is 0x00, a common id
+	   buffer[3] =  DATA_ID_FACTORY;//data type
+	   buffer[4] = CMD_SEND_FROM_MCU;//send from 
+           buffer[5] = 0x02 ;//data 0
+           buffer[6] = viewmode;
+           //calculation the checksum
+           for(i=1;i<=(buffer[1]+1);i++)
+	  {
+                 checksum += buffer[i];
+
+	  }
+	  buffer[buffer[1] +2] = checksum;
+
+          Mcu2Navi_Com(buffer,buffer[1]+3);
+	  
+
+}
+
+
+void Set_CarInputSet_Send(BYTE resolution)
+{
+           BYTE buffer[10],i;
+           BYTE checksum=0;
+		   
+	   buffer[0] =  CMD_HEAD_CODE;
+	   buffer[1] = 5;//length
+	   buffer[2] =  CMD_ID_SETTING;//cmd tye :here is 0x00, a common id
+	   buffer[3] =  DATA_ID_FACTORY;//data type
+	   buffer[4] = CMD_SEND_FROM_MCU;//send from 
+           buffer[5] = 0x03 ;//data 0
+           buffer[6] = resolution;
+           //calculation the checksum
+           for(i=1;i<=(buffer[1]+1);i++)
+	  {
+                 checksum += buffer[i];
+
+	  }
+	  buffer[buffer[1] +2] = checksum;
+
+          Mcu2Navi_Com(buffer,buffer[1]+3);
+	  
+
+}
+
+void Set_DVDSet_Send(BYTE mode)
+{
+           BYTE buffer[10],i;
+           BYTE checksum=0;
+		   
+	   buffer[0] =  CMD_HEAD_CODE;
+	   buffer[1] = 5;//length
+	   buffer[2] =  CMD_ID_SETTING;//cmd tye :here is 0x00, a common id
+	   buffer[3] =  DATA_ID_FACTORY;//data type
+	   buffer[4] = CMD_SEND_FROM_MCU;//send from 
+           buffer[5] = 0x04 ;//data 0
+           buffer[6] = mode;
+           //calculation the checksum
+           for(i=1;i<=(buffer[1]+1);i++)
+	  {
+                 checksum += buffer[i];
+
+	  }
+	  buffer[buffer[1] +2] = checksum;
+
+          Mcu2Navi_Com(buffer,buffer[1]+3);
+	  
+
+}
+
+void Set_TVSet_Send(BYTE mode)
+{
+           BYTE buffer[10],i;
+           BYTE checksum=0;
+		   
+	   buffer[0] =  CMD_HEAD_CODE;
+	   buffer[1] = 5;//length
+	   buffer[2] =  CMD_ID_SETTING;//cmd tye :here is 0x00, a common id
+	   buffer[3] =  DATA_ID_FACTORY;//data type
+	   buffer[4] = CMD_SEND_FROM_MCU;//send from 
+           buffer[5] = 0x05 ;//data 0
+           buffer[6] = mode;
+           //calculation the checksum
+           for(i=1;i<=(buffer[1]+1);i++)
+	  {
+                 checksum += buffer[i];
+
+	  }
+	  buffer[buffer[1] +2] = checksum;
+
+          Mcu2Navi_Com(buffer,buffer[1]+3);
+	  
+
+}
+
+void Set_CarRecoderSet_Send(BYTE mode)
+{
+           BYTE buffer[10],i;
+           BYTE checksum=0;
+		   
+	   buffer[0] =  CMD_HEAD_CODE;
+	   buffer[1] = 5;//length
+	   buffer[2] =  CMD_ID_SETTING;//cmd tye :here is 0x00, a common id
+	   buffer[3] =  DATA_ID_FACTORY;//data type
+	   buffer[4] = CMD_SEND_FROM_MCU;//send from 
+           buffer[5] = 0x06 ;//data 0
+           buffer[6] = mode;
+           //calculation the checksum
+           for(i=1;i<=(buffer[1]+1);i++)
+	  {
+                 checksum += buffer[i];
+
+	  }
+	  buffer[buffer[1] +2] = checksum;
+
+          Mcu2Navi_Com(buffer,buffer[1]+3);
+	  
+
+}
+
+void Set_SysLangSet_Send(BYTE lang)
+{
+           BYTE buffer[10],i;
+           BYTE checksum=0;
+		   
+	   buffer[0] =  CMD_HEAD_CODE;
+	   buffer[1] = 4;//length
+	   buffer[2] =  CMD_ID_SETTING;//cmd type :here is 0x00, a common id
+	   buffer[3] =  DATA_ID_LANG;//data type
+	   buffer[4] = CMD_SEND_FROM_MCU;//send from 
+           buffer[5] = lang ;//data 0
+           
+           //calculation the checksum
+           for(i=1;i<=(buffer[1]+1);i++)
+	  {
+                 checksum += buffer[i];
+
+	  }
+	  buffer[buffer[1] +2] = checksum;
+
+          Mcu2Navi_Com(buffer,buffer[1]+3);
+	  
+
+}
+
+void Set_SysResetSet_Send(BYTE mode)
+{
+           BYTE buffer[10],i;
+           BYTE checksum=0;
+		   
+	   buffer[0] =  CMD_HEAD_CODE;
+	   buffer[1] = 4;//length
+	   buffer[2] =  CMD_ID_SETTING;//cmd tye :here is 0x00, a common id
+	   buffer[3] =  DATA_ID_SYS_RESET;//data type
+	   buffer[4] = CMD_SEND_FROM_MCU;//send from 
+           buffer[5] = mode ;//data 0
+          
+           //calculation the checksum
+           for(i=1;i<=(buffer[1]+1);i++)
+	  {
+                 checksum += buffer[i];
+
+	  }
+	  buffer[buffer[1] +2] = checksum;
+
+          Mcu2Navi_Com(buffer,buffer[1]+3);
+	  
+
+}
+
+
+void IsSignal_Send(BYTE sighas)
+{
+           BYTE buffer[10],i;
+           BYTE checksum=0;
+		   
+	   buffer[0] =  CMD_HEAD_CODE;
+	   buffer[1] = 4;//length
+	   buffer[2] =  CMD_ID_COM_NOTIFY;//cmd tye :here is 0x00, a common id
+	   buffer[3] =  DATA_ID_SIGNAL;//data type
+	   buffer[4] = CMD_SEND_FROM_MCU;//send from 
+           buffer[5] = sighas ;//data 0
+          
+           //calculation the checksum
+           for(i=1;i<=(buffer[1]+1);i++)
+	  {
+                 checksum += buffer[i];
+
+	  }
+	  buffer[buffer[1] +2] = checksum;
+
+          Mcu2Navi_Com(buffer,buffer[1]+3);
+	  
+
+}
+
+void SwitchScreenSize_Send(BYTE mode)
+{
+           BYTE buffer[10],i;
+           BYTE checksum=0;
+		   
+	   buffer[0] =  CMD_HEAD_CODE;
+	   buffer[1] = 5;//length
+	   buffer[2] =  CMD_ID_COM_NOTIFY;//cmd tye :here is 0x00, a common id
+	   buffer[3] =  DATA_ID_SCREENSIZE;//data type
+	   buffer[4] = CMD_SEND_FROM_MCU;//send from 
+           buffer[5] = mode ;//data 0
+           buffer[6] = 0;
+           //calculation the checksum
+           for(i=1;i<=(buffer[1]+1);i++)
+	  {
+                 checksum += buffer[i];
+
+	  }
+	  buffer[buffer[1] +2] = checksum;
+
+          Mcu2Navi_Com(buffer,buffer[1]+3);
+	  
+
+}
+void Set_SysSRC_Send(BYTE src,BYTE on)
+{
+           BYTE buffer[10],i;
+           BYTE checksum=0;
+		   
+	   buffer[0] =  CMD_HEAD_CODE;
+	   buffer[1] = 5;//length
+	   buffer[2] =  CMD_ID_SETTING;//cmd tye :here is 0x00, a common id
+	   buffer[3] =  DATA_ID_SYS_SRC;//data type
+	   buffer[4] = CMD_SEND_FROM_MCU;//send from 
+           buffer[5] = src ;//data 0
+          buffer[6] = on;
+           //calculation the checksum
+           for(i=1;i<=(buffer[1]+1);i++)
+	  {
+                 checksum += buffer[i];
+
+	  }
+	  buffer[buffer[1] +2] = checksum;
+
+          Mcu2Navi_Com(buffer,buffer[1]+3);
+}
+
+void Dvd_Control_Send(BYTE cmd)
+{
+           BYTE buffer[10],i;
+           BYTE checksum=0;
+		   
+	   buffer[0] =  CMD_HEAD_CODE;
+	   buffer[1] = 4;//length
+	   buffer[2] =  CMD_ID_SETTING;//cmd tye :here is 0x00, a common id
+	   buffer[3] =  DATA_ID_DVD_CTRL;//data type
+	   buffer[4] = CMD_SEND_FROM_MCU;//send from 
+           buffer[5] = cmd ;//data 0
+          
+           //calculation the checksum
+           for(i=1;i<=(buffer[1]+1);i++)
+	  {
+                 checksum += buffer[i];
+
+	  }
+	  buffer[buffer[1] +2] = checksum;
+
+          Mcu2Navi_Com(buffer,buffer[1]+3);
+}
+
+void Tv_Control_Send(BYTE cmd)
+{
+           BYTE buffer[10],i;
+           BYTE checksum=0;
+		   
+	   buffer[0] =  CMD_HEAD_CODE;
+	   buffer[1] = 4;//length
+	   buffer[2] =  CMD_ID_SETTING;//cmd tye :here is 0x00, a common id
+	   buffer[3] =  DATA_ID_TV_CTRL;//data type
+	   buffer[4] = CMD_SEND_FROM_MCU;//send from 
+           buffer[5] = cmd ;//data 0
+          
+           //calculation the checksum
+           for(i=1;i<=(buffer[1]+1);i++)
+	  {
+                 checksum += buffer[i];
+
+	  }
+	  buffer[buffer[1] +2] = checksum;
+
+          Mcu2Navi_Com(buffer,buffer[1]+3);
+}
+/*
+back light setting
+*/
+void BL_Control_Send(BYTE cmd)
+{
+       BYTE buffer[10],i;
+       BYTE checksum=0;
+		   
+	   buffer[0] =  CMD_HEAD_CODE;
+	   buffer[1] = 4;//length
+	   buffer[2] =  CMD_ID_SETTING;//cmd tye :here is 0x00, a common id
+	   buffer[3] =  DATA_ID_BL_Switch_CTRL;//data type
+	   buffer[4] = CMD_SEND_FROM_MCU;//send from 
+       buffer[5] = cmd ;//data 0
+          
+           //calculation the checksum
+      for(i=1;i<=(buffer[1]+1);i++)
+	  {
+           checksum += buffer[i];
+
+	  }
+	  buffer[buffer[1] +2] = checksum;
+
+      Mcu2Navi_Com(buffer,buffer[1]+3);
+}
+
+void Sys_SRC_Send(BYTE src)
+{
+       BYTE buffer[10],i;
+       BYTE checksum=0;
+		   
+	   buffer[0] =  CMD_HEAD_CODE;
+	   buffer[1] = 4;//length
+	   buffer[2] =  CMD_ID_SETTING;//cmd tye :here is 0x00, a common id
+	   buffer[3] =  DATA_ID_SRC_Switch_CTRL;//data type
+	   buffer[4] = CMD_SEND_FROM_MCU;//send from 
+       buffer[5] = src ;//data 0
+          
+           //calculation the checksum
+      for(i=1;i<=(buffer[1]+1);i++)
+	  {
+           checksum += buffer[i];
+
+	  }
+	  buffer[buffer[1] +2] = checksum;
+
+      Mcu2Navi_Com(buffer,buffer[1]+3);
+}
+
+#if 1//miller.tao20160426
+//#define MCU_FW_VER "MCU0003"
+#define MCU_FW_VER "LF_MCU_T101A0009" //06
+
+void mcu_version_send(void)
+{
+           BYTE buffer[40],i;
+           BYTE checksum=0;
+		   
+	   buffer[0] =  CMD_HEAD_CODE;
+	   buffer[1] = 0x13+8+1;//length
+	   buffer[2] =  CMD_ID_COM_NOTIFY;//cmd tye :here is 0x00, a common id
+	   buffer[3] =  DATA_ID_VERSION;//data type
+	   buffer[4] = CMD_SEND_FROM_MCU;//send from 
+	   for(i=0;i<16;i++)//7
+           buffer[5+i] = *(MCU_FW_VER+i) ;//data 0
+           //buffer[6] = *(MCU_FW_VER+1) ;//data 1
+           //buffer[5+7] = '_';
+		  buffer[5+16] = '_';
+           for(i=0;i<8;i++)
+           buffer[22+i] = Tw88_version[i];//*(MCU_FW_VER+i) ;//data 0
+           //calculation the checksum
+           for(i=1;i<=(buffer[1]+1);i++)
+	  {
+                 checksum += buffer[i];
+
+	  }
+	  buffer[buffer[1] +2] = checksum;
+
+          Mcu2Navi_Com(buffer,buffer[1]+3);
+	  
+
+}
+
+#else
+//#define MCU_FW_VER "LF_MCU_T101A0003"
+#define MCU_FW_VER "LF_MCU_T101A0003"
+
+void mcu_version_send(void)
+{
+           BYTE buffer[30],i;
+           BYTE checksum=0;
+		   
+	   buffer[0] =  CMD_HEAD_CODE;
+	   buffer[1] = 0x13;//length
+	   buffer[2] =  CMD_ID_COM_NOTIFY;//cmd tye :here is 0x00, a common id
+	   buffer[3] =  DATA_ID_VERSION;//data type
+	   buffer[4] = CMD_SEND_FROM_MCU;//send from 
+	   for(i=0;i<16;i++)
+           buffer[5+i] = *(MCU_FW_VER+i) ;//data 0
+           //buffer[6] = *(MCU_FW_VER+1) ;//data 1
+           //calculation the checksum
+           for(i=1;i<=(buffer[1]+1);i++)
+	  {
+                 checksum += buffer[i];
+
+	  }
+	  buffer[buffer[1] +2] = checksum;
+
+          Mcu2Navi_Com(buffer,buffer[1]+3);
+	  
+
+}
+#endif
+/*==========================
+This function is to handle the CMD from android navi
+By Miller.Tao20151120
+
+==========================*/
+
+#define CMD_COMMON 0x00
+    #define ARM_INIT_DATA 0x00
+	#define ARM_KEYCODE_DATA 0x03
+	#define ARM_VOICE_DATA 0x05
+	#define ARM_TOUCH_DATA 0x0A
+	#define ARM_MENU_DATA 0x0D
+	#define ARM_CAR_TYPE_DATA 0x0F
+	#define ARM_MP5_VIDEO_STA_DATA 0x11
+	#define ARM_GPS_SPEED_DATA 0x13
+
+#define CMD_SETTING 0x80
+            #define ARM_DISPLAY_DATA 0x00
+	    #define ARM_NAVI_SET_DATA 0x01
+	    #define ARM_Factory_SET_DATA 0x02
+	    #define ARM_Lang_Set_DATA 0x03
+	    #define ARM_Sys_Reset_DATA 0x04
+	     #define ARM_Center_Control_DATA 0x05
+	     #define ARM_CHG_SRC_DATA 0x06
+	    #define ARM_TV_CTRL_DATA 0x07
+	    #define ARM_DVD_CTRL_DATA 0x08
+	    #define ARM_BL_CTRL_DATA 0x09
+	     #define ARM_NAVI_STATE_DATA 0x0A
+		#define ARM_NAVI_VOICE_DATA 0x0B
+//BYTE navitemp[8];
+#if 1//miller.tao20160224
+void NAVI_PROCESS(void)
+{
+        BYTE cmd,datatype;
+	if(gGPSCmdRdIndex==gGPSCmdWrtIndex)return;
+	
+	 cmd  = gGPSCmdBuffer[gGPSCmdRdIndex][2];
+	 datatype = gGPSCmdBuffer[gGPSCmdRdIndex][3];
+	    switch(cmd)	
+        {
+             case CMD_COMMON:
+            switch(datatype)
+			{
+                   case ARM_INIT_DATA:
+					if(gGPSCmdBuffer[gGPSCmdRdIndex][5]==0x00)//close system
+					{
+                                                 
+					}
+					else if(gGPSCmdBuffer[gGPSCmdRdIndex][5] ==0x01)//init ok
+					{
+					  #if 1//miller.tao20160224
+					//  if(gGPSInitOk==0)
+					  {
+                                           Init_navi_send(1);
+
+					    mcu_version_send();
+					    gGPSInitOk = 1;
+                                            Set_Display_Send(g_stuSYSINFO.uBright,g_stuSYSINFO.uContrast);
+                                            Set_NaviSet_Send(0x01, g_stuSYSINFO.uNaviVolum);
+					    Set_NaviSet_Send(0x02,g_stuSYSINFO.uNaviType);
+						
+					    Set_SuitSet_Send( g_stuSYSINFO.FS_select.car_suit_set_id.akey, g_stuSYSINFO.FS_select.car_suit_set_id.warn,g_stuSYSINFO.FS_select.car_suit_set_id.find,g_stuSYSINFO.FS_select.car_suit_set_id.autoradar);
+                                            Set_CarSet_Send(g_stuSYSINFO.FS_select.car_type_onoff_id);
+					    Set_RearViewSet_Send(g_stuSYSINFO.FS_select.car_rearview_id);
+					    Set_CarInputSet_Send(g_stuSYSINFO.FS_select.car_input_res_id);
+					    Set_DVDSet_Send( g_stuSYSINFO.FS_select.DVD_onoff_id);
+					    Set_TVSet_Send( g_stuSYSINFO.FS_select.cmmb_type_onoff_id);
+					    Set_CarRecoderSet_Send(g_stuSYSINFO.FS_select.rec_type_onoff_id);
+						}
+					   #endif
+					}
+					else if(gGPSCmdBuffer[gGPSCmdRdIndex][5]==0x02)//info have saved
+					{
+                                             gGPSSaveOk = 1;
+					}
+					break;
+				  case ARM_KEYCODE_DATA://key 
+				  	
+				  	break;
+				  case ARM_VOICE_DATA:
+				  	
+				  	break;
+				 case ARM_TOUCH_DATA:
+				 	break;
+				case ARM_MENU_DATA:
+				 	break;
+				case ARM_CAR_TYPE_DATA:
+
+					break;
+				case ARM_MP5_VIDEO_STA_DATA:
+					SwitchScreenSize_Send(gGPSCmdBuffer[gGPSCmdRdIndex][5]);
+					IPC_PIP_Screen_Fun(gGPSCmdBuffer[gGPSCmdRdIndex][5]);
+					break;
+				case ARM_GPS_SPEED_DATA:
+					break;
+			        default:
+				   	break;
+			}
+			break;
+		case CMD_SETTING:
+            switch(datatype)
+			{
+				    case ARM_DISPLAY_DATA:
+					g_stuSYSINFO.uBright = gGPSCmdBuffer[gGPSCmdRdIndex][5];
+					g_stuSYSINFO.uContrast = gGPSCmdBuffer[gGPSCmdRdIndex][6];
+					#if 1//miller.tao20160416
+					if(g_stuSYSINFO.uBright<=64)
+                    g_stuSYSINFO.uCurDimmerVal=0;
+					else
+					{
+                       g_stuSYSINFO.uCurDimmerVal = (g_stuSYSINFO.uBright-64)/5;
+					}
+					IPC_Send_Bright_Contrast_Fun(g_stuSYSINFO.uCurDimmerVal,g_stuSYSINFO.uContrast);
+					#else
+					IPC_Send_Bright_Contrast_Fun(g_stuSYSINFO.uBright,g_stuSYSINFO.uContrast);
+					#endif
+					//Quick_IPC_send_Data_3var(ARM_DISPLAY_DATA,g_stuSYSINFO.uBright,g_stuSYSINFO.uContrast);
+				    //Set_Display_Send(gGPSCmdBuffer[gGPSCmdRdIndex][5],gGPSCmdBuffer[gGPSCmdRdIndex][6]);
+					break;
+				  case ARM_NAVI_SET_DATA:
+                    if(gGPSCmdBuffer[gGPSCmdRdIndex][5]==0x02)
+					 g_stuSYSINFO.uNaviType= gGPSCmdBuffer[gGPSCmdRdIndex][6];
+					else if(gGPSCmdBuffer[gGPSCmdRdIndex][5]==0x01)
+					   g_stuSYSINFO.uNaviVolum= gGPSCmdBuffer[gGPSCmdRdIndex][6];
+					
+				  	//Set_NaviSet_Send(gGPSCmdBuffer[gGPSCmdRdIndex][5],gGPSCmdBuffer[gGPSCmdRdIndex][6]);
+				  	break;
+				  case ARM_Factory_SET_DATA:
+				  	switch(gGPSCmdBuffer[gGPSCmdRdIndex][5])
+				  	{
+				  	       case 0x00://suitable setting
+				  	               g_stuSYSINFO.FS_select.car_suit_set_id.akey=gGPSCmdBuffer[gGPSCmdRdIndex][6];
+						       g_stuSYSINFO.FS_select.car_suit_set_id.warn=gGPSCmdBuffer[gGPSCmdRdIndex][7];
+							g_stuSYSINFO.FS_select.car_suit_set_id.find=gGPSCmdBuffer[gGPSCmdRdIndex][8];
+                                                       g_stuSYSINFO.FS_select.car_suit_set_id.autoradar=gGPSCmdBuffer[gGPSCmdRdIndex][9];
+							
+                                                       //Set_SuitSet_Send(gGPSCmdBuffer[gGPSCmdRdIndex][6],gGPSCmdBuffer[gGPSCmdRdIndex][7],gGPSCmdBuffer[gGPSCmdRdIndex][8],gGPSCmdBuffer[gGPSCmdRdIndex][9]);
+							break;
+						case 0x01://car type
+						       g_stuSYSINFO.FS_select.car_type_onoff_id =gGPSCmdBuffer[gGPSCmdRdIndex][6];
+						       //Set_CarSet_Send(gGPSCmdBuffer[gGPSCmdRdIndex][6]);
+						       Ipc_Send_FS_setup();
+							break;
+						case 0x02://rear view
+						       // g_stuSYSINFO.FS_select.angle_rada_onoff_id =gGPSCmdBuffer[gGPSCmdRdIndex][6];
+                            g_stuSYSINFO.FS_select.car_rearview_id= gGPSCmdBuffer[gGPSCmdRdIndex][6];
+							switch(g_stuSYSINFO.FS_select.car_rearview_id)
+							{
+				                                 case 0x00://car rear view
+				                                      g_stuSYSINFO.FS_select.angle_rada_onoff_id = 2;
+													  g_stuSYSINFO.FS_select.cam_type_onoff_id = 0;
+												      break;
+												 case 0x01://car rearview +front view
+				                                      g_stuSYSINFO.FS_select.angle_rada_onoff_id = 2;
+													  g_stuSYSINFO.FS_select.cam_type_onoff_id = 0;
+												      break;
+												 case 0x02://add rearview 
+				                                      g_stuSYSINFO.FS_select.angle_rada_onoff_id = 1;
+													  g_stuSYSINFO.FS_select.cam_type_onoff_id = 1;
+												    break;
+												case 0x03://add rearview +front view
+													  g_stuSYSINFO.FS_select.angle_rada_onoff_id = 1;
+													  g_stuSYSINFO.FS_select.cam_type_onoff_id = 1;
+													break;
+												case 0x04://360
+				                                      g_stuSYSINFO.FS_select.angle_rada_onoff_id = 3;
+													  g_stuSYSINFO.FS_select.cam_type_onoff_id = 1;
+													break;
+												case 0x05://no
+				                                      g_stuSYSINFO.FS_select.cam_type_onoff_id = 2;
+													break;
+												default:
+				                                      g_stuSYSINFO.FS_select.cam_type_onoff_id = 2;
+													break;
+							 }
+							  //Set_RearViewSet_Send(gGPSCmdBuffer[gGPSCmdRdIndex][6]);
+						      Ipc_Send_FS_setup();
+							break;
+						case 0x03://input selection
+						     g_stuSYSINFO.FS_select.car_input_res_id =gGPSCmdBuffer[gGPSCmdRdIndex][6];
+						     //Set_CarInputSet_Send(gGPSCmdBuffer[gGPSCmdRdIndex][6]);
+						     Ipc_Send_FS_setup();
+							break;
+						case 0x04://dvd selection
+						    g_stuSYSINFO.FS_select.DVD_onoff_id =gGPSCmdBuffer[gGPSCmdRdIndex][6];
+						     //Set_DVDSet_Send(gGPSCmdBuffer[gGPSCmdRdIndex][6]);
+							 Ipc_Send_FS_setup();
+							break;
+						case 0x05://cmmb selection
+						   g_stuSYSINFO.FS_select.cmmb_type_onoff_id =gGPSCmdBuffer[gGPSCmdRdIndex][6];
+						    //Set_TVSet_Send(gGPSCmdBuffer[gGPSCmdRdIndex][6]);
+							Ipc_Send_FS_setup();
+							break;
+						case 0x06://car recorder selection
+						     g_stuSYSINFO.FS_select.rec_type_onoff_id = gGPSCmdBuffer[gGPSCmdRdIndex][6];
+						    //Set_CarRecoderSet_Send(gGPSCmdBuffer[gGPSCmdRdIndex][6]);
+							Ipc_Send_FS_setup();
+							break;
+						default:
+							break;
+
+					}
+				  	break;
+				 case ARM_Lang_Set_DATA:
+				 	g_stuSYSINFO.uCurOSDLang=gGPSCmdBuffer[gGPSCmdRdIndex][5];
+				 	//Set_SysLangSet_Send(gGPSCmdBuffer[gGPSCmdRdIndex][5]);
+				 	break;
+				case ARM_Sys_Reset_DATA:
+					Set_SysResetSet_Send(gGPSCmdBuffer[gGPSCmdRdIndex][5]);
+				 	break;
+                case ARM_CHG_SRC_DATA://PIP Open
+                                       //navitemp[0]=gGPSCmdBuffer[gGPSCmdRdIndex][5];
+					//navitemp[1]=gGPSCmdBuffer[gGPSCmdRdIndex][6];
+                                       //Set_SysSRC_Send(op.msgbuf[5],op.msgbuf[6]);
+					//if((op.msgbuf[5]==1)&&(op.msgbuf[6]==1))SysMainMode_Enter_CMMB_Video();
+                    if(g_stuSYSINFO.sys_main.uMainMode==SYSTEM_MODE_IN_NAVI)
+					{
+						//if(gNaviStatus!=0)
+						{
+					gPIP_Status.PIP_Switch =gGPSCmdBuffer[gGPSCmdRdIndex][6];
+					gPIP_Status.PIP_SRC =gGPSCmdBuffer[gGPSCmdRdIndex][5];
+					gPIP_Status.PIP_ScreenMode=gGPSCmdBuffer[gGPSCmdRdIndex][7];
+					
+					IPC_PIP_Fun(gGPSCmdBuffer[gGPSCmdRdIndex][6],gGPSCmdBuffer[gGPSCmdRdIndex][5],gGPSCmdBuffer[gGPSCmdRdIndex][7]);
+                    	}
+				    //SysDelay(20);//100
+					//IPC_PIP_Fun(gGPSCmdBuffer[gGPSCmdRdIndex][6],gGPSCmdBuffer[gGPSCmdRdIndex][5],gGPSCmdBuffer[gGPSCmdRdIndex][7]);
+                    }
+					break;
+			       case ARM_TV_CTRL_DATA:
+				   	 Tv_Control_Send(gGPSCmdBuffer[gGPSCmdRdIndex][5]);
+				   	break;
+				case ARM_DVD_CTRL_DATA:
+					DVD_Fill_OpCmd(gGPSCmdBuffer[gGPSCmdRdIndex][5]);
+					//Dvd_Control_Send(gGPSCmdBuffer[gGPSCmdRdIndex][5]);
+					
+					break;
+				case ARM_BL_CTRL_DATA:
+					BL_Control_Send(gGPSCmdBuffer[gGPSCmdRdIndex][5]);
+					if(gGPSCmdBuffer[gGPSCmdRdIndex][5]==0)//closed
+					{
+                        g_stuSYSINFO.bOffScreenSwitch =1;
+						Ipc_RESend_fun((int)Ipc_Send_TFT_onoff,g_stuSYSINFO.bOffScreenSwitch);
+					}
+					else//open
+					{
+                             g_stuSYSINFO.bOffScreenSwitch = 0;
+						Ipc_RESend_fun((int)Ipc_Send_TFT_onoff,g_stuSYSINFO.bOffScreenSwitch);
+					}
+					break;
+				case ARM_NAVI_STATE_DATA:
+                                       gNaviStatus = gGPSCmdBuffer[gGPSCmdRdIndex][5];
+					break;
+				case ARM_NAVI_VOICE_DATA:
+
+					{
+					BYTE temp=0;
+					temp = gGPSCmdBuffer[gGPSCmdRdIndex][5];
+                    //g_GPS_DATA.uSoundFlag = gGPSCmdBuffer[gGPSCmdRdIndex][5];
+                    if(g_GPS_DATA.uSoundFlag)
+                    {
+
+					}else
+                    {
+                       if(temp==1)gNaviVoiceCnt=100;
+					}
+				    g_GPS_DATA.uSoundFlag=temp;
+                    }
+					break;
+			        default:
+				   	break;
+			}
+			break;
+                 default:
+			break;
+	 }
+	gGPSCmdRdIndex++;
+	if(gGPSCmdRdIndex>=GPSCMDBUFFMAX)gGPSCmdRdIndex=0;
+}
+
+#else
+void NAVI_PROCESS(msg_data_t op)
+{
+         
+         BYTE cmd,datatype;
+         cmd  = op.msgbuf[2];
+	 datatype = op.msgbuf[3];
+	 switch(cmd)
+	 {
+                 case CMD_COMMON:
+                         switch(datatype)
+			{
+                                   case ARM_INIT_DATA:
+					if(op.msgbuf[5]==0x00)//close system
+					{
+
+					}
+					else if(op.msgbuf[5] ==0x01)//init ok
+					{
+                                            Init_navi_send(1);
+
+					    mcu_version_send();
+					    gGPSInitOk = 1;
+                                            Set_Display_Send(g_stuSYSINFO.uBright,g_stuSYSINFO.uContrast);
+                                           Set_NaviSet_Send(0x01, g_stuSYSINFO.uNaviVolum);
+					   Set_NaviSet_Send(0x02,g_stuSYSINFO.uNaviType);
+						
+					   Set_SuitSet_Send( g_stuSYSINFO.FS_select.car_suit_set_id.akey, g_stuSYSINFO.FS_select.car_suit_set_id.warn,g_stuSYSINFO.FS_select.car_suit_set_id.find,g_stuSYSINFO.FS_select.car_suit_set_id.autoradar);
+                                            Set_CarSet_Send(g_stuSYSINFO.FS_select.car_type_onoff_id);
+					    Set_RearViewSet_Send(g_stuSYSINFO.FS_select.angle_rada_onoff_id);
+					    Set_CarInputSet_Send(g_stuSYSINFO.FS_select.car_input_res_id);
+					    Set_DVDSet_Send( g_stuSYSINFO.FS_select.DVD_onoff_id);
+					    Set_TVSet_Send( g_stuSYSINFO.FS_select.cmmb_type_onoff_id);
+					   Set_CarRecoderSet_Send(g_stuSYSINFO.FS_select.rec_type_onoff_id);
+					}
+					else if(op.msgbuf[5]==0x02)//info have saved
+					{
+                                             gGPSSaveOk = 1;
+					}
+					break;
+				  case ARM_KEYCODE_DATA://key 
+				  	
+				  	break;
+				  case ARM_VOICE_DATA:
+				  	
+				  	break;
+				 case ARM_TOUCH_DATA:
+				 	break;
+				case ARM_MENU_DATA:
+				 	break;
+				case ARM_CAR_TYPE_DATA:
+
+					break;
+				case ARM_MP5_VIDEO_STA_DATA:
+					SwitchScreenSize_Send(op.msgbuf[5]);
+					IPC_PIP_Screen_Fun(op.msgbuf[5]);
+					break;
+				case ARM_GPS_SPEED_DATA:
+					break;
+			        default:
+				   	break;
+			}
+			break;
+		case CMD_SETTING:
+                         switch(datatype)
+			{
+                                   case ARM_DISPLAY_DATA:
+							g_stuSYSINFO.uBright = op.msgbuf[5];
+							g_stuSYSINFO.uContrast = op.msgbuf[6];
+                                          Set_Display_Send(op.msgbuf[5],op.msgbuf[6]);
+					break;
+				  case ARM_NAVI_SET_DATA:
+                                        if(op.msgbuf[5]==0x02)
+					 g_stuSYSINFO.uNaviType= op.msgbuf[6];
+					else if(op.msgbuf[5]==0x01)
+					   g_stuSYSINFO.uNaviVolum= op.msgbuf[6];
+					
+				  	Set_NaviSet_Send(op.msgbuf[5],op.msgbuf[6]);
+				  	break;
+				  case ARM_Factory_SET_DATA:
+				  	switch(op.msgbuf[5])
+				  	{
+				  	       case 0x00://suitable setting
+				  	               g_stuSYSINFO.FS_select.car_suit_set_id.akey=op.msgbuf[6];
+						       g_stuSYSINFO.FS_select.car_suit_set_id.warn=op.msgbuf[7];
+							g_stuSYSINFO.FS_select.car_suit_set_id.find=op.msgbuf[8];
+                                                       g_stuSYSINFO.FS_select.car_suit_set_id.autoradar=op.msgbuf[9];
+							
+                                                       Set_SuitSet_Send(op.msgbuf[6],op.msgbuf[7],op.msgbuf[8],op.msgbuf[9]);
+							break;
+						case 0x01://car type
+						       g_stuSYSINFO.FS_select.car_type_onoff_id =op.msgbuf[6];
+						       Set_CarSet_Send(op.msgbuf[6]);
+						       Ipc_Send_FS_setup();
+							break;
+						case 0x02://rear view
+						     g_stuSYSINFO.FS_select.angle_rada_onoff_id =op.msgbuf[6];
+						      Set_RearViewSet_Send(op.msgbuf[6]);
+						      Ipc_Send_FS_setup();
+							break;
+						case 0x03://input selection
+						     g_stuSYSINFO.FS_select.car_input_res_id =op.msgbuf[6];
+						     Set_CarInputSet_Send(op.msgbuf[6]);
+							break;
+						case 0x04://dvd selection
+						    g_stuSYSINFO.FS_select.DVD_onoff_id =op.msgbuf[6];
+						     Set_DVDSet_Send(op.msgbuf[6]);
+							 Ipc_Send_FS_setup();
+							break;
+						case 0x05://cmmb selection
+						   g_stuSYSINFO.FS_select.cmmb_type_onoff_id =op.msgbuf[6];
+						    Set_TVSet_Send(op.msgbuf[6]);
+							Ipc_Send_FS_setup();
+							break;
+						case 0x06://car recorder selection
+						     g_stuSYSINFO.FS_select.rec_type_onoff_id = op.msgbuf[6];
+						    Set_CarRecoderSet_Send(op.msgbuf[6]);
+							Ipc_Send_FS_setup();
+							break;
+						default:
+							break;
+
+					}
+				  	break;
+				 case ARM_Lang_Set_DATA:
+				 	g_stuSYSINFO.uCurOSDLang=op.msgbuf[5];
+				 	Set_SysLangSet_Send(op.msgbuf[5]);
+				 	break;
+				case ARM_Sys_Reset_DATA:
+					Set_SysResetSet_Send(op.msgbuf[5]);
+				 	break;
+                                case ARM_CHG_SRC_DATA://PIP Open
+                                       navitemp[0]=op.msgbuf[5];
+					navitemp[1]=op.msgbuf[6];
+                                       //Set_SysSRC_Send(op.msgbuf[5],op.msgbuf[6]);
+					//if((op.msgbuf[5]==1)&&(op.msgbuf[6]==1))SysMainMode_Enter_CMMB_Video();
+					IPC_PIP_Fun(op.msgbuf[6],op.msgbuf[5],op.msgbuf[7]);
+				        SysDelay(100);
+					break;
+			       case ARM_TV_CTRL_DATA:
+				   	 Tv_Control_Send(op.msgbuf[5]);
+				   	break;
+				case ARM_DVD_CTRL_DATA:
+					Dvd_Control_Send(op.msgbuf[5]);
+					DVD_Fill_OpCmd(op.msgbuf[5]);
+					break;
+				case ARM_BL_CTRL_DATA:
+					BL_Control_Send(op.msgbuf[5]);
+					if(op.msgbuf[5]==0)//closed
+					{
+                                                g_stuSYSINFO.bOffScreenSwitch =1;
+						Ipc_RESend_fun((int)Ipc_Send_TFT_onoff,g_stuSYSINFO.bOffScreenSwitch);
+					}
+					else//open
+					{
+                                               g_stuSYSINFO.bOffScreenSwitch = 0;
+						Ipc_RESend_fun((int)Ipc_Send_TFT_onoff,g_stuSYSINFO.bOffScreenSwitch);
+					}
+					break;
+			        default:
+				   	break;
+			}
+			break;
+                 default:
+			break;
+	 }
+}
+#endif
+
+

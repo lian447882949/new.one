@@ -1,0 +1,1068 @@
+#define _COM_C_
+
+#include "compile.h"
+#include "main.h"
+#include "libr.h"
+
+#include "stm32f10x_conf.h"
+#include "port.h"
+#include "com.h"
+#include "i2c_driver.h"
+
+#include "pannel.h"
+#include "arm.h"
+
+#include "tw8836_func.h"
+
+#include        "pannel.h"
+#include "Tw8836_const.h"
+#include "includes.h"
+/*
+handle some time event when time count arrival
+by miller.tao20150731
+
+
+*/
+extern BYTE i2ctest;
+void Time_Cnt_Opertion(void)
+{	
+	if(Time_10ms_arrival)
+	{
+		Time_10ms_arrival=0;		
+	}
+	
+	//------------50ms------------------
+	if(Time_50ms_arrival)
+	{
+		Time_50ms_arrival=0;
+			if(Sys_CAN_light.car_tft_onoff==0x3c)
+			{
+		if(Sys.WVedio_show_timer==1)
+			{
+			Sys.WVedio_show_timer=0;
+			BackLight(1);
+			//TW8836_WritePage(0x02);
+			//TW8836_Write(0x1e, TW8836_Read(0x1e)&0xfe);
+			}
+			}
+		else if(Sys_CAN_light.car_tft_onoff==0x34)
+			{
+			BackLight(0);
+			}
+		else
+			{
+			if(Sys.WVedio_show_timer==1)
+			{
+			Sys.WVedio_show_timer=0;
+			BackLight(1);
+			//TW8836_WritePage(0x02);
+			//TW8836_Write(0x1e, TW8836_Read(0x1e)&0xfe);
+			}
+			}
+		
+	}	
+	//------------100ms-----------------  
+	if(Time_100ms_arrival)
+	{
+		Time_100ms_arrival=0;	
+		if(Sys.Main_Source==SRC_NAVI)
+		{
+		if(Sys.main_osd==main_page_OSD_navi)
+			if(Navi_osd_update_flag)
+				{
+				Navi_osd_update_flag=0;
+				if(Sys.FS_select.NAV_setup_show==0)
+					GPS_big_show();
+				else
+					GPS_small_show();
+				}
+		}
+
+
+
+	}
+	if(Time_300ms_arrival)
+	{
+		Time_300ms_arrival=0;
+
+	}
+	//-------------500ms-----------------
+	if(Time_500ms_arrival)
+	{
+		Time_500ms_arrival=0;
+	}	
+	if(Time_1s_arrival)
+	{
+		Time_1s_arrival=0;	
+
+			  if(Sys_CAN_light.sun_mode==0x01)
+			  	PWM_Configuration(200*Sys_CAN_light.sys_light_value+2000);
+			  else if(Sys_CAN_light.sun_mode==0x02)
+				  PWM_Configuration((200*Sys_CAN_light.sys_light_value)+20*(Sys_CAN_light.button_light_value-0x0c)+50);
+
+              //LF_FrontContrl(0,Touch_status,X_POS,Y_POS);
+              //ARM_Uart_Char(i2ctest);
+	}
+	if(Time_5s_arrival)
+	{
+		Time_5s_arrival=0;	
+                //LF_FrontContrl(0,Touch_status,X_POS,Y_POS);
+	}
+	if(Time_minute_arrival)
+	{
+		Time_minute_arrival=0;			
+	}	
+}
+
+
+void Turn_source_power(BYTE Source)
+{
+    switch(Source)
+    {
+	case SRC_DVD:		
+	case SRC_vdisc:
+	 		//GPIO_SetBits(GPIOC, P_DVD_RST);
+			break;			
+	case SRC_TV:
+	 		//GPIO_SetBits(GPIOC, P_TV_PWR);
+			break;		
+	case SRC_Radio:
+			 //GPIO_SetBits(GPIOA, P_RADIO_PWR);//test
+			//GPIO_ResetBits(GPIOA, P_RADIO_PWR);//test			
+			break;	
+	case SRC_Cambox:
+			 //GPIO_SetBits(GPIOA, P_DVR_PWR);
+			break;				
+	default:	//
+			break;	
+    }
+}
+
+BYTE ADC_GetValue (BYTE adc_channel)
+{
+   return 0;
+}
+
+void Video_FMS6501_init(void)
+{}
+
+void Video_FMS6501_switch(BYTE source)
+{}
+
+void Video_FMS6501_RCA_switch(BYTE source)
+{}
+void Video_FMS6501_REC_switch(BYTE source)
+{}
+
+void Video_switch(BYTE source)
+{}
+
+//u16 flash_temp[10];
+//u16 flash_count=0;
+
+u16 EE_Init(void)
+{
+  	//u16  FlashStatus;
+        
+		Sys.valide_id=0xea;
+		Sys.FS_select.logo_type_onoff_id=0x01;
+		Sys.FS_select.NAV_key_type=1;
+	      //Sys.Main_Source=SRC_Radio;//test
+		//Sys.Volume=10;   
+		//Sys.Fader=7;
+		//Sys.Balance=7;   
+	
+		
+		   FLASH_Unlock();   
+		    FLASH_ErasePage(PAGE0_BASE_ADDRESS);
+		    Save_Eerom_Data();	
+
+		    FLASH_Lock();   
+
+	
+  	 return FLASH_COMPLETE;
+}/*
+   	FLASH_ProgramHalfWord(PAGE0_BASE_ADDRESS+10, flash_count++);
+    	FLASH_ProgramHalfWord(PAGE0_BASE_ADDRESS+12, flash_count++);
+    	FLASH_ProgramHalfWord(PAGE0_BASE_ADDRESS+14, flash_count++);
+    	FLASH_ProgramHalfWord(PAGE0_BASE_ADDRESS+16, flash_count++);
+
+
+	   EE_ReadVariable(PAGE0_BASE_ADDRESS, &flash_temp[0]);
+	   EE_ReadVariable(PAGE0_BASE_ADDRESS+2, &flash_temp[1]);
+	   EE_ReadVariable(PAGE0_BASE_ADDRESS+4, &flash_temp[2]);
+	   EE_ReadVariable(PAGE0_BASE_ADDRESS+6, &flash_temp[3]);
+	   EE_ReadVariable(PAGE0_BASE_ADDRESS+8, &flash_temp[4]);
+	   EE_ReadVariable(PAGE0_BASE_ADDRESS+10, &flash_temp[5]);
+	   EE_ReadVariable(PAGE0_BASE_ADDRESS+12, &flash_temp[6]);
+	   EE_ReadVariable(PAGE0_BASE_ADDRESS+14, &flash_temp[7]);
+	   EE_ReadVariable(PAGE0_BASE_ADDRESS+16, &flash_temp[8]);*/
+/*u16 EE_ReadVariable(u32 VirtAddress, u16* Data)
+{
+  u16 FlashStatus=FLASH_COMPLETE ;
+
+  *Data=*(vu16*)VirtAddress ;
+  return FlashStatus;
+}
+u16 EE_WriteVariable(u32 VirtAddress, u16 Data)
+{
+  u16  FlashStatus;
+
+  FlashStatus=FLASH_ProgramHalfWord(VirtAddress, Data);
+  //FlashStatus=FLASH_ProgramWord(VirtAddress, Data);
+  return FlashStatus;
+}*/
+
+void Read_Eerom_Data(void)
+{
+      int i;
+      //BYTE aTmp;
+#ifdef FLASH_EEROM_DEBUG
+#else	  
+         unsigned long temp=0;
+		
+	temp=*(vu32*)(PAGE0_BASE_ADDRESS);
+	Sys.valide_id=LOBYTE(temp);
+	if(Sys.valide_id==0xea)
+	{
+		      //FLASH_Unlock();   
+			for(i=0;i<512;i++)
+				EEPROM_DATA.write_buf[i]=*(vu32*)(PAGE0_BASE_ADDRESS+i*4 );		
+		     // FLASH_Lock(); 
+
+			        //if(Is_Source_Valide(Sys.Main_Source)==FALSE)
+			        	//Sys.Main_Source=SRC_Radio;
+			 
+				 Sys.DVR_Source%=SRC_Off;
+				 Sys.Volume%=41;
+
+
+				//Read_Radio_Eerom_Variables();
+
+				 Sys.TFT_ID%=3;//==0 背光灭 ==1 背光白天模式 ==2 背光夜间模式
+			 	 Sys.ACC_auto_on%=2;
+				 //Sys.Power_Status;
+				 //Sys.VideoType ;
+
+
+				 Sys.Bright%=41;	//亮度寄存器
+				 Sys.Contrast%=41;	//对比度寄存器
+				 Sys.Color%=41;		//颜色寄存器
+				 //Sys.VideoMode%=user_videomode+1;	//视频模式0=自定义,1=柔和,2=标准,3=明亮
+
+				 Sys.voice_navi%=2;
+				Sys.gps_voice_Source%=SRC_Off;
+				 
+
+	}
+	else
+	{
+		EE_Init();
+	}
+#endif     
+}
+
+
+void Save_Eerom_Data(void)
+{
+      //u16  FlashStatus;
+      int i;
+
+#ifdef FLASH_EEROM_DEBUG
+#else	  
+
+	//Save_Radio_Eerom_Variables();
+
+       FLASH_Unlock();   
+       FLASH_ErasePage(PAGE0_BASE_ADDRESS);
+	for(i=0;i<512;i++)
+		FLASH_ProgramWord(PAGE0_BASE_ADDRESS+4*i, EEPROM_DATA.write_buf[i]);		
+      FLASH_Lock();   
+#endif	  
+}
+void Write_Valid_Data(u32 value)
+{
+      //u16  FlashStatus;
+	  
+       FLASH_Unlock();   
+       FLASH_ErasePage(PAGE2_BASE_ADDRESS);
+	FLASH_ProgramWord(PAGE2_BASE_ADDRESS, value);		
+	
+      FLASH_Lock();   
+}
+
+void Adjust_Source(BYTE Source)
+{
+	if(Sys.Main_Source!=Source)
+	BackLight(0);
+	if(Source==SRC_CAM)
+		POWER_RearVideoOn();
+	else
+		POWER_RearVideoOff();
+	
+       TW8836_Src(Source);
+
+	Sys.Main_Source=Source;
+
+	if((!m_RADAR.power_on_statu)||(Sys.FS_select.auto_rada_onoff_id==0))//||m_RADAR.fDisp_on_p)
+	{
+       	switch(Source)
+		{
+		case SRC_NAVI:
+			if(Sys.FS_select.NAV_setup_show==0)
+				GPS_big_show();
+			else
+				GPS_small_show();
+			Menu_page_DrawImage(main_page_OSD_navi,0);
+			
+
+            //Navi_Controll_Send(CMD_RT_BTGPS_on_GPS);//miller.tao20160323
+           	if(gNaviSystemOn)
+			{
+               gNaviCnt =4000;//3500;//2500;
+               //gNaviSystemOn=0;
+			}
+			else
+				gNaviCnt =200;//500;
+			gNaviSendFlag =1;
+			break;
+		case SRC_CAM:
+			if(Sys.FS_select.cam_type_onoff_id==0)
+				Menu_page_DrawImage(main_page_OSD_font_rada,0);
+			else if(Sys.FS_select.cam_type_onoff_id==1)
+			Menu_page_DrawImage(main_page_OSD_back_rada,Sys.u8back_mode_status);
+			else if(Sys.FS_select.cam_type_onoff_id==2)
+				Menu_page_DrawImage(main_page_OSD_none,sub_page_OSD_none);
+			break;
+		case SRC_CarMedia:
+			Menu_page_DrawImage(main_page_OSD_Home,Sys.Car_Main_Source);
+
+			break;
+		default:
+			Menu_page_DrawImage(main_page_OSD_Home,Sys.Car_Main_Source);
+			Sys.Main_Source=SRC_CarMedia;
+			break;
+       	}
+	}
+	else
+	{
+       	switch(Source)
+		{
+		case SRC_NAVI:
+			GPS_small_show();
+			Menu_page_DrawImage(main_page_OSD_font_rada,0);
+			 //Navi_Controll_Send(CMD_RT_BTGPS_on_GPS);//miller.tao20160323
+			if(gNaviSystemOn)
+			{
+               gNaviCnt =4000;//3500;//2500;
+               //gNaviSystemOn=0;
+			}
+			else
+				gNaviCnt =200;//500;
+			gNaviSendFlag =1;
+			break;
+		case SRC_CAM:
+			if(Sys.FS_select.cam_type_onoff_id==0)
+				Menu_page_DrawImage(main_page_OSD_font_rada,0);
+			else if(Sys.FS_select.cam_type_onoff_id==1)
+			Menu_page_DrawImage(main_page_OSD_back_rada,Sys.u8back_mode_status);
+			else if(Sys.FS_select.cam_type_onoff_id==2)
+				Menu_page_DrawImage(main_page_OSD_none,sub_page_OSD_none);
+			break;
+		case SRC_CarMedia:
+			Menu_page_DrawImage(main_page_OSD_font_rada,0);
+
+			break;
+		default:
+			Menu_page_DrawImage(main_page_OSD_font_rada,0);
+			Sys.Main_Source=SRC_CarMedia;
+			break;
+       		}
+	
+	}
+		
+		
+		Sys.WVedio_show_timer=50;
+
+}
+
+void source_process_fun(void)
+{
+	BackAllCheck();
+
+
+	if(Sys.u8back_status&&(Sys.u8back_exit_auto==0)&&(Sys.FS_select.cam_type_onoff_id!=3))
+	{
+		if(Sys.Main_Source!=SRC_CAM)
+		{
+			Sys.back_last_Main_Source=Sys.Main_Source;
+			Adjust_Source(SRC_CAM);
+			//for(int i=1;i<BENZE_CAN_Steering_angle_BUF_MAX;i++)
+			//	m_BMW_CAN.benze_Steering_angle[i]=m_BMW_CAN.benze_Steering_angle[0];
+		}
+	}
+	else if(Sys.u8back_status&&Sys.u8back_exit_auto)
+	{
+		if(Sys.Main_Source==SRC_CAM)
+			{
+			Delay_1ms(500);
+		Adjust_Source(Sys.back_last_Main_Source);
+			}
+	}
+	else if(Sys.Main_Source==SRC_CAM)
+	{
+		if(Sys.Main_Source==SRC_CAM)
+			{
+			Delay_1ms(500);
+		Adjust_Source(Sys.back_last_Main_Source);
+			}
+	}
+
+		
+	switch(Sys.Main_Source)
+		{
+		case SRC_CAM:
+			if(Sys.FS_select.cam_type_onoff_id==0)
+			{
+				if(m_RADAR.fDisp)
+				{
+					m_RADAR.fDisp=0;
+					Menu_page_Draw_button(main_page_OSD_font_rada,0);
+				}
+			}
+			else if(Sys.FS_select.cam_type_onoff_id==1)	
+			{
+				//BYTE osd_updata_flag=0;
+				WORD angle_index_count;
+				angle_index_count=CBackTrack_GetAngleIndex(m_BMW_CAN.benze_Steering_angle[0]);
+					if(m_RADAR.fDisp)
+					{
+						m_RADAR.fDisp=0;
+						//osd_updata_flag=1;
+						Menu_page_Draw_button(main_page_OSD_back_rada,Sys.u8back_mode_status);
+					}
+
+            
+			if(m_BMW_CAN.benze_Steering_angle_index != angle_index_count)
+				{
+			m_BMW_CAN.benze_Steering_angle_index = angle_index_count;
+			//osd_updata_flag=2;
+			
+			if(Sys.main_osd==main_page_OSD_back_rada&&Sys.sub_osd==sub_page_OSD_back_rada_angle)
+			Menu_page_Draw_button(main_page_OSD_back_rada,sub_page_OSD_back_only_updata_angle);
+				}
+
+            
+			//m_BMW_CAN.benze_Steering_angle+=100;
+			}
+			break;
+		case SRC_NAVI:
+			if(m_BMW_CAN.benze_air_Disp&&Sys.main_osd!=main_page_OSD_font_rada&&Sys.main_osd!=main_page_OSD_door_info)
+				{
+				m_BMW_CAN.benze_air_Disp=0;
+				if(Sys.main_osd!=main_page_OSD_air_info)
+					Menu_page_DrawImage(main_page_OSD_air_info,0);
+				else
+					Menu_page_Draw_button(main_page_OSD_air_info,0);
+				m_BMW_CAN.benze_air_show_Timer=5000;
+				}
+			if(!m_BMW_CAN.benze_air_show_Timer)
+				if(Sys.main_osd==main_page_OSD_air_info)
+					{
+					for(int i=3;i<=8;i++)
+					SpiOsdWinHWEnable(i, 0);
+					Sys.main_osd=Sys.main_osd_last;
+				//Menu_page_DrawImage(main_page_OSD_navi,0);
+					}
+
+				if(Sys.FS_select.auto_rada_onoff_id==0)
+				{
+					if(Sys.main_osd==main_page_OSD_font_rada)
+					{
+					Menu_page_DrawImage(main_page_OSD_navi,0);
+					if(Sys.FS_select.NAV_setup_show==0)
+						GPS_big_show();
+					else
+						GPS_small_show();
+					}
+				}
+				else if(m_RADAR.power_on_statu)
+				{
+					if(m_RADAR.fDisp)
+					{
+						m_RADAR.fDisp=0;
+						if(Sys.main_osd!=main_page_OSD_font_rada)
+							Menu_page_DrawImage(main_page_OSD_font_rada,0);
+						else
+							Menu_page_Draw_button(main_page_OSD_font_rada,0);
+
+						
+						GPS_small_show();
+					}
+				}
+				else if(Sys.main_osd==main_page_OSD_font_rada)
+				{
+					Menu_page_DrawImage(main_page_OSD_navi,0);
+					if(Sys.FS_select.NAV_setup_show==0)
+						GPS_big_show();
+					else
+						GPS_small_show();
+				}
+			break;
+			case SRC_CarMedia:
+				if(Sys.Car_updata_flag)
+					{
+					Sys.Car_updata_flag=0;
+					if(Sys.main_osd!=main_page_OSD_door_info&&Sys.main_osd!=main_page_OSD_font_rada)
+					Menu_page_DrawImage(main_page_OSD_Home,Sys.Car_Main_Source);
+					}
+
+				if(Sys.FS_select.auto_rada_onoff_id==0)
+				{
+					if(Sys.main_osd==main_page_OSD_font_rada)
+					{
+					Menu_page_DrawImage(main_page_OSD_none,0);
+					if(Sys.FS_select.NAV_setup_show==0)
+						GPS_big_show();
+					else
+						GPS_small_show();
+					}
+				}
+				else if(m_RADAR.power_on_statu)
+				{
+					if(m_RADAR.fDisp)
+					{
+						m_RADAR.fDisp=0;
+						if(Sys.main_osd!=main_page_OSD_font_rada)
+							Menu_page_DrawImage(main_page_OSD_font_rada,0);
+						else
+							Menu_page_Draw_button(main_page_OSD_font_rada,0);
+					}
+				}
+				else if(Sys.main_osd==main_page_OSD_font_rada)
+					Menu_page_DrawImage(main_page_OSD_Home,Sys.Car_Main_Source);
+				break;
+		}
+
+	Door_data_pro_fun();
+
+	
+	if(g_GPS_DATA.uSoundFlag)
+	 {
+		 
+		 SW_GPS_CAR_TO_GPS();
+	 }
+	 else
+	 {
+		 SW_GPS_CAR_TO_CAR();
+	 }
+
+		
+
+}
+
+
+void Door_data_pro_fun(void)
+{
+	if(Sys.Main_Source==SRC_CAM)
+		return;
+	
+	if(m_CarDoorInfo.SendFlag)
+		{
+		m_CarDoorInfo.SendFlag=0;
+			{
+				
+				for(int i=0;i<3;i++)
+					door_show_buff[i]=0;
+
+					door_index=0;
+				if(m_CarDoorInfo.front)
+					{
+					door_show_buff[door_index]=0;
+					door_index++;
+					}
+				
+				if(m_CarDoorInfo.rear)
+					{
+					door_show_buff[door_index]=1;
+					door_index++;
+					}
+
+				if(m_CarDoorInfo.uFront_Left||m_CarDoorInfo.uFront_Right\
+					||m_CarDoorInfo.uRear_Left||m_CarDoorInfo.uRear_Right)
+					{
+					door_show_buff[door_index]=2;
+					door_index++;
+					}
+				
+				if(!door_index)
+					{
+				m_CarDoorInfo.show_flag=1;
+				if(Sys.main_osd==main_page_OSD_door_info)
+					if(Sys.Main_Source==SRC_CarMedia)
+					Menu_page_DrawImage(main_page_OSD_Home,Sys.Car_Main_Source);
+					else if(Sys.Main_Source==SRC_NAVI)
+						Menu_page_DrawImage(main_page_OSD_navi,0);
+					else
+					Menu_page_DrawImage(Sys.main_osd_last,Sys.sub_osd_last);
+
+					if(Sys.Main_Source==SRC_NAVI)
+						{
+							if(Sys.main_osd==main_page_OSD_navi)
+							{
+							if(Sys.FS_select.NAV_setup_show==0)
+								GPS_big_show();
+							else
+								GPS_small_show();
+							}
+						}
+					}
+			}
+		}
+
+			if(door_index)//&&m_CarDoorInfo.show_flag)
+		{
+			
+			if(!m_CarDoorInfo.door_show_timer)
+				{
+			switch(door_show_buff[m_CarDoorInfo.show_id])
+				{
+				case 0:
+					if(!(Sys.main_osd==main_page_OSD_door_info&&Sys.sub_osd==sub_page_OSD_font_lid))
+					Menu_page_DrawImage(main_page_OSD_door_info,sub_page_OSD_font_lid);
+					m_CarDoorInfo.door_show_timer=1000;
+					break;
+				case 1:
+					if(!(Sys.main_osd==main_page_OSD_door_info&&Sys.sub_osd==sub_page_OSD_back_lid))
+					Menu_page_DrawImage(main_page_OSD_door_info,sub_page_OSD_back_lid);
+					m_CarDoorInfo.door_show_timer=1000;
+					break;
+				case 2:
+					if(!(Sys.main_osd==main_page_OSD_door_info&&Sys.sub_osd==sub_page_OSD_LR_door))
+					Menu_page_DrawImage(main_page_OSD_door_info,sub_page_OSD_LR_door);
+					else
+						Menu_page_Draw_button(main_page_OSD_door_info,sub_page_OSD_LR_door);
+					m_CarDoorInfo.door_show_timer=1000;
+					break;				
+				}
+
+			if(Sys.Main_Source==SRC_NAVI)
+				{
+			GPS_small_show();
+				}
+
+			if(m_CarDoorInfo.show_id<(door_index-1))
+				m_CarDoorInfo.show_id++;
+			else
+				m_CarDoorInfo.show_id=0;
+			}
+		}
+			#if 0
+		else if(Sys.main_osd==main_page_OSD_door_info)
+		{
+			Adjust_menu_Source(Sys.Main_Source);
+		}
+			#endif
+
+}
+
+void Adjust_menu_Source(BYTE Source)
+{
+	//if(Sys.Main_Source!=Source)
+	//BackLight(0);
+	//if(Source==SRC_CAM)
+	//	POWER_RearVideoOn();
+	//else
+	//	POWER_RearVideoOff();
+	
+    //   TW8836_Src(Source);
+
+	//Sys.Main_Source=Source;
+
+	if((!m_RADAR.power_on_statu)||(Sys.FS_select.auto_rada_onoff_id==0))
+	{
+       	switch(Source)
+		{
+		case SRC_NAVI:
+			Menu_page_DrawImage(main_page_OSD_navi,0);
+			if(Sys.FS_select.NAV_setup_show==0)
+				GPS_big_show();
+			else
+				GPS_small_show();
+
+			break;
+		case SRC_CAM:
+			if(Sys.FS_select.cam_type_onoff_id==0)
+				Menu_page_DrawImage(main_page_OSD_font_rada,0);
+			else if(Sys.FS_select.cam_type_onoff_id==1)
+			Menu_page_DrawImage(main_page_OSD_back_rada,Sys.u8back_mode_status);
+			else if(Sys.FS_select.cam_type_onoff_id==2)
+				Menu_page_DrawImage(main_page_OSD_none,sub_page_OSD_none);
+			break;
+		case SRC_CarMedia:
+			Menu_page_DrawImage(main_page_OSD_Home,Sys.Car_Main_Source);
+
+			break;
+		default:
+			Menu_page_DrawImage(main_page_OSD_Home,Sys.Car_Main_Source);
+			Sys.Main_Source=SRC_CarMedia;
+			break;
+       	}
+	}
+	else
+	{
+       	switch(Source)
+		{
+		case SRC_NAVI:
+						GPS_small_show();
+			Menu_page_DrawImage(main_page_OSD_font_rada,0);
+			
+
+			break;
+		case SRC_CAM:
+			if(Sys.FS_select.cam_type_onoff_id==0)
+				Menu_page_DrawImage(main_page_OSD_font_rada,0);
+			else if(Sys.FS_select.cam_type_onoff_id==1)
+			Menu_page_DrawImage(main_page_OSD_back_rada,Sys.u8back_mode_status);
+			else if(Sys.FS_select.cam_type_onoff_id==2)
+				Menu_page_DrawImage(main_page_OSD_none,sub_page_OSD_none);
+
+			break;
+		case SRC_CarMedia:
+			Menu_page_DrawImage(main_page_OSD_font_rada,0);
+
+			break;
+		default:
+			Menu_page_DrawImage(main_page_OSD_font_rada,0);
+			Sys.Main_Source=SRC_CarMedia;
+			break;
+       		}
+	
+	}
+		
+		
+	//	Sys.WVedio_show_timer=50;
+
+}
+
+void BackAllCheck(void)
+{
+	if(!BACK_PIN_STATUS()) //(1)//
+	{
+	  
+	  if(Sys.FS_select.cam_type_onoff_id!=3)
+		  {
+		//g_stuBACKCNTR.u8CurState = CAM_ON;
+		Sys.u8IO_back_status=CAM_ON_from_IO;
+		//POWER_RearVideoOn();
+		}
+	
+	}
+	else
+	{
+	  if(!Sys.wRearOnByCanTimer)
+	  {
+		
+		
+		if((Sys.FS_select.cam_type_onoff_id!=3)&&(Sys.u8can_back_status!=CAM_ON_from_can))
+			{
+		 //g_stuBACKCNTR.u8CurState = CAM_OFF;
+		 
+		 Sys.u8IO_back_status=CAM_off_id;
+		 //POWER_RearVideoOff();
+		 // g_stuBACKCNTR.u8CurState = CAM_ON;
+		 // g_stuPARKCNTR.u8CurState = PARK_OFF;
+		 // POWER_RearVideoOn();
+			}
+	  }
+	
+	}
+
+	
+	if((Sys.u8IO_back_status==CAM_ON_from_IO)||(Sys.u8can_back_status==CAM_ON_from_can))//||(g_stuBACKCNTR.u8can_rada_status==CAM_ON_from_can))
+		{
+			if(Sys.FS_select.cam_type_onoff_id!=3)
+			{
+			Sys.u8back_status = CAM_ON;
+			}
+		}
+	else
+		{
+			Sys.u8back_status = CAM_OFF;
+		}
+
+
+}
+
+void GPS_small_show()
+{
+	TW8836_WritePage(0x02);
+	TW8836_Write(0x04, 0x20);
+	TW8836_Write(0x03, 0x00);
+	TW8836_Write(0x0C, 0x33);
+
+}
+
+void GPS_big_show()
+{
+	TW8836_WritePage(0x02);
+	TW8836_Write(0x04, 0x14);
+	TW8836_Write(0x03, 0x00);
+	TW8836_Write(0x0C, 0x2b);
+
+}
+
+void Source_init(BYTE Source)
+{}
+void Source_init_twozone(BYTE Source)
+{
+	switch(Sys.Main_Source)
+	{
+		case SRC_vdisc://主信号源是碟盒时 ，后区不能是DVD
+			if(Source==SRC_DVD)
+				Source_init(SRC_vdisc);
+			else
+				Source_init(Source);
+			//DVD_UartSend(Dvd_Key, DVD_PLAY);
+			break;
+		case SRC_DVD:
+			//DVD_UartSend(Dvd_Key, DVD_PLAY);
+			break;
+		default:
+			Source_init(Source);
+			break;
+	}
+}
+void AUX_Function(void)
+{}
+
+void CAM_Function(void)
+{}
+
+void BLUETOOTH_Function(void)
+{
+	//RemValue=BLUETOOTH_Command(RemValue);
+}
+
+BYTE BLUETOOTH_Command(BYTE value)
+{
+    return 0;
+}
+
+void GPS_Function(void)
+{}
+void Videoplay_function(void)
+{
+
+}
+
+BYTE Videoplay_Command(BYTE value)
+{
+   return 0;
+}
+
+void Audioplay_function(void)
+{
+
+}
+
+BYTE Audioplay_Command(BYTE value)
+{
+   return 0;
+}
+void APPplay_function(void)
+{
+
+}
+
+BYTE APPplay_Command(BYTE value)
+{
+   return 0;
+}
+
+void VCR_function(void)
+{
+	//RemValue=VCR_Command(RemValue);
+}
+
+BYTE VCR_Command(BYTE value)
+{
+   return 0;
+}
+
+void IPOD_function(void)
+{
+
+}
+
+BYTE Ipod_Command(BYTE value)
+{
+   return 0;
+}
+
+void Cambox_Function(void)
+{}
+
+
+///发送DVD/VDISC控制命令
+ void Cambox_UartSend(BYTE command, BYTE param)
+{}
+
+void	Ipod_MUL_Function(void)
+{}
+
+void	Audioplay_MUL_Function(void)
+{}
+void	Videoplay_MUL_Function(void)
+{}
+void	BLUETOOTH_MUL_Function(void)
+{
+
+}
+
+void GetLockCode(void)
+{}
+
+#define CBACK_TRACK_MAX_ANGLE                      32
+#define TT 126//比32等分略小(128-2)
+#define bwm_angle_count 0x2000
+
+const U16 CBackTrack_TAB_TUNE_LF_ANGLE_MAP_TAB[CBACK_TRACK_MAX_ANGLE+1] =
+{
+	bwm_angle_count,//	0+	
+	bwm_angle_count-TT*1,//  1+  
+	bwm_angle_count-TT*2,//  2+  
+	bwm_angle_count-TT*3,//  3+  
+	bwm_angle_count-TT*4,//  4+  
+	bwm_angle_count-TT*5,//  5+  
+	bwm_angle_count-TT*6,//  6+  
+	bwm_angle_count-TT*7,//  7+  
+	bwm_angle_count-TT*8,//  8+  
+	bwm_angle_count-TT*9,//  9+  
+	bwm_angle_count-TT*10,//  10+ 
+	bwm_angle_count-TT*11,//  11+ 
+	bwm_angle_count-TT*12,//  12+ 
+	bwm_angle_count-TT*13,//  13+ 
+	bwm_angle_count-TT*14,//  14+ 
+	bwm_angle_count-TT*15,//  15+ 
+	bwm_angle_count-TT*16,//  16+ 
+	bwm_angle_count-TT*17,//  17+ 
+	bwm_angle_count-TT*18,//  18+ 
+	bwm_angle_count-TT*19,//  19+ 
+	bwm_angle_count-TT*20,//  20+ 
+	bwm_angle_count-TT*21,//  21+ 
+	bwm_angle_count-TT*22,//  22+ 
+	bwm_angle_count-TT*23,//  23+ 
+	bwm_angle_count-TT*24,//  24+ 
+	bwm_angle_count-TT*25,//  25+ 
+	bwm_angle_count-TT*26,//  26+ 
+	bwm_angle_count-TT*27,//  27+ 
+	bwm_angle_count-TT*28,//  28+ 
+	bwm_angle_count-TT*29,//  29+ 
+	bwm_angle_count-TT*30,//  30+ 
+	bwm_angle_count-TT*31,//  31+ 
+	bwm_angle_count-TT*32,//  31+
+
+
+};
+const  U16 CBackTrack_TAB_TUNE_RT_ANGLE_MAP_TAB[CBACK_TRACK_MAX_ANGLE+1] =
+{
+
+	bwm_angle_count,//	0+	
+	bwm_angle_count+TT*1,//  1+  
+	bwm_angle_count+TT*2,//  2+  
+	bwm_angle_count+TT*3,//  3+  
+	bwm_angle_count+TT*4,//  4+  
+	bwm_angle_count+TT*5,//  5+  
+	bwm_angle_count+TT*6,//  6+  
+	bwm_angle_count+TT*7,//  7+  
+	bwm_angle_count+TT*8,//  8+  
+	bwm_angle_count+TT*9,//  9+  
+	bwm_angle_count+TT*10,//  10+ 
+	bwm_angle_count+TT*11,//  11+ 
+	bwm_angle_count+TT*12,//  12+ 
+	bwm_angle_count+TT*13,//  13+ 
+	bwm_angle_count+TT*14,//  14+ 
+	bwm_angle_count+TT*15,//  15+ 
+	bwm_angle_count+TT*16,//  16+ 
+	bwm_angle_count+TT*17,//  17+ 
+	bwm_angle_count+TT*18,//  18+ 
+	bwm_angle_count+TT*19,//  19+ 
+	bwm_angle_count+TT*20,//  20+ 
+	bwm_angle_count+TT*21,//  21+ 
+	bwm_angle_count+TT*22,//  22+ 
+	bwm_angle_count+TT*23,//  23+ 
+	bwm_angle_count+TT*24,//  24+ 
+	bwm_angle_count+TT*25,//  25+ 
+	bwm_angle_count+TT*26,//  26+ 
+	bwm_angle_count+TT*27,//  27+ 
+	bwm_angle_count+TT*28,//  28+ 
+	bwm_angle_count+TT*29,//  29+ 
+	bwm_angle_count+TT*30,//  30+ 
+	bwm_angle_count+TT*31,//  31+ 
+	bwm_angle_count+TT*32,//  31+
+
+
+};
+BYTE CBackTrack_GetAngleIndex(U16 angle_val)
+{
+
+    static BYTE index;
+	
+#if 0
+	DWORD DWcount_sum=0;
+for(int i=1;i<BENZE_CAN_Steering_angle_BUF_MAX;i++)
+{
+	m_BMW_CAN.benze_Steering_angle[BENZE_CAN_Steering_angle_BUF_MAX-i]=m_BMW_CAN.benze_Steering_angle[BENZE_CAN_Steering_angle_BUF_MAX-1-i];
+	DWcount_sum+=m_BMW_CAN.benze_Steering_angle[BENZE_CAN_Steering_angle_BUF_MAX-i];
+}
+    DWcount_sum/=(BENZE_CAN_Steering_angle_BUF_MAX-1);
+	angle_val=DWcount_sum;
+#endif
+	angle_val=angle_val&0xff00;
+
+
+    if (angle_val == CBackTrack_TAB_TUNE_LF_ANGLE_MAP_TAB[0])
+        return 0;
+    else
+    {
+
+        if (angle_val > CBackTrack_TAB_TUNE_LF_ANGLE_MAP_TAB[1] )
+            //Right tune
+        {
+            for(index = 0; index < CBACK_TRACK_MAX_ANGLE; index++)
+            {
+                if((angle_val <= CBackTrack_TAB_TUNE_RT_ANGLE_MAP_TAB[index+1]) && (angle_val > CBackTrack_TAB_TUNE_RT_ANGLE_MAP_TAB[index]))
+                {
+                    return index;
+                }
+            }
+
+			if(angle_val > CBackTrack_TAB_TUNE_RT_ANGLE_MAP_TAB[CBACK_TRACK_MAX_ANGLE] )
+            	return CBACK_TRACK_MAX_ANGLE-1;
+			else
+                return 0;
+        }
+        else// if (angle_val >= 0x7F6C)
+            //left tune
+        {
+            for(index = 0; index < CBACK_TRACK_MAX_ANGLE; index++)
+            {
+                if((angle_val <= CBackTrack_TAB_TUNE_LF_ANGLE_MAP_TAB[index]) && (angle_val > CBackTrack_TAB_TUNE_LF_ANGLE_MAP_TAB[index+1]))
+                {
+                    return index+CBACK_TRACK_MAX_ANGLE;
+                }
+            }
+
+			if(angle_val<CBackTrack_TAB_TUNE_LF_ANGLE_MAP_TAB[CBACK_TRACK_MAX_ANGLE])
+				return CBACK_TRACK_MAX_ANGLE+CBACK_TRACK_MAX_ANGLE-1;
+			//else
+			//	return CBACK_TRACK_MAX_ANGLE;
+        }
+
+    }
+    return 0;
+};
+
+
+

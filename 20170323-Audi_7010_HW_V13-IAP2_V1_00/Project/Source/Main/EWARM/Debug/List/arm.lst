@@ -1,0 +1,739 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V6.30.1.53127/W32 for ARM     22/Jun/2016  13:18:41 #
+# Copyright 1999-2011 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\ARM\arm.c                            #
+#    Command line =  F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\ARM\arm.c -D USE_STDPERIPH_DRIVER    #
+#                    -D USE_STM32100B_EVAL -D STM32F10X_CL -lc                #
+#                    F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\STM32F10x_StdPeriph_Template\EWARM\D #
+#                    ebug\List\ -lA F:\软件工程\平台正式代码001\Benze_MainBoa #
+#                    rd\baoma_36\benci_newC_V45\Project\STM32F10x_StdPeriph_T #
+#                    emplate\EWARM\Debug\List\ -o                             #
+#                    F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\STM32F10x_StdPeriph_Template\EWARM\D #
+#                    ebug\Obj\ --no_cse --no_unroll --no_inline               #
+#                    --no_code_motion --no_tbaa --no_clustering               #
+#                    --no_scheduling --debug --endian=little --cpu=Cortex-M3  #
+#                    -e --fpu=None --dlib_config "C:\Program Files\IAR        #
+#                    Systems\Embedded Workbench 6.0_2\arm\INC\c\DLib_Config_F #
+#                    ull.h" -I F:\软件工程\平台正式代码001\Benze_MainBoard\ba #
+#                    oma_36\benci_newC_V45\Project\STM32F10x_StdPeriph_Templa #
+#                    te\EWARM\ -I F:\软件工程\平台正式代码001\Benze_MainBoard #
+#                    \baoma_36\benci_newC_V45\Project\STM32F10x_StdPeriph_Tem #
+#                    plate\EWARM\..\ -I F:\软件工程\平台正式代码001\Benze_Mai #
+#                    nBoard\baoma_36\benci_newC_V45\Project\STM32F10x_StdPeri #
+#                    ph_Template\EWARM\..\..\..\Libraries\STM32F10x_StdPeriph #
+#                    _Driver\inc\ -I F:\软件工程\平台正式代码001\Benze_MainBo #
+#                    ard\baoma_36\benci_newC_V45\Project\STM32F10x_StdPeriph_ #
+#                    Template\EWARM\..\..\..\Libraries\STM32F10x_StdPeriph_Dr #
+#                    iver\src\ -I F:\软件工程\平台正式代码001\Benze_MainBoard #
+#                    \baoma_36\benci_newC_V45\Project\STM32F10x_StdPeriph_Tem #
+#                    plate\EWARM\..\..\..\Project/Common\ -I                  #
+#                    F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\STM32F10x_StdPeriph_Template\EWARM\. #
+#                    .\..\..\Project/TW8836\ -I F:\软件工程\平台正式代码001\B #
+#                    enze_MainBoard\baoma_36\benci_newC_V45\Project\STM32F10x #
+#                    _StdPeriph_Template\EWARM\..\..\..\Project/CAN\ -I       #
+#                    F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\STM32F10x_StdPeriph_Template\EWARM\. #
+#                    .\..\..\Project/FM\ -I F:\软件工程\平台正式代码001\Benze #
+#                    _MainBoard\baoma_36\benci_newC_V45\Project\STM32F10x_Std #
+#                    Periph_Template\EWARM\..\..\..\Project/ARM\ -I           #
+#                    F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\STM32F10x_StdPeriph_Template\EWARM\. #
+#                    .\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\  #
+#                    -On -I "C:\Program Files\IAR Systems\Embedded Workbench  #
+#                    6.0_2\arm\CMSIS\Include\"                                #
+#    List file    =  F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\STM32F10x_StdPeriph_Template\EWARM\D #
+#                    ebug\List\arm.lst                                        #
+#    Object file  =  F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\STM32F10x_StdPeriph_Template\EWARM\D #
+#                    ebug\Obj\arm.o                                           #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\benci_newC_V45\Project\ARM\arm.c
+      1          #define _ARM_C_
+      2          
+      3          #include "compile.h"
+      4          
+      5          #include "stm32f10x_conf.h"
+      6          
+      7          
+      8          #include "port.h"
+      9          #include "main.h"
+     10          #include "libr.h"
+     11          
+     12          #include "arm.h"
+     13          #include "arm_driver.h"
+     14          #include "uart_fun.h"
+     15          
+     16          void ARM_data_Process(void)                                                                                                                                                                     
+     17          {                                                                                                                                                                                               
+     18                                                                                                                                                                                   
+     19            	Byte i,j;                                                                                                                                                                                   
+     20          	Byte arm_rec_type=0,arm_rec_index=0;                                                                                                                                                          
+     21                                                                                                                                                                                         
+     22          /*                                                                                                                                                                                              
+     23          	if(ARM_ack_request!=0)                                                                                                                                                                        
+     24          	{                                                                                                                                                                                             
+     25          		ARM_Receive_ACK(ARM_ack_request);                                                                                                                                                           
+     26          		ARM_ack_request=0;		                                                                                                                                                                      
+     27          	}*/                                                                                                                                                                                           
+     28          	if(ARM_Done_index>=ARM_Receive_index_max)                                                                                                                                                     
+     29          		ARM_Done_index=0;                                                                                                                                                                           
+     30                                                                                                                                                                            
+     31          	                                                                                                                                                                                              
+     32          	//for(ARM_Done_index=0;ARM_Done_index<ARM_Receive_index_max;ARM_Done_index++)                                                                                                                 
+     33          	for(j=0;j<ARM_Receive_index_max;j++)                                                                                                                                                          
+     34          	{                                                                                                                                                                                             
+     35          		if(ARM_Rec_buffer[ARM_Done_index][ARM_Receive_Cnt_max-1]==ARM_Receive_Busy)		                                                                                                              
+     36          		{                                                                                                                                                                                           
+     37          				arm_rec_type=0;	                                                                                                                                                                        
+     38          				{                                                                                                                                                                                       
+     39          					if (ARM_Rec_buffer[ARM_Done_index][1] == COM_ARM_ID)		//os command                                                                                                                  
+     40          					{                                                                                                                                                                                     
+     41          						switch(ARM_Rec_buffer[ARM_Done_index][2])                                                                                                                                           
+     42          						{                                                                                                                                                                                   
+     43          							case Cmd_OpenCloseUSART:                                                                                                                                                          
+     44          									arm_rec_type=Cmd_OpenCloseUSART;                                                                                                                                              
+     45          									ARM_rec_USART1_buff[0]=ARM_Rec_buffer[ARM_Done_index][4];                                                                                                                     
+     46          									ARM_USART1_Status=ARM_rec_USART1_buff[0];                                                                                                                                     
+     47          									                                                                                                                                                                              
+     48          									switch(ARM_rec_USART1_buff[0])                                                                                                                                                
+     49          									{                                                                                                                                                                             
+     50          										case 0x00:		                                                                                                                                                              
+     51          											System_openlogo_init_ok=1;                                                                                                                                                
+     52          						                                                                                                
+     53          											break;                                                                                                                                                                    
+     54          										 case 0x02://system is updating program                                                                                                                                     
+     55                                                                                                                                              
+     56          											break;                                                                                                                                                                    
+     57          										default:                                                                                                                                                                    
+     58          											break;                                                                                                                                                                    
+     59                                                                                                                                                                                                          
+     60          									}                                                                                                                                                                             
+     61          								 break;                                                                                                                                                                         
+     62          							case Cmd_HandShake:                                                                                                                                                               
+     63                                                                                                                                                                                                          
+     64          								 break;                                                                                                                                                                         
+     65          							                                                                                                                                                                                  
+     66          							default:                                                                                                                                                                          
+     67          								 break;                                                                                                                                                                         
+     68          						}                                                                                                                                                                                   
+     69          					}                                                                                                                                                                                     
+     70          					else if(ARM_Rec_buffer[ARM_Done_index][1] == APP_ARM_ID)//APP                                                                                                                         
+     71          					{                                                                                                                                                                                     
+     72          						switch(ARM_Rec_buffer[ARM_Done_index][2])                                                                                                                                           
+     73          						{                                                                                                                                                                                   
+     74          							                                                                                                                                                                                  
+     75          							case ARM_rec_start_type:                                                                                                                                                          
+     76          								for(i=0;i<ARM_rec_start_max;i++)                                                                                                                                                
+     77          									ARM_rec_start_buff[i]=ARM_Rec_buffer[ARM_Done_index][4+i];                                                                                                                    
+     78          								arm_rec_type=ARM_rec_start_type;//---表示有数据更新--                                                                                                                           
+     79          								System_init_ok=1;                                                                                                                                                               
+     80          								//HARD_MUTE_OFF();//GPIO_ResetBits(GPIOB, P_MUTE);//TSH,2013-04-22,关掉硬件?
+     81                                                                                                      
+     82          								WINCA_ProtocolFlag = 1;//切换协议                                                                                                                                               
+     83          								//if(BackOKID)                                                                                                                                                                  
+     84          									//UART_Rada_Send();//TSH20130605,for APP take charge the back car,we need                                                                                                     
+     85          								break;	                                                                                                                                                                        
+     86          							case ARM_rec_save_type:                                                                                                                                                           
+     87          								arm_rec_type=ARM_rec_save_type;//---表示有数据更新--                                                                                                                            
+     88          								break;                                                                                                                                                                          
+     89          							case ARM_rec_beep_type:                                                                                                                                                           
+     90          								arm_rec_type=ARM_rec_beep_type;//---表示有数据更新--                                                                                                                            
+     91          								break;                                                                                                                                                                          
+     92                                                                                                                                                                                                          
+     93          							case ARM_rec_src_type:                                                                                                                                                            
+     94          									for(i=0;i<ARM_rec_src_max;i++)                                                                                                                                                
+     95          									ARM_rec_src_buff[i]=ARM_Rec_buffer[ARM_Done_index][4+i];                                                                                                                      
+     96          									arm_rec_type=ARM_rec_src_type;//---表示有数据更新--                                                                                                                           
+     97          									break;                                                                                                                                                                        
+     98          							case ARM_rec_menu_req_type:                                                                                                                                                       
+     99          									for(i=0;i<ARM_rec_menu_req_max;i++)                                                                                                                                           
+    100          										ARM_rec_menu_req_buff[i]=ARM_Rec_buffer[ARM_Done_index][4+i];                                                                                                               
+    101          									arm_rec_type=ARM_rec_menu_req_type;//---表示有数据更新--                                                                                                                      
+    102          									break;	                                                                                                                                                                      
+    103          							case ARM_rec_touch_type:                                                                                                                                                          
+    104          									for(i=0;i<ARM_rec_touch_max;i++)                                                                                                                                              
+    105          										ARM_rec_touch_buff[i]=ARM_Rec_buffer[ARM_Done_index][4+i];                                                                                                                  
+    106          									arm_rec_type=ARM_rec_touch_type;//---表示有数据更新--                                                                                                                         
+    107          						break;	                                                                                                                                                                            
+    108          							case ARM_rec_ControlPolling:                                                                                                                                                      
+    109          									ARM_rec_ContrPoll_buff[0]=ARM_Rec_buffer[ARM_Done_index][4];                                                                                                                  
+    110          									ARM_rec_ContrPoll_buff[1]=ARM_Rec_buffer[ARM_Done_index][4+1];                                                                                                                
+    111          									arm_rec_type=ARM_rec_ControlPolling;                                                                                                                                          
+    112          								break;                                                                                                                                                                          
+    113          							case ARM_rec_TimeSet:                                                                                                                                                             
+    114          								for(i=0;i<6;i++)                                                                                                                                                                
+    115          								ARM_rec_TimeSet_buff[i]=ARM_Rec_buffer[ARM_Done_index][4+i];                                                                                                                    
+    116          								arm_rec_type=ARM_rec_TimeSet;                                                                                                                                                   
+    117          								break;                                                                                                                                                                          
+    118          							case ARM_rec_HW_Mute:                                                                                                                                                             
+    119          								for(i=0;i<ARM_rec_fun_sel_max-1;i++)                                                                                                                                            
+    120          								ARM_rec_HWMute_buff[i] = ARM_Rec_buffer[ARM_Done_index][4+i];                                                                                                                   
+    121          								arm_rec_type = ARM_rec_HW_Mute;                                                                                                                                                 
+    122          								break;                                                                                                                                                                          
+    123          							case ARM_rec_menu_type:                                                                                                                                                           
+    124          								switch(ARM_Rec_buffer[ARM_Done_index][4])                                                                                                                                       
+    125          								{                                                                                                                                                                               
+    126          									case ARM_rec_menu_main_type:                                                                                                                                                  
+    127          										for(i=0;i<ARM_rec_menu_main_max;i++)                                                                                                                                        
+    128          											ARM_rec_menu_main_buff[i]=ARM_Rec_buffer[ARM_Done_index][5+i];                                                                                                            
+    129          										arm_rec_type=ARM_rec_menu_type;//---表示有数据更新--                                                                                                                        
+    130          										arm_rec_index=ARM_rec_menu_main_type;//---表示有数据更新--                                                                                                                  
+    131          											break;								                                                                                                                                                    
+    132          									case ARM_rec_menu_radio_type:                                                                                                                                                 
+    133          											for(i=0;i<ARM_rec_menu_radio_max;i++)                                                                                                                                     
+    134          												ARM_rec_menu_radio_buff[i]=ARM_Rec_buffer[ARM_Done_index][5+i];                                                                                                         
+    135          											arm_rec_type=ARM_rec_menu_type;//---表示有数据更新--                                                                                                                      
+    136          											arm_rec_index=ARM_rec_menu_radio_type;//---表示有数据更新--                                                                                                               
+    137          											break;								                                                                                                                                                    
+    138          									case ARM_rec_menu_bt_type:                                                                                                                                                    
+    139          											for(i=0;i<ARM_rec_menu_bt_max;i++)                                                                                                                                        
+    140          												ARM_rec_menu_bt_buff[i]=ARM_Rec_buffer[ARM_Done_index][5+i];                                                                                                            
+    141          											arm_rec_type=ARM_rec_menu_type;//---表示有数据更新--                                                                                                                      
+    142          											arm_rec_index=ARM_rec_menu_bt_type;//---表示有数据更新--                                                                                                                  
+    143          											break;                                                                                                                                                                    
+    144          									case ARM_rec_menu_dvd_type:                                                                                                                                                   
+    145          											for(i=0;i<ARM_rec_menu_dvd_max;i++)                                                                                                                                       
+    146          												ARM_rec_menu_dvd_buff[i]=ARM_Rec_buffer[ARM_Done_index][5+i];                                                                                                           
+    147          											arm_rec_type=ARM_rec_menu_type;//---表示有数据更新--                                                                                                                      
+    148          											arm_rec_index=ARM_rec_menu_dvd_type;//---表示有数据更新--                                                                                                                 
+    149          											break;	                                                                                                                                                                  
+    150          									case ARM_rec_menu_audioplay_type:                                                                                                                                             
+    151          											for(i=0;i<ARM_rec_menu_audioplay_max;i++)                                                                                                                                 
+    152          												ARM_rec_menu_audioplay_buff[i]=ARM_Rec_buffer[ARM_Done_index][5+i];                                                                                                     
+    153          											arm_rec_type=ARM_rec_menu_type;//---表示有数据更新--                                                                                                                      
+    154          											arm_rec_index=ARM_rec_menu_audioplay_type;//---表示有数据更新--                                                                                                           
+    155          											break;                                                                                                                                                                    
+    156          									case ARM_rec_menu_videoplay_type:                                                                                                                                             
+    157          											for(i=0;i<ARM_rec_menu_videoplay_max;i++)                                                                                                                                 
+    158          												ARM_rec_menu_videoplay_buff[i]=ARM_Rec_buffer[ARM_Done_index][5+i];                                                                                                     
+    159          											arm_rec_type=ARM_rec_menu_type;//---表示有数据更新--                                                                                                                      
+    160          											arm_rec_index=ARM_rec_menu_videoplay_type;//---表示有数据更新--                                                                                                           
+    161          											break;                                                                                                                                                                    
+    162          									case ARM_rec_menu_cam_type:                                                                                                                                                   
+    163          										for(i=0;i<ARM_rec_menu_cam_max;i++)                                                                                                                                         
+    164          											ARM_rec_menu_cam_buff[i]=ARM_Rec_buffer[ARM_Done_index][5+i];                                                                                                             
+    165          										arm_rec_type=ARM_rec_menu_type;//---表示有数据更新--                                                                                                                        
+    166          										arm_rec_index=ARM_rec_menu_cam_type;//---表示有数据更新--                                                                                                                   
+    167          										break;                                                                                                                                                                      
+    168          									case ARM_rec_menu_navi_type://lts20131122                                                                                                                                     
+    169          										for(i=0;i<ARM_rec_menu_navi_max;i++)                                                                                                                                        
+    170          											ARM_rec_menu_navi_buff[i]=ARM_Rec_buffer[ARM_Done_index][5+i];                                                                                                            
+    171          										arm_rec_type=ARM_rec_menu_type;//---表示有数据更新--                                                                                                                        
+    172          										arm_rec_index=ARM_rec_menu_navi_type;//---表示有数据更新--                                                                                                                  
+    173          										break;								                                                                                                                                                      
+    174          														                                                                                                                                                                    
+    175          									case ARM_rec_menu_digitv_type:                                                                                                                                                
+    176          										for(i=0;i<ARM_rec_menu_digitv_max;i++)                                                                                                                                      
+    177          											ARM_rec_menu_digitv_buff[i]=ARM_Rec_buffer[ARM_Done_index][5+i];                                                                                                          
+    178          										arm_rec_type=ARM_rec_menu_type;//---表示有数据更新--                                                                                                                        
+    179          										arm_rec_index=ARM_rec_menu_digitv_type;//---表示有数据更新--                                                                                                                
+    180          										break;						                                                                                                                                                          
+    181          									case ARM_rec_menu_analogtv_type:                                                                                                                                              
+    182          										for(i=0;i<ARM_rec_menu_analog_max;i++)                                                                                                                                      
+    183          											ARM_rec_menu_analogtv_buff[i]=ARM_Rec_buffer[ARM_Done_index][5+i];                                                                                                        
+    184          										arm_rec_type=ARM_rec_menu_type;//---表示有数据更新--                                                                                                                        
+    185          										arm_rec_index=ARM_rec_menu_analogtv_type;//---表示有数据更新--                                                                                                              
+    186          										break;                                                                                                                                                                      
+    187          								                                                                                                                                                                                
+    188          								                                                                                                                                                                                
+    189          									case ARM_rec_menu_cambox_type:                                                                                                                                                
+    190          										for(i=0;i<ARM_rec_menu_cambox_max;i++)                                                                                                                                      
+    191          											ARM_rec_menu_cambox_buff[i]=ARM_Rec_buffer[ARM_Done_index][5+i];                                                                                                          
+    192          										arm_rec_type=ARM_rec_menu_type;//---表示有数据更新--                                                                                                                        
+    193          										arm_rec_index=ARM_rec_menu_cambox_type;//---表示有数据更新--                                                                                                                
+    194          										break;                                                                                                                                                                      
+    195          																                                                                                                                                                                
+    196          								                                                                                                                                                                                
+    197          									case ARM_rec_menu_steer_type:                                                                                                                                                 
+    198          										for(i=0;i<ARM_rec_menu_steer_max;i++)                                                                                                                                       
+    199          											ARM_rec_menu_steer_buff[i]=ARM_Rec_buffer[ARM_Done_index][5+i];                                                                                                           
+    200          										arm_rec_type=ARM_rec_menu_type;//---表示有数据更新--                                                                                                                        
+    201          										arm_rec_index=ARM_rec_menu_steer_type;//---表示有数据更新--                                                                                                                 
+    202          										break;                                                                                                                                                                      
+    203          									case ARM_rec_beep_type:                                                                                                                                                       
+    204          										arm_rec_type=ARM_rec_beep_type;//---表示有数据更新--                                                                                                                        
+    205          										break;                                                                                                                                                                      
+    206          									case ARM_rec_src_type:                                                                                                                                                        
+    207          										for(i=0;i<ARM_rec_src_max;i++)                                                                                                                                              
+    208          											ARM_rec_src_buff[i]=ARM_Rec_buffer[ARM_Done_index][5+i];                                                                                                                  
+    209          										arm_rec_type=ARM_rec_src_type;//---表示有数据更新--                                                                                                                         
+    210          										break;                                                                                                                                                                      
+    211          									case ARM_rec_menu_setup_type:                                                                                                                                                 
+    212          										for(i=0;i<ARM_rec_menu_setup_max;i++)                                                                                                                                       
+    213          											ARM_rec_menu_setup_buff[i]=ARM_Rec_buffer[ARM_Done_index][5+i];                                                                                                           
+    214          										arm_rec_type=ARM_rec_menu_type;//---表示有数据更新--                                                                                                                        
+    215          										arm_rec_index=ARM_rec_menu_setup_type;//---表示有数据更新--                                                                                                                 
+    216          										break;								                                                                                                                                                      
+    217          									case ARM_rec_menu_factory_type:                                                                                                                                               
+    218          										for(i=0;i<ARM_rec_menu_factory_max;i++)                                                                                                                                     
+    219          											ARM_rec_menu_factory_buff[i]=ARM_Rec_buffer[ARM_Done_index][5+i];                                                                                                         
+    220          										arm_rec_type=ARM_rec_menu_type;//---表示有数据更新--                                                                                                                        
+    221          										arm_rec_index=ARM_rec_menu_factory_type;//---表示有数据更新--                                                                                                               
+    222          										break;                                                                                                                                                                      
+    223          								                                                                                                                                                                                
+    224          							}                                                                                                                                                                                 
+    225          								 break;                                                                                                                                                                         
+    226          						case ARM_rec_upgrade_type:                                                                                                                                                          
+    227          								for(i=0;i<ARM_rec_upgrade_max;i++)                                                                                                                                              
+    228          									ARM_rec_upgrade_buff[i]=ARM_Rec_buffer[ARM_Done_index][4+i];                                                                                                                  
+    229          								arm_rec_type=ARM_rec_upgrade_type;//---表示有数据更新--                                                                                                                         
+    230          								break;						                                                                                                                                                              
+    231          						case ARM_rec_system_config_type:                                                                                                                                                    
+    232          							for(i=0;i<ARM_rec_system_config_max;i++)                                                                                                                                          
+    233          								ARM_rec_system_config_buff[i]=ARM_Rec_buffer[ARM_Done_index][4+i];                                                                                                              
+    234          							arm_rec_type=ARM_rec_system_config_type;//---表示有数据更新--                                                                                                                     
+    235          							break;                                                                                                                                                                            
+    236          						//#if 1 //TSH,2013-05-03,cancel this Cmd                                                                                                                                            
+    237          						case ARM_rec_function_config_type:                                                                                                                                                  
+    238          							for(i=0;i<ARM_rec_function_config_max;i++)                                                                                                                                        
+    239          								ARM_rec_function_config_buff[i]=ARM_Rec_buffer[ARM_Done_index][4+i];                                                                                                            
+    240          							arm_rec_type=ARM_rec_function_config_type;//---表示有数据更新--                                                                                                                   
+    241          							break;                                                                                                                                                                            
+    242          						//#endif                                                                                                                                                                            
+    243          						case ARM_rec_get_version_type:                                                                                                                                                      
+    244          							arm_rec_type=ARM_rec_get_version_type;//---表示有数据更新--                                                                                                                       
+    245          						       break;  
+    246          						case ARM_rec_SetFM://miller.tao20150730
+    247          						      arm_rec_type=ARM_rec_SetFM;
+    248                                                                  //for(i=0;i<ARM_rec_SetFM_max;i++)                                                                                                                                      
+    249          								gFMFrequency=(ARM_Rec_buffer[ARM_Done_index][4+0]<<8)|ARM_Rec_buffer[ARM_Done_index][4+1];  
+    250          							break;
+    251          						#ifdef _CANBUS_EN                                                                                                                                                                   
+    252          						case ARM_rec_canbus_type://TSH,2013-05-04 add CAN Bus                                                                                                                               
+    253          						switch(ARM_Rec_buffer[ARM_Done_index][4])                                                                                                                                           
+    254          						{                                                                                                                                                                                   
+    255          							case ARM_rec_canbus_tuguan:                                                                                                                                                       
+    256          									for(i=0;i<ARM_rec_canbus_tuguan_max;i++)                                                                                                                                      
+    257          										ARM_rec_canbus_public_buff[i]=ARM_Rec_buffer[ARM_Done_index][4+i];                                                                                                          
+    258          									arm_rec_type=ARM_rec_canbus_type;//---表示有数据更新--                                                                                                                        
+    259          									arm_rec_index=ARM_rec_canbus_tuguan;//---表示有数据更新--                                                                                                                     
+    260          									break;                                                                                                                                                                        
+    261          							case hyundai_cantype:                                                                                                                                                             
+    262          									for(i=0;i<ARM_rec_canbus_hyundai_max;i++)                                                                                                                                     
+    263          										ARM_rec_canbus_public_buff[i]=ARM_Rec_buffer[ARM_Done_index][5+i];                                                                                                          
+    264          									arm_rec_type=ARM_rec_canbus_type;//---表示有数据更新--                                                                                                                        
+    265          									arm_rec_index=hyundai_cantype;//---表示有数据更新--											                                                                                                      
+    266          									break;                                                                                                                                                                        
+    267                                                                                                                                                                                
+    268          							case Mondeo_cantype:                                                                                                                                                              
+    269          									for(i=0;i<ARM_rec_canbus_Mondeo_max;i++)                                                                                                                                      
+    270          										ARM_rec_canbus_public_buff[i]=ARM_Rec_buffer[ARM_Done_index][5+i];                                                                                                          
+    271          									arm_rec_type=ARM_rec_canbus_type;//---表示有数据更新--                                                                                                                        
+    272          									arm_rec_index=Mondeo_cantype;//---表示有数据更新--		                                                                                                                        
+    273          									break;                                                                                                                                                                        
+    274          							case camry_cantype:                                                                                                                                                               
+    275          									for(i=0;i<ARM_rec_canbus_camry_max;i++)                                                                                                                                       
+    276          										ARM_rec_canbus_public_buff[i]=ARM_Rec_buffer[ARM_Done_index][5+i];                                                                                                          
+    277          									arm_rec_type=ARM_rec_canbus_type;//---表示有数据更新--                                                                                                                        
+    278          									arm_rec_index=camry_cantype;//---表示有数据更新--		                                                                                                                          
+    279          									break;                                                                                                                                                                        
+    280                                                                                                                                                                                   
+    281          							case teana_cantype:                                                                                                                                                               
+    282          								for(i=0;i<ARM_rec_canbus_teana_max;i++)                                                                                                                                         
+    283          									ARM_rec_canbus_public_buff[i]=ARM_Rec_buffer[ARM_Done_index][5+i];                                                                                                            
+    284          								arm_rec_type=ARM_rec_canbus_type;//---表示有数据更新--                                                                                                                          
+    285          								arm_rec_index=teana_cantype;//---表示有数据更新--	                                                                                                                              
+    286          								break;                                                                                                                                                                          
+    287          							case Focus_cantype:                                                                                                                                                               
+    288          									for(i=0;i<ARM_rec_canbus_focus_max;i++)                                                                                                                                       
+    289          										ARM_rec_canbus_public_buff[i]=ARM_Rec_buffer[ARM_Done_index][5+i];                                                                                                          
+    290          									arm_rec_type=ARM_rec_canbus_type;//---表示有数据更新--                                                                                                                        
+    291          									arm_rec_index=Focus_cantype;//---表示有数据更新--		                                                                                                                          
+    292          									break;									                                                                                                                                                      
+    293                                                                                                                                                                                   
+    294          							case cruze_simple_cantype:                                                                                                                                                        
+    295          							case Encore_Onstar_cantype:                                                                                                                                                       
+    296          									for(i=0;i<ARM_rec_canbus_cruze_max;i++)                                                                                                                                       
+    297          										ARM_rec_canbus_public_buff[i]=ARM_Rec_buffer[ARM_Done_index][5+i];                                                                                                          
+    298          									arm_rec_type=ARM_rec_canbus_type;//---表示有数据更新--                                                                                                                        
+    299          									arm_rec_index=cruze_simple_cantype;//---表示有数据更新--									                                                                                                    
+    300          									break;                                                                                                                                                                        
+    301                                                                                                                                                                                
+    302          							case CRV_cantype:                                                                                                                                                                 
+    303          							case civic_cantype:                                                                                                                                                               
+    304          								for(i=0;i<ARM_rec_canbus_CRV_max;i++)                                                                                                                                           
+    305          									ARM_rec_canbus_public_buff[i]=ARM_Rec_buffer[ARM_Done_index][5+i];                                                                                                            
+    306          								arm_rec_type=ARM_rec_canbus_type;//---表示有数据更新--                                                                                                                          
+    307          								arm_rec_index=ARM_Rec_buffer[ARM_Done_index][4];//---表示有数据更新--	                                                                                                          
+    308          								break;                                                                                                                                                                          
+    309                                                                                                                                                                                 
+    310          							case CitroenC4C5_cantype:                                                                                                                                                         
+    311          								for(i=0;i<ARM_rec_canbus_CitroenC4C5_max;i++)                                                                                                                                   
+    312          									ARM_rec_canbus_public_buff[i]=ARM_Rec_buffer[ARM_Done_index][5+i];                                                                                                            
+    313          								arm_rec_type=ARM_rec_canbus_type;//---表示有数据更新--                                                                                                                          
+    314          								arm_rec_index=CitroenC4C5_cantype;//---表示有数据更新--	                                                                                                                        
+    315          								break;                                                                                                                                                                          
+    316                                                                                                                                                                                
+    317          							case bz408_cantype:                                                                                                                                                               
+    318          								ARM_rec_canbus_public_buff[0]=ARM_Rec_buffer[ARM_Done_index][5];                                                                                                                
+    319          								ARM_rec_canbus_public_buff[1]=ARM_Rec_buffer[ARM_Done_index][6];                                                                                                                
+    320          								arm_rec_type=ARM_rec_canbus_type;//---表示有数据更新--                                                                                                                          
+    321          								arm_rec_index=bz408_cantype;//---表示有数据更新--	                                                                                                                              
+    322          								break;		                                                                                                                                                                      
+    323          							case bz308_cantype:                                                                                                                                                               
+    324          								for(i=0;i<ARM_rec_canbus_bz308_max;i++)                                                                                                                                         
+    325          									ARM_rec_canbus_public_buff[i]=ARM_Rec_buffer[ARM_Done_index][5+i];                                                                                                            
+    326          								arm_rec_type=ARM_rec_canbus_type;//---表示有数据更新--                                                                                                                          
+    327          								arm_rec_index=bz308_cantype;//---表示有数据更新--	                                                                                                                              
+    328          								break;                                                                                                                                                                          
+    329          							case fiesta_cantype:                                                                                                                                                              
+    330          								for(i=0;i<ARM_rec_canbus_fiesta_max;i++)                                                                                                                                        
+    331          									ARM_rec_canbus_public_buff[i]=ARM_Rec_buffer[ARM_Done_index][5+i];                                                                                                            
+    332          								arm_rec_type=ARM_rec_canbus_type;//---表示有数据更新--                                                                                                                          
+    333          								arm_rec_index=fiesta_cantype;//---表示有数据更新--	                                                                                                                            
+    334          								break;                                                                                                                                                                          
+    335          							case L200_cantype:                                                                                                                                                                
+    336          								for(i=0;i<ARM_rec_canbus_L200_max;i++)                                                                                                                                          
+    337          									ARM_rec_canbus_public_buff[i]=ARM_Rec_buffer[ARM_Done_index][5+i];                                                                                                            
+    338          								arm_rec_type=ARM_rec_canbus_type;//---表示有数据更新--                                                                                                                          
+    339          								arm_rec_index=L200_cantype;//---表示有数据更新--	                                                                                                                              
+    340          								break;                                                                                                                                                                          
+    341          							default:                                                                                                                                                                          
+    342          								break;                                                                                                                                                                          
+    343          						}                                                                                                                                                                                   
+    344          						break;                                                                                                                                                                              
+    345          						#endif                                                                                                                                                                              
+    346                                                                                                                                                                                                          
+    347          						case ARM_rec_canbox_upgrade_type:                                                                                                                                                   
+    348          							for(i=0;i<ARM_rec_canupgrade_max;i++)                                                                                                                                             
+    349          								ARM_rec_canupgrade_buff[i]=ARM_Rec_buffer[ARM_Done_index][4+i];                                                                                                                 
+    350          							arm_rec_type=ARM_rec_canbox_upgrade_type;//---???????--                                                                                                                           
+    351          							break;			                                                                                                                                                                      
+    352                                                                                                                                                                                                          
+    353          						default:                                                                                                                                                                            
+    354          								 break;                                                                                                                                                                         
+    355          						}                                                                                                                                                                                   
+    356          					}                                                                                                                                                                                     
+    357                                                                                                                                                                                                          
+    358          				}                                                                                                                                                                                       
+    359                                                                                                                                                                                                          
+    360          				ARM_Rec_buffer[ARM_Done_index][ARM_Receive_Cnt_max-1]=ARM_Receive_Free;                                                                                                                 
+    361          				                                                                                                                                                                                        
+    362          				//if(ARM_Done_index<(ARM_Receive_index_max-1))                                                                                                                                          
+    363          					//ARM_Done_index++;                                                                                                                                                                   
+    364          				//else                                                                                                                                                                                  
+    365          					//ARM_Done_index=0;						                                                                                                                                                        
+    366                                                                                                                                                                                                          
+    367          				//------数据处理----------------                                                                                                                                                        
+    368          				switch(arm_rec_type)                                                                                                                                                                    
+    369          				{                                                                                                                                                                                       
+    370          					case ARM_rec_start_type:                                                                                                                                                              
+    371          						//System_init_ok=1;                                                                                                                                                                 
+    372          						//WINCA_ProtocolFlag = 1;//切换协议                                                                                                                                                 
+    373          						break;                                                                                                                                                                              
+    374          					#if 0 //cancel this CMD,TSH,2013-05-03                                                                                                                                                
+    375          					case ARM_rec_openlogo_init_type:                                                                                                                                                      
+    376          						System_openlogo_init_ok=1;                                                                                                                                                          
+    377          						break;                                                                                                                                                                              
+    378          					#endif                                                                                                                                                                                
+    379          					case ARM_rec_save_type:                                                                                                                                                               
+    380          						System_save_ok=1;                                                                                                                                                                   
+    381          						break;                                                                                                                                                                              
+    382          					case ARM_rec_beep_type:                                                                                                                                                               
+    383          							                                                                                                                                                
+    384          						break;                                                                                                                                                                              
+    385          					case ARM_rec_power_type:                                                                                                                                                              
+    386          						                                                                                                                                                             
+    387          						break;                                                                                                                                                                              
+    388          					case ARM_rec_menu_req_type:                                                                                                                                                           
+    389          						                                                                                                                                                           
+    390          						break;                                                                                                                                                                              
+    391          					case ARM_rec_src_type:                                                                                                                                                                
+    392          						UART_SRC_process();                                                                                                                                                               
+    393          						break;                                                                                                                                                                              
+    394          					case ARM_rec_touch_type:                                                                                                                                                              
+    395          						UART_Touch_process();                                                                                                                                                         
+    396          						break;    
+    397          					case ARM_rec_SetFM:
+    398                                                         UART_SetFM_process(gFMFrequency);
+    399          						break;
+    400          					case ARM_rec_menu_type:                                                                                                                                                               
+    401          						//if(System_Power_Status==Power_acc_off)                                                                                                                                            
+    402          							//break;                                                                                                                                                                          
+    403          						switch(arm_rec_index)                                                                                                                                                               
+    404          						{                                                                                                                                                                                   
+    405          							#if 0 //TSH,cancel this Cmd,2013-05-03                                                                                                                                            
+    406          							case ARM_rec_menu_main_type:                                                                                                                                                      
+    407          								UART_main_process();                                                                                                                                                            
+    408          								break;                                                                                                                                                                          
+    409          							#endif                                                                                                                                                                            
+    410          							case ARM_rec_menu_radio_type:                                                                                                                                                     
+    411          								                                                                                                                                                        
+    412          								break;						                                                                                                                                                              
+    413          							case ARM_rec_menu_bt_type:                                                                                                                                                        
+    414          								                                                                                                                                                              
+    415          								break;                                                                                                                                                                          
+    416          							case ARM_rec_menu_dvd_type:                                                                                                                                                       
+    417          								                                                                                                                                                             
+    418          								break;                                                                                                                                                                          
+    419          							case ARM_rec_menu_audioplay_type:                                                                                                                                                 
+    420          								                                                                                                                                                      
+    421          								break;                                                                                                                                                                          
+    422          							case ARM_rec_menu_videoplay_type:                                                                                                                                                 
+    423          								                                                                                                                                                     
+    424          								break;                                                                                                                                                                          
+    425          							case ARM_rec_menu_navi_type://lts20131122                                                                                                                                         
+    426          								                                                                                                                                                           
+    427          								break;								                                                                                                                                                          
+    428          							case ARM_rec_menu_digitv_type:                                                                                                                                                    
+    429          								                                                                                                                                                          
+    430          								break;						                                                                                                                                                              
+    431          							case ARM_rec_menu_analogtv_type:                                                                                                                                                  
+    432          								                                                                                                                                                       
+    433          								break;                                                                                                                                                                          
+    434          							case ARM_rec_menu_setup_type:                                                                                                                                                     
+    435          								                                                                                                                                                         
+    436          								break;	                                                                                                                                                                        
+    437          							case ARM_rec_menu_factory_type:                                                                                                                                                   
+    438          								                                                                                                                                                       
+    439          								break;                                                                                                                                                                          
+    440          							case ARM_rec_menu_steer_type:                                                                                                                                                     
+    441          								                                                                                                                                                         
+    442          								break;                                                                                                                                                                          
+    443          							                                                                                                                                                                        
+    444          							default:                                                                                                                                                                          
+    445          								break;                                                                                                                                                                          
+    446          						}                                                                                                                                                                                   
+    447          						break;							                                                                                                                                                                
+    448          					case ARM_rec_upgrade_type:                                                                                                                                                            
+    449          						                                                                                                                                                         
+    450          						break;                                                                                                                                                                              
+    451          					case ARM_rec_system_config_type:                                                                                                                                                      
+    452          						                                                                                                                                                    
+    453          						break;                                                                                                                                                                              
+    454          					//#if 1 //TSH,2013-05-03,cancel this Cmd                                                                                                                                              
+    455          					case ARM_rec_function_config_type:                                                                                                                                                    
+    456          						//WavePlayer_Start(Sys.Buzzer_type);                                                                                                                                                
+    457          						                                                                                                                                                    
+    458          						break;                                                                                                                                                                              
+    459          					//#endif                                                                                                                                                                              
+    460          					case ARM_rec_get_version_type:			                                                                                                                                
+    461          						UART_get_version_process();                                                                                                                                               
+    462          						break;                                                                                                                                                                              
+    463                                                                                                                                                                                                          
+    464          					case ARM_rec_canbox_upgrade_type:			                                                                                                                                      
+    465          						                                                                                                                                                
+    466          						break;                                                                                                                                                                              
+    467          						                                                                                                                                                                                    
+    468          					case ARM_rec_ControlPolling:                                                                                                                                                          
+    469          						switch(ARM_rec_ContrPoll_buff[0])                                                                                                                                                   
+    470          						{                                                                                                                                                                                   
+    471          							case 0x01://DVD                                                                                                                                                                   
+    472          									                                                                                                                                 
+    473          								break;                                                                                                                                                                          
+    474          							case 0x02://back car                                                                                                                                                              
+    475          									;                                                                                                                                        
+    476          								break;                                                                                                                                                                          
+    477          							case 0x03:								                                                                                                                                                        
+    478          								                                                                                                                                            
+    479          								break;                                                                                                                                                                          
+    480          							case 0x04:                                                                                                                                                                        
+    481          								                                                                                                                                                   
+    482          								break;                                                                                                                                                                          
+    483          							case 0x05:                                                                                                                                                                        
+    484          							    //if(ARM_rec_ContrPoll_buff[1]==0x01)//回馈                                                                                                                                   
+    485          								break;;                                                                                                                                                                         
+    486          							case 0xa0:                                                                                                                                                                        
+    487          						                                                                                                                             
+    488          								break;                                                                                                                                                                          
+    489          							default:                                                                                                                                                                          
+    490          								break;                                                                                                                                                                          
+    491          						}                                                                                                                                                                                   
+    492                                                                                                                                                                                                          
+    493          						break;                                                                                                                                                                              
+    494          					case ARM_rec_TimeSet:                                                                                                                                                                 
+    495          			                                                                                                                                            
+    496          								                                                                                                                                                                                
+    497          								//Time_Adjust();                                                                                                                                                                  
+    498          								break;                                                                                                                                                                          
+    499          					case ARM_rec_HW_Mute:                                                                                                                                                                 
+    500          						switch(ARM_rec_HWMute_buff[0])                                                                                                                                                      
+    501          						{                                                                                                                                                                                   
+    502          							case 0x01://HW mute                                                                                                                                                               
+    503          								if((System_Power_Status==Powerstanby)||(System_Power_Status==Power_canbuswait_init))                                                                                                    
+    504          								{                                                                                                                                                                               
+    505          									                                                                                                                                                                              
+    506          								}                                                                                                                                                                               
+    507          								else                                                                                                                                                                            
+    508          								{                                                                                                                                                                               
+    509          									if(ARM_rec_HWMute_buff[1])                                                                                                                                                    
+    510          									 {                                                                                                                                                                            
+    511          									 	//HARD_MUTE_ON();                                                                                                                                                             
+    512          										//F_mute_Cmd_id=1;//arm mute on cmd                                                                                                                                           
+    513          									 }                                                                                                                                                                            
+    514          									else                                                                                                                                                                          
+    515          									 {                                                                                                                                                                            
+    516          									 	//F_mute_Cmd_id=0;                                                                                                                                                            
+    517          									 	//if((F_mute_id==0)&&(F_soft_mute_id==0))                                                                                                                                     
+    518          									 	{                                                                                                                                                                           
+    519          									 		                                                                                                                                                                          
+    520          									 		//HARD_MUTE_OFF();                                                                                                                                                          
+    521          										}                                                                                                                                                                           
+    522          									 }                                                                                                                                                                            
+    523          								}                                                                                                                                                                               
+    524          								break;                                                                                                                                                                          
+    525          							case 0x02://close the system                                                                                                                                                      
+    526          								                                                                                                                                                             
+    527          								break;                                                                                                                                                                          
+    528          							case 0x03://back light switch                                                                                                                                                     
+    529          								if(ARM_rec_HWMute_buff[1]==1)                                                                                                                                                   
+    530          								 {                                                                                                                                                                              
+    531          								 	//BackLight(1);                                                                                                                                                                 
+    532          									                                                                                                                                                              
+    533          								 }                                                                                                                                                                              
+    534          								else if(ARM_rec_HWMute_buff[1]==2)                                                                                                                                              
+    535          								 {                                                                                                                                                                              
+    536          								 	//BackLight(1);                                                                                                                                                                 
+    537          									                                                                                                                                                                  
+    538          								 }                                                                                                                                                                              
+    539          								else                                                                                                                                                                            
+    540          								 {                                                                                                                                                                              
+    541          								 	//BackLight(0);                                                                                                                                                                 
+    542          									                                                                                                                                                                 
+    543          								 }                                                                                                                                                                              
+    544          								break;                                                                                                                                                                          
+    545          							case 0x04:                                                                                                                                                                        
+    546          								                                                                                                                                                              
+    547          								Sys.ACC_auto_on=1;                                                                                                                                                              
+    548          								Rem_SRC_long_set=1;                                                                                                                                                             
+    549          								break;                                                                                                                                                                          
+    550          							case 0x05:                                                                                                                                                                        
+    551          								if(ARM_rec_HWMute_buff[1]==0x01)//jin die                                                                                                                                       
+    552          								{                                                                                                                                                                               
+    553          									///dvdrunStatus=DISC_RUN_IN;                                                                                                                                                     
+    554          								}                                                                                                                                                                               
+    555          								else if(ARM_rec_HWMute_buff[1]==0x02)//chu die                                                                                                                                  
+    556          								{                                                                                                                                                                               
+    557          									//dvdrunStatus=DISC_RUN_OUT;                                                                                                                                                    
+    558          								}	                                                                                                                                                                              
+    559          								break;                                                                                                                                                                          
+    560          							case 0x06://AUX切换命令                                                                                                                                                           
+    561          								if(ARM_rec_HWMute_buff[1]==0x01)//主机AUX输入                                                                                                                                   
+    562          								{                                                                                                                                                                               
+    563          									                                                                                                                               
+    564          								}                                                                                                                                                                               
+    565          								else if(ARM_rec_HWMute_buff[1]==0x02)//原车信号输入                                                                                                                             
+    566          								{                                                                                                                                                                               
+    567          									                                                                                                                                
+    568          								}	                                                                                                                                                                              
+    569          								break;									                                                                                                                                                        
+    570          							default:                                                                                                                                                                          
+    571          								break;                                                                                                                                                                          
+    572          						}                                                                                                                                                                                   
+    573                                                                                                                                                                                                          
+    574          						break;                                                                                                                                                                              
+    575          					#ifdef	_CANBUS_EN                                                                                                                                                                    
+    576          					case ARM_rec_canbus_type:                                                                                                                                                             
+    577          						//CAN_APP_IF_Process(arm_rec_index);                                                                                                                                                  
+    578          						#if 0 //TSH,20130720                                                                                                                                                                
+    579          						switch(arm_rec_index)                                                                                                                                                               
+    580          						{                                                                                                                                                                                   
+    581          							case ARM_rec_canbus_tuguan:                                                                                                                                                       
+    582          								UART_canbus_tuguan_process();                                                                                                                                                   
+    583          								break;	                                                                                                                                                                        
+    584          							case ARM_rec_canbus_Haima_S7:                                                                                                                                                     
+    585          								UART_canbus_Haima_S7_process();                                                                                                                                                 
+    586          								break;	                                                                                                                                                                        
+    587          							default:                                                                                                                                                                          
+    588          								break;                                                                                                                                                                          
+    589          						}                                                                                                                                                                                   
+    590          						#endif                                                                                                                                                                              
+    591          						break;                                                                                                                                                                              
+    592          						                                                                                                                                                                                    
+    593          					#endif                                                                                                                                                                                
+    594          				}                                                                                                                                                                                       
+    595                                                                                                                                                                                                          
+    596          		}                                                                                                                                                                                           
+    597          		if(ARM_Done_index<(ARM_Receive_index_max-1))                                                                                                                                                
+    598          			ARM_Done_index++;                                                                                                                                                                         
+    599          		else                                                                                                                                                                                        
+    600          			ARM_Done_index=0;						                                                                                                                                                              
+    601          			                                                                                                                                                                                          
+    602          	}				                                                                                                                                                                                      
+    603          }                                                                                                                                                                                               
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       24  ARM_data_Process
+             24 -> UART_SRC_process
+             24 -> UART_SetFM_process
+             24 -> UART_Touch_process
+             24 -> UART_get_version_process
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       1  ARM_Done_index
+       1  ARM_Max_Time_Cnt
+    1000  ARM_Rec_buffer
+     100  ARM_Rec_temp
+       1  ARM_Receive_Cnt
+       1  ARM_Receive_OK
+       1  ARM_Receive_ack
+       1  ARM_Receive_index
+       1  ARM_Receive_length
+       1  ARM_Send_length
+     100  ARM_Send_temp
+       1  ARM_USART1_Status
+       1  ARM_ack_request
+    2364  ARM_data_Process
+       2  ARM_rec_ContrPoll_buff
+       4  ARM_rec_HWMute_buff
+       8  ARM_rec_TimeSet_buff
+       1  ARM_rec_USART1_buff
+      32  ARM_rec_canbus_public_buff
+      80  ARM_rec_canupgrade_buff
+      28  ARM_rec_function_config_buff
+       4  ARM_rec_menu_analogtv_buff
+       8  ARM_rec_menu_audioplay_buff
+      32  ARM_rec_menu_bt_buff
+       1  ARM_rec_menu_cam_buff
+      36  ARM_rec_menu_cambox_buff
+       1  ARM_rec_menu_digitv_buff
+      16  ARM_rec_menu_dvd_buff
+       4  ARM_rec_menu_factory_buff
+       1  ARM_rec_menu_main_buff
+       1  ARM_rec_menu_navi_buff
+       4  ARM_rec_menu_radio_buff
+       2  ARM_rec_menu_req_buff
+      16  ARM_rec_menu_setup_buff
+      80  ARM_rec_menu_steer_buff
+       8  ARM_rec_menu_videoplay_buff
+       2  ARM_rec_openlogo_init_buff
+       4  ARM_rec_power_buff
+       2  ARM_rec_src_buff
+       1  ARM_rec_start_buff
+      68  ARM_rec_system_config_buff
+       8  ARM_rec_touch_buff
+       2  ARM_rec_upgrade_buff
+       1  ARM_send_id
+       1  Rem_SRC_long_set
+       1  WINCA_ProtocolFlag
+       4  gFMFrequency
+
+ 
+ 1 673 bytes in section .bss
+ 2 364 bytes in section .text
+ 
+ 2 364 bytes of CODE memory
+ 1 673 bytes of DATA memory
+
+Errors: none
+Warnings: none

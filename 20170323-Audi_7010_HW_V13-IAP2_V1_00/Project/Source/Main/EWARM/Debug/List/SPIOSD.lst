@@ -1,0 +1,1007 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V6.30.1.53127/W32 for ARM     22/Jun/2016  13:18:40 #
+# Copyright 1999-2011 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\TW8836\SPIOSD.c                      #
+#    Command line =  F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\TW8836\SPIOSD.c -D                   #
+#                    USE_STDPERIPH_DRIVER -D USE_STM32100B_EVAL -D            #
+#                    STM32F10X_CL -lc F:\软件工程\平台正式代码001\Benze_MainB #
+#                    oard\baoma_36\benci_newC_V45\Project\STM32F10x_StdPeriph #
+#                    _Template\EWARM\Debug\List\ -lA                          #
+#                    F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\STM32F10x_StdPeriph_Template\EWARM\D #
+#                    ebug\List\ -o F:\软件工程\平台正式代码001\Benze_MainBoar #
+#                    d\baoma_36\benci_newC_V45\Project\STM32F10x_StdPeriph_Te #
+#                    mplate\EWARM\Debug\Obj\ --no_cse --no_unroll             #
+#                    --no_inline --no_code_motion --no_tbaa --no_clustering   #
+#                    --no_scheduling --debug --endian=little --cpu=Cortex-M3  #
+#                    -e --fpu=None --dlib_config "C:\Program Files\IAR        #
+#                    Systems\Embedded Workbench 6.0_2\arm\INC\c\DLib_Config_F #
+#                    ull.h" -I F:\软件工程\平台正式代码001\Benze_MainBoard\ba #
+#                    oma_36\benci_newC_V45\Project\STM32F10x_StdPeriph_Templa #
+#                    te\EWARM\ -I F:\软件工程\平台正式代码001\Benze_MainBoard #
+#                    \baoma_36\benci_newC_V45\Project\STM32F10x_StdPeriph_Tem #
+#                    plate\EWARM\..\ -I F:\软件工程\平台正式代码001\Benze_Mai #
+#                    nBoard\baoma_36\benci_newC_V45\Project\STM32F10x_StdPeri #
+#                    ph_Template\EWARM\..\..\..\Libraries\STM32F10x_StdPeriph #
+#                    _Driver\inc\ -I F:\软件工程\平台正式代码001\Benze_MainBo #
+#                    ard\baoma_36\benci_newC_V45\Project\STM32F10x_StdPeriph_ #
+#                    Template\EWARM\..\..\..\Libraries\STM32F10x_StdPeriph_Dr #
+#                    iver\src\ -I F:\软件工程\平台正式代码001\Benze_MainBoard #
+#                    \baoma_36\benci_newC_V45\Project\STM32F10x_StdPeriph_Tem #
+#                    plate\EWARM\..\..\..\Project/Common\ -I                  #
+#                    F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\STM32F10x_StdPeriph_Template\EWARM\. #
+#                    .\..\..\Project/TW8836\ -I F:\软件工程\平台正式代码001\B #
+#                    enze_MainBoard\baoma_36\benci_newC_V45\Project\STM32F10x #
+#                    _StdPeriph_Template\EWARM\..\..\..\Project/CAN\ -I       #
+#                    F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\STM32F10x_StdPeriph_Template\EWARM\. #
+#                    .\..\..\Project/FM\ -I F:\软件工程\平台正式代码001\Benze #
+#                    _MainBoard\baoma_36\benci_newC_V45\Project\STM32F10x_Std #
+#                    Periph_Template\EWARM\..\..\..\Project/ARM\ -I           #
+#                    F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\STM32F10x_StdPeriph_Template\EWARM\. #
+#                    .\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\  #
+#                    -On -I "C:\Program Files\IAR Systems\Embedded Workbench  #
+#                    6.0_2\arm\CMSIS\Include\"                                #
+#    List file    =  F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\STM32F10x_StdPeriph_Template\EWARM\D #
+#                    ebug\List\SPIOSD.lst                                     #
+#    Object file  =  F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\ben #
+#                    ci_newC_V45\Project\STM32F10x_StdPeriph_Template\EWARM\D #
+#                    ebug\Obj\SPIOSD.o                                        #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\软件工程\平台正式代码001\Benze_MainBoard\baoma_36\benci_newC_V45\Project\TW8836\SPIOSD.c
+      1          #define __SPIOSD_C__
+      2          
+      3          #include "includes.h"
+      4          
+      5          //#include "SPIFlash.h"
+      6          //#include "SPIOSD.h"
+      7          //#include "TW8836.h"
+      8          
+      9          
+     10          
+     11          const uint8_t SpiOsdWinBase[9] =
+     12          {
+     13              SPIOSD_WIN0_START, SPIOSD_WIN1_START, SPIOSD_WIN2_START,
+     14              SPIOSD_WIN3_START, SPIOSD_WIN4_START, SPIOSD_WIN5_START,
+     15              SPIOSD_WIN6_START, SPIOSD_WIN7_START, SPIOSD_WIN8_START,
+     16          };
+     17          
+     18           const uint8_t bmp_LUT[] = {    // LUT
+     19              // Color Look Up Table (256) bytes
+     20              #if 1
+     21          	0,0,0,0,0,0,128,0,0,128,0,0,0,128,128,0,128,0,0,0,128,0,128,0,128,128,0,0,192,192,192,0,
+     22          	192,220,192,0,240,202,166,0,51,0,0,0,0,0,51,0,51,0,51,0,51,51,0,0,22,22,22,0,28,28,28,0,
+     23          	34,34,34,0,41,41,41,0,85,85,85,0,77,77,77,0,66,66,66,0,57,57,57,0,128,124,255,0,80,80,255,0,
+     24          	147,0,214,0,255,236,204,0,198,214,239,0,214,231,231,0,144,169,173,0,0,255,51,0,0,0,102,0,0,0,153,0,
+     25          	0,0,204,0,0,51,0,0,0,51,51,0,0,51,102,0,0,51,153,0,0,51,204,0,0,51,255,0,0,102,0,0,
+     26          	0,102,51,0,0,102,102,0,0,102,153,0,0,102,204,0,0,102,255,0,0,153,0,0,0,153,51,0,0,153,102,0,
+     27          	0,153,153,0,0,153,204,0,0,153,255,0,0,204,0,0,0,204,51,0,0,204,102,0,0,204,153,0,0,204,204,0,
+     28          	0,204,255,0,0,255,102,0,0,255,153,0,0,255,204,0,51,255,0,0,255,0,51,0,51,0,102,0,51,0,153,0,
+     29          	51,0,204,0,51,0,255,0,255,51,0,0,51,51,51,0,51,51,102,0,51,51,153,0,51,51,204,0,51,51,255,0,
+     30          	51,102,0,0,51,102,51,0,51,102,102,0,51,102,153,0,51,102,204,0,51,102,255,0,51,153,0,0,51,153,51,0,
+     31          	51,153,102,0,51,153,153,0,51,153,204,0,51,153,255,0,51,204,0,0,51,204,51,0,51,204,102,0,51,204,153,0,
+     32          	51,204,204,0,51,204,255,0,51,255,51,0,51,255,102,0,51,255,153,0,51,255,204,0,51,255,255,0,102,0,0,0,
+     33          	102,0,51,0,102,0,102,0,102,0,153,0,102,0,204,0,102,0,255,0,102,51,0,0,102,51,51,0,102,51,102,0,
+     34          	102,51,153,0,102,51,204,0,102,51,255,0,102,102,0,0,102,102,51,0,102,102,102,0,102,102,153,0,102,102,204,0,
+     35          	102,153,0,0,102,153,51,0,102,153,102,0,102,153,153,0,102,153,204,0,102,153,255,0,102,204,0,0,102,204,51,0,
+     36          	102,204,153,0,102,204,204,0,102,204,255,0,102,255,0,0,102,255,51,0,102,255,153,0,102,255,204,0,204,0,255,0,
+     37          	255,0,204,0,153,153,0,0,153,51,153,0,153,0,153,0,153,0,204,0,153,0,0,0,153,51,51,0,153,0,102,0,
+     38          	153,51,204,0,153,0,255,0,153,102,0,0,153,102,51,0,153,51,102,0,153,102,153,0,153,102,204,0,153,51,255,0,
+     39          	153,153,51,0,153,153,102,0,153,153,153,0,153,153,204,0,153,153,255,0,153,204,0,0,153,204,51,0,102,204,102,0,
+     40          	153,204,153,0,153,204,204,0,153,204,255,0,153,255,0,0,153,255,51,0,153,204,102,0,153,255,153,0,153,255,204,0,
+     41          	153,255,255,0,204,0,0,0,153,0,51,0,204,0,102,0,204,0,153,0,204,0,204,0,153,51,0,0,204,51,51,0,
+     42          	204,51,102,0,204,51,153,0,204,51,204,0,204,51,255,0,204,102,0,0,204,102,51,0,153,102,102,0,204,102,153,0,
+     43          	204,102,204,0,153,102,255,0,204,153,0,0,204,153,51,0,204,153,102,0,204,153,153,0,204,153,204,0,204,153,255,0,
+     44          	204,204,0,0,204,204,51,0,204,204,102,0,204,204,153,0,204,204,204,0,204,204,255,0,204,255,0,0,204,255,51,0,
+     45          	153,255,102,0,204,255,153,0,204,255,204,0,204,255,255,0,204,0,51,0,255,0,102,0,255,0,153,0,204,51,0,0,
+     46          	255,51,51,0,255,51,102,0,255,51,153,0,255,51,204,0,255,51,255,0,255,102,0,0,255,102,51,0,204,102,102,0,
+     47          	255,102,153,0,255,102,204,0,204,102,255,0,255,153,0,0,255,153,51,0,255,153,102,0,255,153,153,0,255,153,204,0,
+     48          	255,153,255,0,255,204,0,0,255,204,51,0,255,204,102,0,255,204,153,0,255,204,204,0,255,204,255,0,255,255,51,0,
+     49          	204,255,102,0,255,255,153,0,255,255,204,0,102,102,255,0,102,255,102,0,102,255,255,0,255,102,102,0,255,102,255,0,
+     50          	255,255,102,0,33,0,165,0,95,95,95,0,119,119,119,0,134,134,134,0,150,150,150,0,203,203,203,0,178,178,178,0,
+     51          	215,215,215,0,221,221,221,0,227,227,227,0,234,234,234,0,241,241,241,0,248,248,248,0,240,251,255,0,164,160,160,0,
+     52          	128,128,128,0,0,0,255,0,0,255,0,0,0,255,255,0,255,0,0,0,255,0,255,0,255,255,0,0,255,255,255,0,
+     53          #endif
+     54          	#if 0
+     55          	0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x80, 0x80, 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 
+     56          	 0x80, 0x00, 0x80, 0x00, 0x00, 0x80, 0x80, 0x00, 0xc0, 0xc0, 0xc0, 0x00, 0xc0, 0xdc, 0xc0, 0x00, 0xa6, 0xca, 0xf0, 0x00,
+     57          	 0x00, 0x00, 0x33, 0x00, 0x33, 0x00, 0x00, 0x00, 0x33, 0x00, 0x33, 0x00, 0x00, 0x33, 0x33, 0x00, 0x16, 0x16, 0x16, 0x00, 
+     58          	 0x1c, 0x1c, 0x1c, 0x00, 0x22, 0x22, 0x22, 0x00, 0x29, 0x29, 0x29, 0x00, 0x55, 0x55, 0x55, 0x00, 0x4d, 0x4d, 0x4d, 0x00, 0x42, 0x42, 0x42, 0x00, 
+     59          	 0x39, 0x39, 0x39, 0x00, 0xff, 0x7c, 0x80, 0x00, 0xff, 0x50, 0x50, 0x00, 0xd6, 0x00, 0x93, 0x00, 0xcc, 0xec, 0xff, 0x00, 
+     60          	 0xef, 0xd6, 0xc6, 0x00, 0xe7, 0xe7, 0xd6, 0x00, 0xad, 0xa9, 0x90, 0x00, 0x33, 0xff, 0x00, 0x00, 0x66, 0x00, 0x00, 0x00,
+     61          	 0x99, 0x00, 0x00, 0x00, 0xcc, 0x00, 0x00, 0x00, 0x00, 0x33, 0x00, 0x00, 0x33, 0x33, 0x00, 0x00, 0x66, 0x33, 0x00, 0x00, 0x99, 0x33, 0x00, 0x00, 
+     62          	 0xcc, 0x33, 0x00, 0x00, 0xff, 0x33, 0x00, 0x00, 0x00, 0x66, 0x00, 0x00, 0x33, 0x66, 0x00, 0x00, 0x66, 0x66, 0x00, 0x00, 
+     63          	 0x99, 0x66, 0x00, 0x00, 0xcc, 0x66, 0x00, 0x00, 0xff, 0x66, 0x00, 0x00, 0x00, 0x99, 0x00, 0x00, 0x33, 0x99, 0x00, 0x00, 
+     64          	 0x66, 0x99, 0x00, 0x00, 0x99, 0x99, 0x00, 0x00, 0xcc, 0x99, 0x00, 0x00, 0xff, 0x99, 0x00, 0x00, 0x00, 0xcc, 0x00, 0x00, 0x33, 0xcc, 0x00, 0x00, 
+     65          	 0x66, 0xcc, 0x00, 0x00, 0x99, 0xcc, 0x00, 0x00, 0xcc, 0xcc, 0x00, 0x00, 0xff, 0xcc, 0x00, 0x00, 0x66, 0xff, 0x00, 0x00, 
+     66          	 0x99, 0xff, 0x00, 0x00, 0xcc, 0xff, 0x00, 0x00, 0x00, 0xff, 0x33, 0x00, 0x33, 0x00, 0xff, 0x00, 0x66, 0x00, 0x33, 0x00, 
+     67          	 0x99, 0x00, 0x33, 0x00, 0xcc, 0x00, 0x33, 0x00, 0xff, 0x00, 0x33, 0x00, 0x00, 0x33, 0xff, 0x00, 0x33, 0x33, 0x33, 0x00, 0x66, 0x33, 0x33, 0x00, 
+     68          	 0x99, 0x33, 0x33, 0x00, 0xcc, 0x33, 0x33, 0x00, 0xff, 0x33, 0x33, 0x00, 0x00, 0x66, 0x33, 0x00, 0x33, 0x66, 0x33, 0x00, 
+     69          	 0x66, 0x66, 0x33, 0x00, 0x99, 0x66, 0x33, 0x00, 0xcc, 0x66, 0x33, 0x00, 0xff, 0x66, 0x33, 0x00, 0x00, 0x99, 0x33, 0x00, 
+     70          	 0x33, 0x99, 0x33, 0x00, 0x66, 0x99, 0x33, 0x00, 0x99, 0x99, 0x33, 0x00, 0xcc, 0x99, 0x33, 0x00, 0xff, 0x99, 0x33, 0x00, 0x00, 0xcc, 0x33, 0x00, 
+     71          	 0x33, 0xcc, 0x33, 0x00, 0x66, 0xcc, 0x33, 0x00, 0x99, 0xcc, 0x33, 0x00, 0xcc, 0xcc, 0x33, 0x00, 0xff, 0xcc, 0x33, 0x00, 
+     72          	 0x33, 0xff, 0x33, 0x00, 0x66, 0xff, 0x33, 0x00, 0x99, 0xff, 0x33, 0x00, 0xcc, 0xff, 0x33, 0x00, 0xff, 0xff, 0x33, 0x00, 
+     73          	 0x00, 0x00, 0x66, 0x00, 0x33, 0x00, 0x66, 0x00, 0x66, 0x00, 0x66, 0x00, 0x99, 0x00, 0x66, 0x00, 0xcc, 0x00, 0x66, 0x00, 0xff, 0x00, 0x66, 0x00, 
+     74          	 0x00, 0x33, 0x66, 0x00, 0x33, 0x33, 0x66, 0x00, 0x66, 0x33, 0x66, 0x00, 0x99, 0x33, 0x66, 0x00, 0xcc, 0x33, 0x66, 0x00, 
+     75          	 0xff, 0x33, 0x66, 0x00, 0x00, 0x66, 0x66, 0x00, 0x33, 0x66, 0x66, 0x00, 0x66, 0x66, 0x66, 0x00, 0x99, 0x66, 0x66, 0x00, 
+     76          	 0xcc, 0x66, 0x66, 0x00, 0x00, 0x99, 0x66, 0x00, 0x33, 0x99, 0x66, 0x00, 0x66, 0x99, 0x66, 0x00, 0x99, 0x99, 0x66, 0x00, 0xcc, 0x99, 0x66, 0x00, 
+     77          	 0xff, 0x99, 0x66, 0x00, 0x00, 0xcc, 0x66, 0x00, 0x33, 0xcc, 0x66, 0x00, 0x99, 0xcc, 0x66, 0x00, 0xcc, 0xcc, 0x66, 0x00, 
+     78          	 0xff, 0xcc, 0x66, 0x00, 0x00, 0xff, 0x66, 0x00, 0x33, 0xff, 0x66, 0x00, 0x99, 0xff, 0x66, 0x00, 0xcc, 0xff, 0x66, 0x00, 
+     79          	 0xff, 0x00, 0xcc, 0x00, 0xcc, 0x00, 0xff, 0x00, 0x00, 0x99, 0x99, 0x00, 0x99, 0x33, 0x99, 0x00, 0x99, 0x00, 0x99, 0x00, 0xcc, 0x00, 0x99, 0x00, 
+     80          	 0x00, 0x00, 0x99, 0x00, 0x33, 0x33, 0x99, 0x00, 0x66, 0x00, 0x99, 0x00, 0xcc, 0x33, 0x99, 0x00, 0xff, 0x00, 0x99, 0x00, 
+     81          	 0x00, 0x66, 0x99, 0x00, 0x33, 0x66, 0x99, 0x00, 0x66, 0x33, 0x99, 0x00, 0x99, 0x66, 0x99, 0x00, 0xcc, 0x66, 0x99, 0x00, 
+     82          	 0xff, 0x33, 0x99, 0x00, 0x33, 0x99, 0x99, 0x00, 0x66, 0x99, 0x99, 0x00, 0x99, 0x99, 0x99, 0x00, 0xcc, 0x99, 0x99, 0x00, 0xff, 0x99, 0x99, 0x00, 
+     83          	 0x00, 0xcc, 0x99, 0x00, 0x33, 0xcc, 0x99, 0x00, 0x66, 0xcc, 0x66, 0x00, 0x99, 0xcc, 0x99, 0x00, 0xcc, 0xcc, 0x99, 0x00, 
+     84          	 0xff, 0xcc, 0x99, 0x00, 0x00, 0xff, 0x99, 0x00, 0x33, 0xff, 0x99, 0x00, 0x66, 0xcc, 0x99, 0x00, 0x99, 0xff, 0x99, 0x00, 
+     85          	 0xcc, 0xff, 0x99, 0x00, 0xff, 0xff, 0x99, 0x00, 0x00, 0x00, 0xcc, 0x00, 0x33, 0x00, 0x99, 0x00, 0x66, 0x00, 0xcc, 0x00, 0x99, 0x00, 0xcc, 0x00, 
+     86          	 0xcc, 0x00, 0xcc, 0x00, 0x00, 0x33, 0x99, 0x00, 0x33, 0x33, 0xcc, 0x00, 0x66, 0x33, 0xcc, 0x00, 0x99, 0x33, 0xcc, 0x00, 
+     87          	 0xcc, 0x33, 0xcc, 0x00, 0xff, 0x33, 0xcc, 0x00, 0x00, 0x66, 0xcc, 0x00, 0x33, 0x66, 0xcc, 0x00, 0x66, 0x66, 0x99, 0x00, 
+     88          	 0x99, 0x66, 0xcc, 0x00, 0xcc, 0x66, 0xcc, 0x00, 0xff, 0x66, 0x99, 0x00, 0x00, 0x99, 0xcc, 0x00, 0x33, 0x99, 0xcc, 0x00, 0x66, 0x99, 0xcc, 0x00, 
+     89          	 0x99, 0x99, 0xcc, 0x00, 0xcc, 0x99, 0xcc, 0x00, 0xff, 0x99, 0xcc, 0x00, 0x00, 0xcc, 0xcc, 0x00, 0x33, 0xcc, 0xcc, 0x00, 
+     90          	 0x66, 0xcc, 0xcc, 0x00, 0x99, 0xcc, 0xcc, 0x00, 0xcc, 0xcc, 0xcc, 0x00, 0xff, 0xcc, 0xcc, 0x00, 0x00, 0xff, 0xcc, 0x00, 
+     91          	 0x33, 0xff, 0xcc, 0x00, 0x66, 0xff, 0x99, 0x00, 0x99, 0xff, 0xcc, 0x00, 0xcc, 0xff, 0xcc, 0x00, 0xff, 0xff, 0xcc, 0x00, 0x33, 0x00, 0xcc, 0x00, 
+     92          	 0x66, 0x00, 0xff, 0x00, 0x99, 0x00, 0xff, 0x00, 0x00, 0x33, 0xcc, 0x00, 0x33, 0x33, 0xff, 0x00, 0x66, 0x33, 0xff, 0x00, 
+     93          	 0x99, 0x33, 0xff, 0x00, 0xcc, 0x33, 0xff, 0x00, 0xff, 0x33, 0xff, 0x00, 0x00, 0x66, 0xff, 0x00, 0x33, 0x66, 0xff, 0x00, 
+     94          	 0x66, 0x66, 0xcc, 0x00, 0x99, 0x66, 0xff, 0x00, 0xcc, 0x66, 0xff, 0x00, 0xff, 0x66, 0xcc, 0x00, 0x00, 0x99, 0xff, 0x00, 0x33, 0x99, 0xff, 0x00, 
+     95          	 0x66, 0x99, 0xff, 0x00, 0x99, 0x99, 0xff, 0x00, 0xcc, 0x99, 0xff, 0x00, 0xff, 0x99, 0xff, 0x00, 0x00, 0xcc, 0xff, 0x00, 
+     96          	 0x33, 0xcc, 0xff, 0x00, 0x66, 0xcc, 0xff, 0x00, 0x99, 0xcc, 0xff, 0x00, 0xcc, 0xcc, 0xff, 0x00, 0xff, 0xcc, 0xff, 0x00, 
+     97          	 0x33, 0xff, 0xff, 0x00, 0x66, 0xff, 0xcc, 0x00, 0x99, 0xff, 0xff, 0x00, 0xcc, 0xff, 0xff, 0x00, 0xff, 0x66, 0x66, 0x00, 0x66, 0xff, 0x66, 0x00, 
+     98          	 0xff, 0xff, 0x66, 0x00, 0x66, 0x66, 0xff, 0x00, 0xff, 0x66, 0xff, 0x00, 0x66, 0xff, 0xff, 0x00, 0xa5, 0x00, 0x21, 0x00, 
+     99          	 0x5f, 0x5f, 0x5f, 0x00, 0x77, 0x77, 0x77, 0x00, 0x86, 0x86, 0x86, 0x00, 0x96, 0x96, 0x96, 0x00, 0xcb, 0xcb, 0xcb, 0x00, 
+    100          	 0xb2, 0xb2, 0xb2, 0x00, 0xd7, 0xd7, 0xd7, 0x00, 0xdd, 0xdd, 0xdd, 0x00, 0xe3, 0xe3, 0xe3, 0x00, 0xea, 0xea, 0xea, 0x00, 0xf1, 0xf1, 0xf1, 0x00, 
+    101          	 0xf8, 0xf8, 0xf8, 0x00, 0xff, 0xfb, 0xf0, 0x00, 0xa0, 0xa0, 0xa4, 0x00, 0x80, 0x80, 0x80, 0x00, 0xff, 0x00, 0x00, 0x00, 
+    102          	 0x00, 0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0xff, 0xff, 0xff, 0x00
+    103          
+    104          #endif
+    105           }; 
+    106          
+    107          
+    108          uint8_t SpiOsdWinRegs[10 * 0x10];
+    109          
+    110          
+    111          
+    112          extern uint8_t gucSpiFlash4ByteMode;
+    113          extern uint8_t SPICMD_x_READ;
+    114          extern uint8_t SPICMD_x_BYTES;
+    115          
+    116          
+    117          void SpiOsdEnable( uint8_t en )
+    118          {
+    119              TW8836_WritePage(TW8836_PAGE4_SPI_OSD);
+    120          
+    121              if(en)
+    122              {
+    123                  TW8836_Write(REG400, TW8836_Read(REG400) | 0x04);
+    124              }
+    125              else
+    126              {
+    127                  TW8836_Write(REG400, TW8836_Read(REG400) & 0xFB);
+    128              }
+    129          }
+    130          
+    131          
+    132          void SpiOsdSetDeValue( void )
+    133          {
+    134              uint16_t temp = 0;
+    135              uint8_t  HDE  = 0, PCLK0 = 0;
+    136          
+    137              TW8836_WritePage(TW8836_PAGE2_SCALER);
+    138          
+    139              HDE   = TW8836_Read(REG210);
+    140              PCLK0 = TW8836_Read(REG20D) & 0x03;
+    141          
+    142              temp  = HDE + PCLK0 - 18;
+    143          
+    144              TW8836_WritePage(TW8836_PAGE4_SPI_OSD);
+    145              TW8836_Write(REG40E, (uint8_t)(temp >> 0x08));
+    146              TW8836_Write(REG40F, (uint8_t)(temp >> 0x00));
+    147          }
+    148          
+    149          
+    150          void SpiOsdWinEnable( uint8_t winno, uint8_t en )
+    151          {
+    152              uint8_t *dat = gtSpiOsd.reg[winno];
+    153          
+    154              if(en) *dat |= 0x01;
+    155              else   *dat &= 0xFE;
+    156          }
+    157          
+    158          
+    159          void SpiOsdAlphaBlending( uint8_t winno, uint8_t en, uint8_t mode, uint8_t alpha )
+    160          {
+    161              uint8_t *dat = gtSpiOsd.reg[winno];
+    162          
+    163              if(en)   *dat |= 0x10;
+    164              else     *dat &= 0xEF;
+    165          
+    166              if(mode) *dat |= 0x20;  /*Per Pixel Alpha*/
+    167              else     *dat &= 0xDF;  /*Global Window 1 Alpha*/
+    168          
+    169              dat += SPIOSD_WIN_ALPHA;
+    170          
+    171              if(winno == 0) dat += 4;
+    172          
+    173              *dat = alpha;
+    174          }
+    175          
+    176          
+    177          void SpiOsdSetBitsPixel( uint8_t winno, uint8_t bpp )
+    178          {
+    179              uint8_t *dat = gtSpiOsd.reg[winno];
+    180              uint8_t mode = 0;
+    181          
+    182              if(bpp == 4)      mode = 0;
+    183              else if(bpp == 6) mode = 1;
+    184              else              mode = 2;
+    185          
+    186              *dat &= 0x3F;
+    187              *dat |= (mode << 6);
+    188          }
+    189          
+    190          
+    191          void SpiOsdLutOffset( uint8_t winno,  uint8_t lut_offset )
+    192          {
+    193              uint8_t *dat = gtSpiOsd.reg[winno];
+    194          
+    195              dat += SPIOSD_WIN_LUT_PTR;
+    196          
+    197              if(winno == 0) dat += 4;
+    198          
+    199              *dat = lut_offset >> 4;
+    200          }
+    201          
+    202          
+    203          void SpiOsdBuffWidth( uint8_t winno, uint16_t w, uint16_t h )
+    204          {
+    205              uint8_t *dat = gtSpiOsd.reg[winno];
+    206          
+    207              uint8_t temp = 0;
+    208          
+    209              dat += SPIOSD_WIN_DISPSIZE;
+    210          
+    211              if(winno)
+    212              {
+    213                  temp = *dat & 0xC0;
+    214                  *dat++ = (uint8_t)(w >> 8 | temp);
+    215                  *dat++ = (uint8_t)(w);
+    216              }
+    217              else
+    218              {
+    219                  temp   = (uint8_t)(h >> 8);
+    220                  temp <<= 4;
+    221                  temp  |= (uint8_t)(w >> 8);
+    222          
+    223                  *dat++ = temp;
+    224                  *dat++ = (uint8_t)w;
+    225                  *dat++ = (uint8_t)h;
+    226              }
+    227          }
+    228          
+    229          
+    230          void SpiOsdSpiStartAddress( uint8_t winno, uint32_t address )
+    231          {
+    232              uint8_t *dat = gtSpiOsd.reg[winno];
+    233          
+    234              dat += SPIOSD_WIN_BUFFERSTART;
+    235          
+    236              *dat++ = (uint8_t)(address >> 20);
+    237              *dat++ = (uint8_t)(address >> 12);
+    238              *dat   = (uint8_t)(address >> 4 );
+    239          
+    240              if(winno == 0) dat += 0x0E;
+    241              else           dat += 0x06;
+    242          
+    243              *dat   = (uint8_t)(address & 0x0F);
+    244          }
+    245          
+    246          
+    247          void SpiOsdWindowPosAndSize( uint8_t winno, uint16_t start_h, uint16_t start_v, uint16_t len_h, uint16_t len_v )
+    248          {
+    249              uint8_t *dat = gtSpiOsd.reg[winno];
+    250          
+    251              uint8_t temp = 0;
+    252          
+    253              dat += SPIOSD_WIN_WINDOW;
+    254          
+    255              temp   = (start_v >> 8);
+    256              temp <<= 4;
+    257              temp  |= (start_h >> 8);
+    258          
+    259              *dat++ = temp;
+    260              *dat++ = (uint8_t)start_h;
+    261              *dat++ = (uint8_t)start_v;
+    262          
+    263              temp   = (len_v >> 8);
+    264              temp <<= 4;
+    265              temp  |= (len_h >> 8);
+    266          
+    267              *dat++ = temp;
+    268              *dat++ = (uint8_t)len_h;
+    269              *dat++ = (uint8_t)len_v;
+    270          }
+    271          
+    272          
+    273          void SpiOsdZoom( uint8_t winno, uint8_t en )
+    274          {
+    275              uint8_t *dat = gtSpiOsd.reg[winno];
+    276          
+    277              if(en) *dat |= 0x02;
+    278              else   *dat &= 0xFD;
+    279          }
+    280          
+    281          
+    282          void SpiOsdFillColor( uint8_t winno, uint8_t en, uint8_t fill_color )
+    283          {
+    284              uint8_t *dat = gtSpiOsd.reg[winno];
+    285          
+    286              if(en) *dat |= 0x04;
+    287              else   *dat &= 0xFB;
+    288          
+    289              dat += SPIOSD_WIN_FILLCOLOR;
+    290          
+    291              *dat = fill_color;
+    292          }
+    293          
+    294          
+    295          void SpiOsdSetLut( uint8_t winno, uint8_t type, uint16_t lut_offset, uint16_t size, uint32_t addr, uint8_t alpha )
+    296          {
+    297              SPIOSD_LUT *lut = &gtSpiOsd.lut[winno];
+    298          
+    299              lut->type   = 0x80 | type;
+    300              lut->offset = lut_offset;
+    301              lut->size   = size;
+    302              lut->addr   = addr;
+    303              lut->alpha  = alpha;
+    304          }
+    305          
+    306          
+    307          void SpiOsdSetRlc( uint8_t winno, uint8_t bpp, uint8_t counter )
+    308          {
+    309              SPIOSD_RLC *rlc;
+    310          
+    311              if(winno == 0)
+    312              {
+    313                  return;
+    314              }
+    315          
+    316              if((winno == 1) || (winno == 2))
+    317              {
+    318                  rlc = &gtSpiOsd.rlc[1]; /*Group B*/
+    319              }
+    320              else
+    321              {
+    322                  rlc = &gtSpiOsd.rlc[0]; /*Group A*/
+    323              }
+    324          
+    325              rlc->winno   = winno;
+    326              rlc->bpp     = bpp;
+    327              rlc->counter = counter;
+    328          }
+    329          
+    330          
+    331          void SpiOsdInit( void )
+    332          {
+    333              uint8_t winno = 0, offset = 0;
+    334          
+    335              for(winno = 0; winno < 9; winno++)
+    336              {
+    337                  if(winno) offset = winno + 0x01;
+    338                  else      offset = 0x00;
+    339          
+    340                  gtSpiOsd.reg[winno] = &SpiOsdWinRegs[offset << 0x04];
+    341              }
+    342          
+    343              SpiOsdClrLut();
+    344              SpiOsdClrReg();
+    345              SpiOsdClrRlc();
+    346          
+    347              SpiOsdUpdateReg(0, 8);
+    348              SpiOsdUpdateRlc();
+    349          }
+    350          
+    351          
+    352          void SpiOsdClrReg( void )
+    353          {
+    354              uint8_t i = 0;
+    355          
+    356              for(i = 0; i < 10 * 0x10; i++)
+    357              {
+    358                  SpiOsdWinRegs[i] = 0x00;
+    359              }
+    360          }
+    361          
+    362          
+    363          void SpiOsdClrLut( void )
+    364          {
+    365              uint8_t winno = 0;
+    366          
+    367              SPIOSD_LUT *lut;
+    368          
+    369              for(winno = 0; winno < 9; winno++)
+    370              {
+    371                  lut = &gtSpiOsd.lut[winno];
+    372          
+    373                  lut->type   = 0;
+    374                  lut->offset = 0;
+    375                  lut->size   = 0;
+    376                  lut->addr   = 0;
+    377                  lut->alpha  = 0xFF;
+    378              }
+    379          }
+    380          
+    381          
+    382          void SpiOsdClrRlc( void )
+    383          {
+    384              uint8_t i = 0;
+    385          
+    386              SPIOSD_RLC *rlc;
+    387          
+    388              for(i = 0; i < 2; i++)
+    389              {
+    390                  rlc = &gtSpiOsd.rlc[i];
+    391          
+    392                  rlc->winno   = 0;
+    393                  rlc->bpp     = 0;
+    394                  rlc->counter = 0;
+    395              }
+    396          }
+    397          
+    398          void SpiOsdClrRlc_updateReg( void )
+    399          {
+    400              TW8836_WritePage(TW8836_PAGE4_SPI_OSD);
+    401          	TW8836_Write(0x04,0);
+    402          	TW8836_Write(0x06,0);
+    403          
+    404          }
+    405          
+    406          
+    407          
+    408          void SpiOsdUpdateReg( uint8_t begin_winno, uint8_t end_winno )
+    409          {
+    410              uint8_t i = 0, winno = 0, reg = 0;
+    411          
+    412              uint8_t *dat;
+    413          
+    414              TW8836_WritePage(TW8836_PAGE4_SPI_OSD);
+    415          
+    416              for(winno = begin_winno; winno <= end_winno; winno++)
+    417              {
+    418                  dat = gtSpiOsd.reg[winno];
+    419                  reg = SpiOsdWinBase[winno];
+    420          
+    421          		//WriteTW88(dat+0x04, 0);
+    422          		//WriteTW88(dat+0x05, 0);
+    423          
+    424          		if(Sys.Main_Source==SRC_NAVI)
+    425          			{
+    426          				for(i = 0x0e; i >0; i--)   TW8836_Write(reg+i-1, dat[i-1]);
+    427          			}
+    428          		else		
+    429          			{
+    430                  for(i = 0; i < 0x10; i++)   TW8836_Write(reg+i, dat[i]);
+    431          			}
+    432          
+    433                  if(winno == 0)
+    434                  {
+    435                      for( ; i < 0x17; i++)   TW8836_Write(reg+i, dat[i]);
+    436                  }
+    437              }
+    438          }
+    439          
+    440          
+    441          void SpiOsdUpdateReg_update_win( uint8_t begin_winno, uint8_t end_winno )
+    442          {
+    443              uint8_t i = 0, winno = 0, reg = 0;
+    444          
+    445              uint8_t *dat;
+    446          
+    447              TW8836_WritePage(TW8836_PAGE4_SPI_OSD);
+    448          
+    449              for(winno = begin_winno; winno <= end_winno; winno++)
+    450              {
+    451                  dat = gtSpiOsd.reg[winno];
+    452                  reg = SpiOsdWinBase[winno];
+    453          
+    454                  for(i = 0x07; i < 0x0a; i++)   TW8836_Write(reg+i, dat[i]);
+    455          
+    456                  if(winno == 0)
+    457                  {
+    458                 //     for( ; i < 0x17; i++)   TW8836_Write(reg+i, dat[i]);
+    459                  }
+    460              }
+    461          }
+    462          
+    463          
+    464          void SpiOsdUpdateLut( uint8_t winno, uint8_t alpha )
+    465          {
+    466          	uint8_t i,j;
+                 	          ^
+Warning[Pe177]: variable "j" was declared but never referenced
+    467          	uint16_t k;
+    468          	uint8_t bTemp;
+    469          	SPIOSD_LUT *lut;
+    470          	lut  = &gtSpiOsd.lut[winno];
+    471          #ifdef DEBUG_OSD
+    472          	dPrintf("\n\rSpiOsdIoLoadLUT%s win:%bd, LutLoc:%d size:%d 0x%06lx", type ? "S":" ", _winno, LutOffset, size, spiaddr);
+    473          #endif
+    474          
+    475          //#if defined(TW8836_CHIPDEBUG)
+    476          //#else
+    477          //	McuSpiClkToPclk(PLLCLK_DIV_3P0);	//BKFYI.DIV_2P0 is better.
+    478          //#endif
+    479          
+    480          	TW8836_WritePage(TW8836_PAGE4_SPI_OSD );
+    481          
+    482          	//--- SPI-OSD config
+    483          	bTemp = SOSD_LUT_WEN;
+    484          	bTemp |= SOSD_LUT_INC_COLM;	
+    485          	if(winno==1 || winno==2)	bTemp |= SOSD_LUT_BGRP;		
+    486          	else if(lut->offset >> 8)		bTemp |= SOSD_LUT_HIGH256; 
+    487          
+    488          
+    489          		WriteTW88(REG410, bTemp);			
+    490          		WriteTW88(REG411, (uint8_t)lut->offset);		//reset address ptr.
+    491          
+    492          if(1)
+    493          {
+    494          		for(i=0; i < (lut->size / 64); i++ ) {		//min size is a 64(16*4)
+    495          			SpiFlashReadRLE2Header(SPI_Buffer,lut->addr + i*64,64);
+    496          			for(k=0; k < 64; k++)
+    497          				WriteTW88(REG412, SPI_Buffer[k]);		//write data
+    498          				}
+    499          }
+    500          else
+    501          {
+    502          			for(k=0; k < (256*4); k++)
+    503          				WriteTW88(REG412, bmp_LUT[k]);		//write data
+    504          }
+    505          	//pixel alpha
+    506          	if(alpha!=0xFF) {
+    507          		lut->offset += alpha;
+    508          
+    509          		bTemp = SOSD_LUT_WEN | SOSD_LUT_INC_NO | SOSD_LUT_ATTR ; 
+    510          		if(winno==1 || winno==2)	bTemp |= SOSD_LUT_BGRP;	
+    511          		else if(lut->offset >> 8)		bTemp |= SOSD_LUT_HIGH256;
+    512          	
+    513          		WriteTW88(REG410, bTemp);
+    514          		WriteTW88(REG411, (uint8_t)lut->offset );
+    515          		WriteTW88(REG412, 0x7F );
+    516          	}
+    517          
+    518          
+    519          #if defined(TW8836_CHIPDEBUG)
+    520          #else
+    521          //	McuSpiClkRestore();
+    522          #endif
+    523          }
+    524          #if 0
+    525          {
+    526              SPIOSD_LUT *lut;
+    527          
+    528              uint8_t  ucType = 0;
+    529          
+    530              uint8_t  ucTemp = 0;
+    531              uint16_t uiTemp = 0;
+    532              uint32_t ulTemp = 0;
+    533          
+    534          
+    535              lut  = &gtSpiOsd.lut[winno];
+    536          
+    537              ucType = lut->type;
+    538          
+    539              if((ucType & 0x80) == 0x00) return;
+    540          
+    541              ucType &= SPIOSD_LUT_MASK;
+    542          
+    543              if(ucType == SPIOSD_LUT_ADDR) return;
+    544          
+    545          
+    546              TW8836_WritePage(TW8836_PAGE4_SPI_OSD);
+    547          
+    548              ucTemp = SPIOSD_LUT_WEN;
+    549          
+    550              if(ucType == SPIOSD_LUT_ADDR) ucTemp |= SPIOSD_LUT_INC_ADDR;
+    551              else                          ucTemp |= SPIOSD_LUT_INC_BYTE;
+    552          
+    553              if((winno == 1) || (winno == 2))
+    554              {
+    555                  ucTemp |= SPIOSD_LUT_SEL;
+    556              }
+    557              else
+    558              {
+    559                  if(lut->offset & 0x0F00)
+    560                  {
+    561                      ucTemp |= SPIOSD_LUT_ADDR_H;
+    562                  }
+    563              }
+    564          
+    565          
+    566              /*8-BIT SPIOSD Look Up Table Access Control*/
+    567              TW8836_Write(REG410, ucTemp);
+    568          
+    569              /*8-BIT SPIOSD Look Up Table Address*/
+    570              TW8836_Write(REG411, (uint8_t)(lut->offset));
+    571          
+    572              /*Flash Busy Control : No Busy Check & Read Mode*/
+    573              TW8836_Write(REG4C4, 0x00);
+    574          
+    575              /*DMA Control Register*/
+    576              SpiFlashDmaControl(DMA_RW_DEST_SOSD_LUT, DMA_RW_MODE_INCREASE, SPICMD_x_BYTES + gucSpiFlash4ByteMode);
+    577          
+    578          
+    579              /*DMA Page & Index Register*/
+    580              uiTemp = lut->offset;
+    581              
+    582              if(ucType == SPIOSD_LUT_ADDR)
+    583              {
+    584                  TW8836_Write(REG4C6, (uint8_t)(uiTemp >> 8));
+    585                  TW8836_Write(REG4C7, (uint8_t)(uiTemp));
+    586              }
+    587              else
+    588              {
+    589                  TW8836_Write(REG4C6, (uint8_t)(uiTemp >> 6));
+    590                  TW8836_Write(REG4C7, (uint8_t)(uiTemp << 2));
+    591              }
+    592          
+    593          
+    594              /*DMA Length High , MID, Low Byte*/
+    595              uiTemp = lut->size;
+    596          
+    597              TW8836_Write(REG4DA, 0x00);
+    598              TW8836_Write(REG4C8, (uint8_t)(uiTemp >> 8));
+    599              TW8836_Write(REG4C9, (uint8_t)(uiTemp));
+    600          
+    601          
+    602              /*DMA Command Buffer*/
+    603              ulTemp = lut->addr;
+    604          
+    605              TW8836_Write(REG4CA, SPICMD_x_READ);
+    606          
+    607              if(gucSpiFlash4ByteMode)
+    608              {
+    609                  TW8836_Write(REG4CB, (uint8_t)(ulTemp >> 24));
+    610                  TW8836_Write(REG4CC, (uint8_t)(ulTemp >> 16));
+    611                  TW8836_Write(REG4CD, (uint8_t)(ulTemp >> 8));
+    612                  TW8836_Write(REG4CE, (uint8_t)(ulTemp));
+    613              }
+    614              else
+    615              {
+    616                  TW8836_Write(REG4CB, (uint8_t)(ulTemp >> 16));
+    617                  TW8836_Write(REG4CC, (uint8_t)(ulTemp >> 8));
+    618                  TW8836_Write(REG4CD, (uint8_t)(ulTemp));
+    619              }
+    620          
+    621          
+    622              /*DMA Start*/
+    623              TW8836_Write(REG4C4, 0x01);
+    624          
+    625          
+    626              if(alpha)
+    627              {
+    628                  ucTemp = lut->alpha;
+    629          
+    630                  if(ucTemp != 0xFF)
+    631                  {
+    632                      uiTemp += ucTemp;
+    633          
+    634                      ucTemp = SPIOSD_LUT_WEN | SPIOSD_LUT_BYT;
+    635          
+    636                      if((winno == 1) || (winno == 2))
+    637                      {
+    638                          ucTemp |= SPIOSD_LUT_SEL;
+    639                      }
+    640                      else
+    641                      {
+    642                          if(uiTemp >> 8)
+    643                          {
+    644                              ucTemp |= SPIOSD_LUT_ADDR_H;
+    645                          }
+    646                      }
+    647          
+    648                      TW8836_Write(REG410, ucTemp);
+    649                      TW8836_Write(REG411, (uint8_t)uiTemp);
+    650                      TW8836_Write(REG412, 0x7F);
+    651                  }
+    652              }
+    653          }
+    654          #endif
+    655          
+    656          void SpiOsdUpdateRlc( void )
+    657          {
+    658              uint8_t i = 0, temp = 0;
+    659          
+    660              SPIOSD_RLC *rlc;
+    661          
+    662              TW8836_WritePage(TW8836_PAGE4_SPI_OSD);
+    663          
+    664              for(i = 0; i < 2; i++)
+    665              {
+    666                  rlc = &gtSpiOsd.rlc[i];
+    667          
+    668                  TW8836_Write(REG404 + i * 2, rlc->winno << 0x04);
+    669          
+    670                  temp = rlc->bpp;
+    671          
+    672                  if(temp == 7) temp++;
+    673          
+    674                  temp <<= 0x04;
+    675          
+    676                  temp |= (rlc->counter & 0x0F);
+    677          
+    678                  TW8836_Write(REG405 + i * 2, temp);
+    679              }
+    680          }
+    681          
+    682          void SpiOsdUpdateRlc_user( uint8_t winno )
+    683          {
+    684              uint8_t i = 0, temp = 0;
+    685          
+    686              SPIOSD_RLC *rlc;
+    687          
+    688              TW8836_WritePage(TW8836_PAGE4_SPI_OSD);
+    689          
+    690              //for(i = 0; i < 2; i++)
+    691          	if((winno==1)||(winno==2))
+    692          		i=1;
+    693          	
+    694              {
+    695                  rlc = &gtSpiOsd.rlc[i];
+    696          
+    697                  TW8836_Write(REG404 + i * 2, rlc->winno << 0x04);
+    698          
+    699                  temp = rlc->bpp;
+    700          
+    701                  if(temp == 7) temp++;
+    702          
+    703                  temp <<= 0x04;
+    704          
+    705                  temp |= (rlc->counter & 0x0F);
+    706          
+    707                  TW8836_Write(REG405 + i * 2, temp);
+    708              }
+    709          }
+    710          
+    711          
+    712          /*================================
+    713          fun:transparent some color
+    714          by Miller.Tao20150912
+    715          
+    716          
+    717          =================================*/
+    718          
+    719          void SpiOsdSetGlobalAlpha( uint8_t winno, uint8_t alpha )
+    720          {
+    721          	 uint8_t  *data_p;
+    722          
+    723          	data_p = gtSpiOsd.reg[winno];
+    724          
+    725          	*data_p &= 0xCF;
+    726          	if(alpha) *data_p |= 0x10;
+    727          
+    728          	data_p += SPIOSD_WIN_ALPHA;
+    729          	if(!winno)	data_p += 4;
+    730          	*data_p = alpha;
+    731          }
+    732          
+    733          void SpiOsdSetPixelAlpha( uint8_t winno, uint8_t alpha )
+    734          {
+    735          	 uint8_t  *data_p;
+    736          
+    737          	data_p = gtSpiOsd.reg[winno];
+    738          
+    739          	if(alpha)	*data_p |= 0x30;
+    740          	else		*data_p &= 0xCF;
+    741          
+    742          	data_p += SPIOSD_WIN_ALPHA;//SPI_OSDWIN_ALPHA;
+    743          	if(!winno)	data_p += 4;
+    744          	*data_p = alpha;
+    745          }
+    746          
+    747          void SpiOsdPixelAlphaAttr(uint32_t lutloc, uint8_t value)
+    748          {
+    749              TW8836_WritePage(TW8836_PAGE4_SPI_OSD);
+    750          
+    751              TW8836_Write(REG410, 0xC3);
+    752          
+    753              if(lutloc & 0x100)  TW8836_Write(REG410, TW8836_Read(REG410) | 0x08);
+    754              else                TW8836_Write(REG410, TW8836_Read(REG410) & 0xF7);
+    755          
+    756              TW8836_Write(REG411, (uint8_t)lutloc);
+    757              TW8836_Write(REG412, value);
+    758          }
+    759          
+    760          void SpiOsdPixelAlphaAttr_user(uint8_t winno, uint16_t alpha, uint8_t value)
+    761          {
+    762          	uint8_t bTemp=0;
+    763          	SPIOSD_LUT *lut;
+                 	            ^
+Warning[Pe177]: variable "lut" was declared but never referenced
+    764          	//lut  = &gtSpiOsd.lut[winno];
+    765          	
+    766          	//if(alpha!=0xFF) 
+    767          		{
+    768          		//lut->offset += alpha;
+    769          
+    770          		bTemp = SOSD_LUT_WEN | SOSD_LUT_INC_NO | SOSD_LUT_ATTR ; 
+    771          		if(winno==1 || winno==2)	bTemp |= SOSD_LUT_BGRP; 
+    772          		else if(alpha >> 8)		bTemp |= SOSD_LUT_HIGH256;
+    773          
+    774          		WriteTW88(REG410, bTemp);
+    775          		WriteTW88(REG411, (uint8_t)alpha );
+    776          		WriteTW88(REG412, value );
+    777          	}
+    778          }
+    779          
+    780          
+    781          void SpiOsdWinGlobalAlpha(uint8_t winno, uint8_t alpha)
+    782          {
+    783              uint32_t index = SpiOsdWinBase[winno];
+    784          
+    785              TW8836_WritePage(TW8836_PAGE4_SPI_OSD);
+    786          
+    787              TW8836_Write(index, TW8836_Read(index) & 0xCF);
+    788          
+    789              if(alpha) TW8836_Write(index, TW8836_Read(index) | 0x10);
+    790          
+    791              if(winno) index += 0x0C;
+    792              else      index += 0x10;
+    793          
+    794              TW8836_Write(index, alpha);
+    795          }
+    796          
+    797          
+    798          void SpiOsdWinPixelAlpha(uint8_t winno, uint8_t alpha)
+    799          {
+    800              uint32_t index = SpiOsdWinBase[winno];
+    801          
+    802              TW8836_WritePage(TW8836_PAGE4_SPI_OSD);
+    803          
+    804              if(alpha) TW8836_Write(index, TW8836_Read(index) | 0x30);
+    805              else      TW8836_Write(index, TW8836_Read(index) & 0xCF);
+    806          
+    807              if(winno) index += 0x0C;
+    808              else      index += 0x10;
+    809          
+    810              TW8836_Write(index, alpha);
+    811          }
+    812          
+    813          
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+        8  SpiOsdAlphaBlending
+        8  SpiOsdBuffWidth
+        0  SpiOsdClrLut
+        0  SpiOsdClrReg
+        0  SpiOsdClrRlc
+        8  SpiOsdClrRlc_updateReg
+              8 -> TW8836_Write
+              8 -> TW8836_WritePage
+        8  SpiOsdEnable
+              8 -> TW8836_Read
+              8 -> TW8836_Write
+              8 -> TW8836_WritePage
+        4  SpiOsdFillColor
+       16  SpiOsdInit
+             16 -> SpiOsdClrLut
+             16 -> SpiOsdClrReg
+             16 -> SpiOsdClrRlc
+             16 -> SpiOsdUpdateReg
+             16 -> SpiOsdUpdateRlc
+        0  SpiOsdLutOffset
+       16  SpiOsdPixelAlphaAttr
+             16 -> TW8836_Read
+             16 -> TW8836_Write
+             16 -> TW8836_WritePage
+       24  SpiOsdPixelAlphaAttr_user
+             24 -> WriteTW88
+        4  SpiOsdSetBitsPixel
+       16  SpiOsdSetDeValue
+             16 -> TW8836_Read
+             16 -> TW8836_Write
+             16 -> TW8836_WritePage
+        0  SpiOsdSetGlobalAlpha
+       16  SpiOsdSetLut
+        0  SpiOsdSetPixelAlpha
+        4  SpiOsdSetRlc
+        0  SpiOsdSpiStartAddress
+       32  SpiOsdUpdateLut
+             32 -> SpiFlashReadRLE2Header
+             32 -> TW8836_WritePage
+             32 -> WriteTW88
+       32  SpiOsdUpdateReg
+             32 -> TW8836_Write
+             32 -> TW8836_WritePage
+       32  SpiOsdUpdateReg_update_win
+             32 -> TW8836_Write
+             32 -> TW8836_WritePage
+       16  SpiOsdUpdateRlc
+             16 -> TW8836_Write
+             16 -> TW8836_WritePage
+       24  SpiOsdUpdateRlc_user
+             24 -> TW8836_Write
+             24 -> TW8836_WritePage
+        0  SpiOsdWinEnable
+       16  SpiOsdWinGlobalAlpha
+             16 -> TW8836_Read
+             16 -> TW8836_Write
+             16 -> TW8836_WritePage
+       16  SpiOsdWinPixelAlpha
+             16 -> TW8836_Read
+             16 -> TW8836_Write
+             16 -> TW8836_WritePage
+       16  SpiOsdWindowPosAndSize
+        0  SpiOsdZoom
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable23
+       4  ??DataTable23_1
+       4  ??DataTable23_2
+       4  ??DataTable23_3
+       4  ??DataTable23_4
+       4  ??DataTable23_5
+       4  ??DataTable23_6
+     128  SPI_Buffer
+      78  SpiOsdAlphaBlending
+      78  SpiOsdBuffWidth
+      54  SpiOsdClrLut
+      28  SpiOsdClrReg
+      48  SpiOsdClrRlc
+      26  SpiOsdClrRlc_updateReg
+      54  SpiOsdEnable
+      46  SpiOsdFillColor
+      82  SpiOsdInit
+      30  SpiOsdLutOffset
+      82  SpiOsdPixelAlphaAttr
+      78  SpiOsdPixelAlphaAttr_user
+      62  SpiOsdSetBitsPixel
+      74  SpiOsdSetDeValue
+      48  SpiOsdSetGlobalAlpha
+      38  SpiOsdSetLut
+      50  SpiOsdSetPixelAlpha
+      44  SpiOsdSetRlc
+      54  SpiOsdSpiStartAddress
+     256  SpiOsdUpdateLut
+     170  SpiOsdUpdateReg
+      92  SpiOsdUpdateReg_update_win
+     100  SpiOsdUpdateRlc
+     104  SpiOsdUpdateRlc_user
+      12  SpiOsdWinBase
+      36  SpiOsdWinEnable
+      92  SpiOsdWinGlobalAlpha
+      94  SpiOsdWinPixelAlpha
+     160  SpiOsdWinRegs
+      74  SpiOsdWindowPosAndSize
+      36  SpiOsdZoom
+    1024  bmp_LUT
+     188  gtSpiOsd
+
+ 
+   476 bytes in section .bss
+ 1 036 bytes in section .rodata
+ 2 136 bytes in section .text
+ 
+ 2 136 bytes of CODE  memory
+ 1 036 bytes of CONST memory
+   476 bytes of DATA  memory
+
+Errors: none
+Warnings: 2

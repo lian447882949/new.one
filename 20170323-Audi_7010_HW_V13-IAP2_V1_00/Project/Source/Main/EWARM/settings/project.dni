@@ -1,0 +1,101 @@
+[Stack]
+FillEnabled=0
+OverflowWarningsEnabled=1
+WarningThreshold=90
+SpWarningsEnabled=1
+WarnLogOnly=1
+UseTrigger=1
+TriggerName=main
+LimitSize=0
+ByteLimit=50
+[DebugChecksum]
+Checksum=-1985631865
+[InterruptLog]
+LogEnabled=0
+SumEnabled=0
+GraphEnabled=0
+ShowTimeLog=1
+ShowTimeSum=1
+SumSortOrder=0
+[Interrupts]
+Enabled=1
+[MemoryMap]
+Enabled=0
+Base=0
+UseAuto=0
+TypeViolation=1
+UnspecRange=1
+ActionState=1
+[Trace1]
+Enabled=0
+ShowSource=1
+[Exceptions]
+StopOnUncaught=_ 0
+StopOnThrow=_ 0
+[CallStack]
+ShowArgs=0
+[Disassembly]
+MixedMode=1
+[struct_types]
+Fmt0=CanRxMsg-StdId	4	0
+[array_types]
+Fmt0=vu16[10]	4	0
+Fmt1=vu16[2]	4	0
+[watch_formats]
+Fmt0={W}42:Powerwork_init_Status	5	0
+Fmt1={W}42:System_Power_Status	4	0
+Fmt2={W}42:m_BMW_CAN.benze_Steering_angle_index	3	0
+[Log file]
+LoggingEnabled=_ 0
+LogFile=_ ""
+Category=_ 0
+[TermIOLog]
+LoggingEnabled=_ 0
+LogFile=_ ""
+[CallStackLog]
+Enabled=0
+[DriverProfiling]
+Enabled=0
+Mode=0
+Graph=0
+Symbiont=0
+Exclusions=
+[Disassemble mode]
+mode=0
+[Breakpoints2]
+Bp0=_ 0 "EMUL_CODE" "{$PROJ_DIR$}.501.11" 0 0 1 "" 0 "" 0
+Bp1=_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\..\ARM\arm.c}.561.9" 0 0 1 "" 0 "" 0
+Bp2=_ 0 "EMUL_CODE" "{$PROJ_DIR$}.3620.6" 0 0 1 "" 0 "" 0
+Bp3=_ 0 "EMUL_CODE" "{$PROJ_DIR$}.3618.5" 0 0 1 "" 0 "" 0
+Bp4=_ 0 "EMUL_CODE" "{$PROJ_DIR$}.4292.6" 0 0 1 "" 0 "" 0
+Bp5=_ 0 "EMUL_CODE" "{$PROJ_DIR$}.4171.4" 0 0 1 "" 0 "" 0
+Count=6
+[Aliases]
+A0=_ "E:\taobao\benci_newC_V37\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_gpio.c" ""
+A1=_ "E:\肖志涛\new_C\benci_newC_V19\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_can.c" ""
+A2=_ "E:\肖志涛\new_C\benci_newC_V19\Project\STM32F10x_StdPeriph_Template\main.c" ""
+A3=_ "E:\肖志涛\new_C\benci_newC_V24\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_can.c" ""
+A4=_ "E:\肖志涛\new_C\benci_newC_V24\Project\Common\com.c" ""
+A5=_ "E:\肖志涛\new_C\benci_newC_V24\Project\Common\libr.c" ""
+A6=_ "E:\肖志涛\new_C\benci_newC_V24\Project\STM32F10x_StdPeriph_Template\main.c" ""
+A7=_ "E:\肖志涛\new_C\benci_newC_V34\Project\Common\com.c" ""
+A8=_ "E:\肖志涛\new_C\benci_newC_V34\Project\STM32F10x_StdPeriph_Template\main.c" ""
+A9=_ "E:\肖志涛\new_C\benci_newC_V44\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\core_cm3.h" ""
+A10=_ "E:\肖志涛\new_C\benci_newC_V44\Project\Common\MTN5.c" ""
+A11=_ "E:\肖志涛\new_C\benci_newC_V44\Project\Common\system_function.c" ""
+A12=_ "E:\肖志涛\new_C\benci_newC_V44\Project\STM32F10x_StdPeriph_Template\main.c" ""
+A13=_ "E:\肖志涛\new_C\benci_newC_V44\Project\STM32F10x_StdPeriph_Template\stm32f10x_it.c" ""
+A14=_ "F:\软件工程\平台正式代码001\Benze_MainBoard\benci_newC\benci_newC_V15\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_usart.c" ""
+A15=_ "F:\软件工程\平台正式代码001\Benze_MainBoard\benci_newC\benci_newC_V16\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\core_cm3.h" ""
+A16=_ "F:\软件工程\平台正式代码001\Benze_MainBoard\benci_newC\benci_newC_V16\Project\STM32F10x_StdPeriph_Template\main.c" ""
+A17=_ "F:\软件工程\平台正式代码001\Benze_MainBoard\benci_newC\benci_newC_V17\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\core_cm3.h" ""
+A18=_ "F:\软件工程\平台正式代码001\Benze_MainBoard\benci_newC\benci_newC_V17\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_can.c" ""
+A19=_ "F:\软件工程\平台正式代码001\Benze_MainBoard\benci_newC\benci_newC_V17\Project\STM32F10x_StdPeriph_Template\main.c" ""
+A20=_ "F:\软件工程\平台正式代码001\Benze_MainBoard\benci_newC\benci_newC_V21\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_can.c" ""
+A21=_ "F:\软件工程\平台正式代码001\Benze_MainBoard\benci_newC\benci_newC_V23\Project\STM32F10x_StdPeriph_Template\main.c" ""
+A22=_ "F:\软件工程\平台正式代码001\Benze_MainBoard\benci_newC\benci_newC_V27\Project\STM32F10x_StdPeriph_Template\main.c" ""
+A23=_ "F:\软件工程\平台正式代码001\Benze_MainBoard\benci_newC\benci_newC_V42\Project\STM32F10x_StdPeriph_Template\main.c" ""
+A24=_ "F:\软件工程\平台正式代码001\Benze_MainBoard\benci_newC\benci_newC_V44\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\core_cm3.h" ""
+A25=_ "F:\软件工程\平台正式代码001\Benze_MainBoard\benci_newC\benci_newC_V44\Project\STM32F10x_StdPeriph_Template\main.c" ""
+Count=26
+SuppressDialog=0

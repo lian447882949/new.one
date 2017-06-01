@@ -1,0 +1,484 @@
+#define	_SYSTEM_FUNCTION_C_
+
+#include "compile.h"
+#include "includes.h"
+#include "stm32f10x_conf.h"
+#include "system_config.h"
+#include "libr.h"
+#include "system_function.h"
+
+#include "main.h"
+
+#include "port.h"
+
+#include "com.h"
+
+
+
+
+
+#include "i2c_driver.h"
+
+
+
+
+
+//#include "keycolor.h"
+
+
+
+BYTE const  screenlight_table[SCREEN_LIGHT_MAX]=
+{
+//LIGHT          0      1    2   3       4     5    6      7     8        9  
+                   0x0f,0x1f,0x3f,0x5f,0x7f,0x9f,0xbf,0xcf,0xbf,0xef ,  0xff,
+};
+
+void Mute_Process(void)
+{}
+void audio_mute_function(void)
+{}
+
+BYTE AudioGPS_vol_separate_check(void)//==1 GPS发声
+{
+	/*if((Sys.Main_Source==SRC_Bluetooth)&&(BT_call_status!=BT_CALLEND))
+		return 0;
+	if((Sys.Main_Source==SRC_audioplay)||(Sys.Main_Source==SRC_videoplay)||\
+	(Sys.Main_Source==SRC_App))
+	     return 0;
+	else if((Sys.Main_Source==SRC_NAVI)&&(Sys.voice_navi==1)&&\
+		((Sys.gps_voice_Source==SRC_videoplay)||(Sys.gps_voice_Source==SRC_audioplay)||(Sys.gps_voice_Source==SRC_App)))
+	    return 0;
+       else if((audio_gps_voice_id==1)&&(Sys.voice_navi==1))
+		return 1;
+	else*/
+		return 0;	
+}
+void  Volume_menubar(void)
+{}
+
+void  Volume_Adjust(void)
+{}
+
+//*******************************************
+// * 函数名称：AccOffCheck
+// * 内容简介：ACC 是否关闭检测 P_Acc=0( ACC ON)
+// *				  :   检测时间为2S
+// * 函数变量：无
+// *				  :
+// *	返回值	  :    BIT =0( ACC ON)
+//*******************************************
+BYTE AccOffCheck(void)
+{//只要有一次ACC ON就调出
+	Byte Cnt=200;
+
+	if(ACC_Detect()==FALSE)
+	{
+			do{
+				Delay_1ms(10);
+				Cnt--;
+				}
+			while((ACC_Detect()==FALSE)&&(Cnt!=0));  //ACC  OFF /Delay 10*50=500ms   出
+
+			if(Cnt==0)
+			{
+					return TRUE;
+			}
+	}
+	return FALSE;
+}
+
+//*******************************************
+// * 函数名称：AccOnCheck
+// * 内容简介：ACC 是否开检测 P_Acc=0( ACC ON)
+// * 函数变量：无
+// *				  :   检测时间为10ms
+// *				  :
+// *	返回值	  :     BIT =0( ACC ON)
+//*******************************************
+BYTE AccOnCheck (void)
+{//只要有一次ACC OFF就调出
+	WORD Cnt=100;
+
+	if(ACC_Detect()==TRUE)
+	{
+			do{
+				Delay_1ms(10);
+				Cnt--;
+			}
+			while((ACC_Detect()==TRUE)&&(Cnt!=0));  //ACC  ON /Delay 10*1=10ms   出
+
+			if(Cnt==0)
+				return TRUE;
+	}
+	return FALSE;
+
+}
+
+
+/*******************************************
+ * 函数名称：CanPowerOnCheck
+ * 内容简介：detect can power on or not 
+ * 函数变量：无
+ *				  :   检测时间为10ms
+ *				  :
+ *	返回值	  :     ret =0( can Off)
+                                          = 1(can on)
+                                          =2(sleep/idle)
+*******************************************/
+BYTE CanPowerOnCheck (void)
+{
+              BYTE  ret =0;
+	         if(!Sys.wPowerOnByCanTimer2)
+                {
+                      #if 1 //Miller.Tao20141104
+                  	if(m_BMW_CAN.AccPwr == SYSTEM_POWER_ON)
+		      {
+	                       //m_BMW_CAN.benze_Pwr_acc = SYSTEM_POWER_OFF;
+	                       m_BMW_CAN.AudioPwr = SYSTEM_POWER_OFF;
+	                       m_BMW_CAN.AccPwr = SYSTEM_POWER_OFF;
+                     }					
+                      #endif
+                  
+                }
+
+				
+		if(!Sys.wPowerOnByCanTimer)
+		{
+                         #if 1 //Miller.Tao20141107
+			 if(m_BMW_CAN.benze_Pwr_acc == SYSTEM_POWER_ON)
+			{
+				   m_BMW_CAN.benze_Pwr_acc = SYSTEM_POWER_OFF;
+				   m_BMW_CAN.AudioPwr = SYSTEM_POWER_OFF;//Miller.Tao20150119
+				   //m_BMW_CAN.AccPwr = SYSTEM_POWER_OFF;
+			}
+                         #endif
+		  
+		}
+
+
+		   if((m_BMW_CAN.benze_Pwr_acc == SYSTEM_POWER_OFF))
+			   	ret = 0;
+	      else if(m_BMW_CAN.benze_Pwr_acc == SYSTEM_POWER_ON&&m_BMW_CAN.AudioPwr == SYSTEM_POWER_OFF)
+		  	       ret =1;
+	      else if(m_BMW_CAN.benze_Pwr_acc == SYSTEM_POWER_ON&&m_BMW_CAN.AudioPwr == SYSTEM_POWER_ON)
+		  	       ret = 2;
+
+	      return ret;
+
+
+}
+
+
+//#define BAT_AD_6V 		0x36
+#define BAT_AD_7V 		0x48
+#define BAT_AD_8_5V 	0x5c
+
+void BAT_Detect_Int(void)		//	50ms??
+{}
+
+
+//*******************************************
+// * 函数名称：Initial516AD
+// * 内容简介：MCU内部初始化
+// * 函数变量：无
+// *				  :
+// *	返回值	  :    无
+//*******************************************
+
+//82 5V
+//----ACC AD=88     ACC VOLT=7V
+//----ACC AD=100     ACC VOLT=8V
+//----ACC AD=111     ACC VOLT=9V
+//----ACC AD=127     ACC VOLT=10V
+bool ACC_Detect(void)
+{
+	if(fSystemReset==1)
+	{
+		//BackLight(0);
+		return FALSE;   
+	}
+	else
+	{
+	//if(ADC_GetValue (ACC_ADC1_Channel)>ACC_7V) 
+	if(GPIO_ReadInputDataBit(GPIOA, P_ACC_DET)==0)//1
+		return TRUE;
+	else
+		return FALSE;   
+	}
+}
+
+bool ITL_Detect(void)
+{
+//#if(WINCA==CE8920||WINCA==CE8903||WINCA==CE8979||WINCA==CE8904||WINCA==CE8969||WINCA==CE8922||WINCA==CE8977)
+	//if(ADC_GetValue (ITL_ADC2_Channel)>5)
+//#else
+	//if(ADC_GetValue (ADC2_ITL_Channel)>80)
+//#endif
+		//return TRUE;
+	//else
+		return FALSE;   
+}
+bool Back_Detect(void)
+{
+	//if(GPIO_ReadInputDataBit(GPIOE, P_BACK_ID)==0)
+	//{
+		//BackDetectID=1;
+		//return TRUE;
+	//}
+	//else
+	{
+		//BackDetectID=0;
+		return FALSE;
+	}	
+}
+
+bool Brake_Detect(void)
+{
+	//if(GPIO_ReadInputDataBit(GPIOE, P_BREAK_ID)==0)
+	//{
+	//	return TRUE;
+	//}
+	//else
+	{
+		return FALSE;
+	}
+}
+//BYTE tv_detect_ad;
+//无电视       ==255
+//内置电视 ==127
+//外置电视 ==170
+//内外置都有==101
+bool TV_Detect(void)
+{
+	BYTE tv_detect_ad;
+	//if(GPIO_ReadInputDataBit(GPIOE, P_TV_ID)==0)
+	tv_detect_ad=0;//ADC_GetValue (ADC1_TVID_Channel);
+	//Draw_ASCIIStr();
+	//DrawNum(200,100,3,tv_detect_ad);
+
+	//if(tv_detect_ad>148)//外置电视 ==170
+	#ifdef araba_digi_tv  
+		//GPIO_WriteBit(GPIOC, P_TV_SEL , Bit_SET);
+		return TRUE;
+	#else
+	if((tv_detect_ad>148) ||(tv_detect_ad<114))
+	{//内位置都有时，优先外置  by tiger 0828
+		//GPIO_WriteBit(GPIOC, P_TV_SEL , Bit_SET);
+		return TRUE;
+	}
+	else
+	{
+		//GPIO_WriteBit(GPIOC, P_TV_SEL , Bit_RESET);
+		return FALSE;
+	}
+	#endif
+}
+void VDISC_IPOD_Detect(void)
+{}
+
+void Ipod_Insert_Detect(void)
+{}
+
+bool BACK_OPEN_System_det(void)
+{
+	return FALSE;
+}
+void Back_Func(void)
+{}
+
+void Brake_Func(void)
+{}
+void screen_black_check(void)
+{}
+void Clear_Rem_Touch_Value(void)
+{}
+
+void screen_light_detect(void)
+{}
+
+void screen_light_set(void)
+{
+}
+void screen_light_function(BYTE light)
+{
+	//BYTE val;
+
+	if(light>SCREEN_LIGHT_MAX-1)
+		light=SCREEN_LIGHT_MAX-1;	
+
+	if(light==SCREEN_LIGHT_MAX-1)
+	{
+		WriteTW88_Page(0x98c, screenlight_table[light]);		
+	}
+	else
+	{
+		WriteTW88_Page(0x98c, screenlight_table[light]);		
+	}
+}
+void key_color_function(BYTE color)
+{}
+void key_color_set(BYTE color)
+{}
+BOOL Is_Source_Valide(BYTE source)
+{
+	if((source<SRC_Radio)||(source>SRC_Cambox))//SRC_Ipod))
+		return FALSE;
+	else
+		return TRUE;
+}
+
+BOOL Is_PIP_Source_Valide(BYTE source)
+{
+	if((source==SRC_DVD)||\
+		(source==SRC_NAVI)||\
+		(source==SRC_AUX1)||\
+		(source==SRC_AUX2)||\
+		(source==SRC_videoplay)||\
+		(source==SRC_CAM)||\
+		(source==SRC_TV))//
+		return TRUE;
+	else
+		return FALSE;
+}
+BOOL Is_PIP_Source_CVBS(BYTE source)
+{
+	if((source==SRC_AUX1)||\
+		(source==SRC_AUX2)||\
+		(source==SRC_videoplay)||\
+		(source==SRC_CAM)||\
+		(source==SRC_TV))//
+		return TRUE;
+	else
+		return FALSE;
+}
+void System_setup_reset_function(void)
+{
+
+}
+
+void Rem_Change_Source(void)
+{}
+
+
+void SRC_Function_Process(void)
+{	
+	switch(Sys.Main_Source)
+	{
+		case SRC_Bluetooth://倒车需要出来蓝牙的命令
+			BLUETOOTH_Function();
+			break;
+		default:
+			break;
+	}
+	
+
+	
+	switch(Sys.Main_Source)
+	{
+		case SRC_DVD:
+		case SRC_vdisc:				
+			
+			break;
+		case SRC_Ipod:
+			//IPOD_function();
+			break;
+		case SRC_Radio:
+			//Radio_Function();
+			break;
+		case SRC_TV:
+			//TV_Function();
+			break;		
+		case SRC_NAVI:
+			//GPS_Function();	
+			break;	
+		case SRC_videoplay:
+			//Videoplay_function();
+			break;
+		case SRC_audioplay:
+			//Audioplay_function();
+			break;
+		case SRC_VCR:
+			//VCR_function();
+			break;
+		case SRC_App:
+			//APPplay_function();			
+			break;	
+		case SRC_AUX1:	
+		case SRC_AUX2:	
+			//DigiTV_Function();
+			//AUX_Function();	
+			break;		
+		case SRC_CAM:	
+			//CAM_Function();	
+			break;	
+		case SRC_Cambox:	
+			//Cambox_Function();
+			break;
+		//default://test
+			//Radio_Function();
+			//break;			
+	}
+	/*if(RemValue==Rem_eject)
+	{
+		UART_Android_Key_Send(SEND_ANDROID_KEY_DVD);
+	}*/
+	
+	Ipod_MUL_Function();
+	Audioplay_MUL_Function();
+	Videoplay_MUL_Function();
+	BLUETOOTH_MUL_Function();
+
+}
+
+void Turn_source_power_off(void)
+{	
+
+
+}
+void SRC_REM_func(void)
+{}
+void PIP_func_limit(void)
+{}
+/****************************************************************************************
+画中画窗口只能是DTV,CVBS,YUV中的任意一个，不能有2个窗口的类别是一样的。
+
+主     			WIN1      		   WIN2
+BT/AUDIO/IPOD/RADIO		
+			NAVI(主窗口切换为CVBS)	   DVD
+			NAVI(主窗口切换为DTV)	   CAM/AUX1/AUX2/TV/VIDEO
+			DVD(主窗口切换为CVBS)	   NAVI
+			DVD(主窗口切换为DTV)	   CAM/AUX1/AUX2/TV/VIDEO
+                	CAM/AUX1/AUX2/TV/VIDEO	   DVD/NAVI
+NAVI		
+			DVD	   		   CAM/AUX1/AUX2/TV/VIDEO			
+                	CAM/AUX1/AUX2/TV/VIDEO	   DVD
+DVD
+			NAVI			   CAM/AUX1/AUX2/TV/VIDEO
+			CAM/AUX1/AUX2/TV/VIDEO     NAVI
+CAM/AUX1/AUX2/TV/VIDEO
+			DVD	   		   NAVI			
+                	NAVI	     		   DVD
+*****************************************************************************************/
+void PIP_Display(BYTE main_source,BYTE source1_id,BYTE source1,BYTE source2_id,BYTE source2)
+{}
+void PIP_Display_Func(BYTE main_source,BYTE source1_id,BYTE source1,BYTE source2_id,BYTE source2)
+{}
+
+void system_recover_func(void)
+{}
+
+void OSD_Time_Clear(void)
+{}
+
+/*============================
+*this is to handle the touch events
+*
+*By Miller.Tao
+*Date :20150914
+=============================*/
+void Touch_Events_Process(void)
+{
+     
+
+}
+	

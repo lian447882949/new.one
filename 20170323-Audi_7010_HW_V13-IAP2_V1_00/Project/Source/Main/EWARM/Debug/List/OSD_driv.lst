@@ -1,0 +1,1663 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V6.30.1.53127/W32 for ARM     10/Jul/2015  15:59:51 #
+# Copyright 1999-2011 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  F:\code\T102\STM32_TZ_T102\Project\TW8836\OSD_driv.c     #
+#    Command line =  F:\code\T102\STM32_TZ_T102\Project\TW8836\OSD_driv.c -D  #
+#                    USE_STDPERIPH_DRIVER -D USE_STM32100B_EVAL -D            #
+#                    STM32F10X_CL -lc F:\code\T102\STM32_TZ_T102\Project\STM3 #
+#                    2F10x_StdPeriph_Template\EWARM\Debug\List\ -lA           #
+#                    F:\code\T102\STM32_TZ_T102\Project\STM32F10x_StdPeriph_T #
+#                    emplate\EWARM\Debug\List\ -o                             #
+#                    F:\code\T102\STM32_TZ_T102\Project\STM32F10x_StdPeriph_T #
+#                    emplate\EWARM\Debug\Obj\ --no_cse --no_unroll            #
+#                    --no_inline --no_code_motion --no_tbaa --no_clustering   #
+#                    --no_scheduling --debug --endian=little --cpu=Cortex-M3  #
+#                    -e --fpu=None --dlib_config "C:\Program Files\IAR        #
+#                    Systems\Embedded Workbench 6.0\arm\INC\c\DLib_Config_Ful #
+#                    l.h" -I F:\code\T102\STM32_TZ_T102\Project\STM32F10x_Std #
+#                    Periph_Template\EWARM\ -I F:\code\T102\STM32_TZ_T102\Pro #
+#                    ject\STM32F10x_StdPeriph_Template\EWARM\..\ -I           #
+#                    F:\code\T102\STM32_TZ_T102\Project\STM32F10x_StdPeriph_T #
+#                    emplate\EWARM\..\..\..\Libraries\STM32F10x_StdPeriph_Dri #
+#                    ver\inc\ -I F:\code\T102\STM32_TZ_T102\Project\STM32F10x #
+#                    _StdPeriph_Template\EWARM\..\..\..\Libraries\STM32F10x_S #
+#                    tdPeriph_Driver\src\ -I F:\code\T102\STM32_TZ_T102\Proje #
+#                    ct\STM32F10x_StdPeriph_Template\EWARM\..\..\..\Project/C #
+#                    ommon\ -I F:\code\T102\STM32_TZ_T102\Project\STM32F10x_S #
+#                    tdPeriph_Template\EWARM\..\..\..\Project/TW8836\ -I      #
+#                    F:\code\T102\STM32_TZ_T102\Project\STM32F10x_StdPeriph_T #
+#                    emplate\EWARM\..\..\..\Libraries\CMSIS\CM3\DeviceSupport #
+#                    \ST\STM32F10x\ -Ol -I "C:\Program Files\IAR              #
+#                    Systems\Embedded Workbench 6.0\arm\CMSIS\Include\"       #
+#    List file    =  F:\code\T102\STM32_TZ_T102\Project\STM32F10x_StdPeriph_T #
+#                    emplate\EWARM\Debug\List\OSD_driv.lst                    #
+#    Object file  =  F:\code\T102\STM32_TZ_T102\Project\STM32F10x_StdPeriph_T #
+#                    emplate\EWARM\Debug\Obj\OSD_driv.o                       #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+F:\code\T102\STM32_TZ_T102\Project\TW8836\OSD_driv.c
+      1          #define _OSD_C_
+      2          
+      3          #include "i2c_driver.h"
+      4          #include "tw8823_const.h"
+      5          //#include "osd_func.h"
+      6          #include "osd_driv.h"
+      7          #include "tw8823_spi.h"
+      8          
+      9          
+     10          struct st_animation AnimationData[MAX_ANIMATION];
+     11          BIT AnimationON=0;
+     12          
+     13          
+     14          #define DMA_SIZE	0x8000L
+     15          
+     16          BYTE	OsdWinBase[5] = { WIN0_ST, WIN1_ST, WIN4_ST, WIN4_ST, WIN4_ST };
+     17          
+     18          //=============================================================================
+     19          //		OsdWinDisplay
+     20          //      0xSM:        S: sub sel, M: main sel
+     21          //                   0:NO, 1:8bit, 2:16bit, 3:all
+     22          //=============================================================================
+     23          void OsdWinDisplay(BYTE mode)
+     24          {
+     25          	WriteTW88( 0xff, OSD_PAGE );
+     26          	WriteTW88( OSD_OUT_SEL, mode ); 
+     27          }
+     28          
+     29          //=============================================================================
+     30          //		OSD Window Setup
+     31          //=============================================================================
+     32          
+     33          void OsdWinEnable(BYTE winno, BYTE en)
+     34          {
+     35          	BYTE index = OsdWinBase[winno] + OSDWIN_ENABLE;
+     36          	BYTE dat;
+     37          	
+     38          	WriteTW88( 0xff, OSD_PAGE );
+     39          	dat = ReadTW88(index);
+     40          	if( en ) WriteTW88(index, dat | 0x01);
+     41          	else     WriteTW88(index, dat & 0xfe);
+     42          }
+     43          
+     44          void OsdWin01Enable(void)//test
+     45          {
+     46          	WriteTW88( 0xff, OSD_PAGE );
+     47          	WriteTW88( 0xA0, 0x30);
+     48          }
+     49          
+     50          void OsdWin01Undisable(void)//test
+     51          {
+     52          	WriteTW88( 0xff, OSD_PAGE );
+     53          	WriteTW88( 0xA0, 0x31);
+     54          }
+     55          
+     56          BYTE  If_Windown_Display(BYTE winno)
+     57          {
+     58          	BYTE index = OsdWinBase[winno] + OSDWIN_ENABLE;
+     59          	BYTE dat;
+     60          	
+     61          	WriteTW88( 0xff, OSD_PAGE );
+     62          	dat = ReadTW88(index);
+     63          
+     64          	if((dat & 0x01) == 0)	//不使能
+     65          		return 0;														   
+     66          
+     67          	dat = ReadTW88( OSD_OUT_SEL); 
+     68          	dat &= 0x03;
+     69          
+     70          	if(winno == 4){
+     71          		if(dat == 0 || dat == 1)
+     72          			return 0;	 	
+     73          	}else{
+     74          		if(dat == 0 || dat == 2)
+     75          			return 0;	 	
+     76          	}
+     77          
+     78            	return 1;
+     79          }
+     80          
+     81          void OsdWinTransparent(BYTE winno, BYTE en)
+     82          {
+     83          	BYTE index = OsdWinBase[winno] + OSDWIN_ENABLE;
+     84          	BYTE dat;
+     85          	
+     86          	WriteTW88( 0xff, OSD_PAGE );
+     87          	dat = ReadTW88(index);
+     88          	if( en ) WriteTW88(index, dat | 0x10);
+     89          	else     WriteTW88(index, dat & 0xEF);
+     90          }	 
+     91          
+     92          void OsdWinBufferMem(BYTE winno, DWORD start)
+     93          {
+     94          	BYTE index = OsdWinBase[winno] + OSDWIN_BUFFERSTART;
+     95          	
+     96          	WriteTW88( 0xff, OSD_PAGE );
+     97          	WriteTW88(index++, (BYTE)(start>>16));
+     98          	WriteTW88(index++, (BYTE)(start>>8));
+     99          	WriteTW88(index++, (BYTE)start);
+    100          }
+    101          
+    102          /*
+    103          void OsdWinBufferWH(BYTE winno, BYTE w64, BYTE h64)
+    104          {
+    105          	BYTE index = OsdWinBase(winno) + OSDWIN_BUFFERSTART + 3;
+    106          
+    107          	WriteTW88( 0xff, OSD_PAGE );
+    108          	WriteTW88(index++, w64);
+    109          	WriteTW88(index,   h64);
+    110          }
+    111          */
+    112          void OsdWinBuffer(BYTE winno, DWORD start, BYTE w64, BYTE h64)
+    113          {
+    114          	BYTE index = OsdWinBase[winno] + OSDWIN_BUFFERSTART;
+    115          	
+    116          	WriteTW88( 0xff, OSD_PAGE );
+    117          	WriteTW88(index++, (BYTE)(start>>16));
+    118          	WriteTW88(index++, (BYTE)(start>>8));
+    119          	WriteTW88(index++, (BYTE)start);
+    120          	
+    121          	WriteTW88(index++, w64);
+    122          	WriteTW88(index,   h64);
+    123          }
+    124          
+    125          void OsdWinBufferOffsetXY (BYTE winno, WORD x, WORD y)
+    126          {
+    127          	BYTE index = OsdWinBase[winno] + OSDWIN_DISPOFFSET;
+    128          
+    129          	WriteTW88( 0xff, OSD_PAGE );
+    130          	WriteTW88(index++, (BYTE)(x>>8));
+    131          	WriteTW88(index++, (BYTE)x);
+    132          	WriteTW88(index++, (BYTE)(y>>8));
+    133          	WriteTW88(index,   (BYTE)y);
+    134          }
+    135          		
+    136          void OsdWinScreen(BYTE winno, WORD x, WORD y, WORD w, WORD h)
+    137          {
+    138          	BYTE index = OsdWinBase[winno] + OSDWIN_SCREEN;
+    139          
+    140          	WriteTW88( 0xff, OSD_PAGE );
+    141          	WriteTW88(index++, (BYTE)(x>>8));
+    142          	WriteTW88(index++, (BYTE)x);
+    143          	WriteTW88(index++, (BYTE)(y>>8));
+    144          	WriteTW88(index++, (BYTE)y);
+    145          	WriteTW88(index++, (BYTE)(w>>8));
+    146          	WriteTW88(index++, (BYTE)w);
+    147          	WriteTW88(index++, (BYTE)(h>>8));
+    148          	WriteTW88(index,   (BYTE)h);
+    149          }
+    150          
+    151          #if		1
+    152          void OsdWinStart(BYTE winno, WORD x, WORD y)
+    153          {
+    154          	BYTE index = OsdWinBase[winno] + OSDWIN_SCREEN;
+    155          
+    156          	WriteTW88( 0xff, OSD_PAGE );
+    157          	WriteTW88(index++, (BYTE)(x>>8));
+    158          	WriteTW88(index++, (BYTE)x);
+    159          	WriteTW88(index++, (BYTE)(y>>8));
+    160          	WriteTW88(index++, (BYTE)y);
+    161          }
+    162          
+    163          void Osd16Format(BYTE format)
+    164          {
+    165          	BYTE dat;
+    166          
+    167          	WriteTW88( 0xff, OSD_PAGE );
+    168          	dat = ReadTW88( 0xc0 ) & 0xf1;
+    169          	WriteTW88( 0xc0, dat | format );
+    170          }
+    171          #endif
+    172          
+    173          
+    174          void OsdWriteMode( BYTE mode )
+    175          {
+    176          	WriteTW88( 0xff, OSD_PAGE );
+    177          	WriteTW88( OSD_MODE, mode );
+    178          }
+    179          //=============================================================================
+    180          //		BitBlt Setup
+    181          //=============================================================================
+    182          void OsdBltSourceMemoryStart(DWORD start)
+    183          {
+    184          	BYTE index = OSD_BITBLTSOURCE;
+    185          	
+    186          	WriteTW88( 0xff, OSD_PAGE );
+    187          	WriteTW88(index++, (BYTE)(start>>16));
+    188          	WriteTW88(index++, (BYTE)(start>>8));
+    189          	WriteTW88(index,   (BYTE)start);
+    190          }
+    191          
+    192          void OsdBltSourceMemoryW64(BYTE w64)	
+    193          {
+    194          	WriteTW88( 0xff, OSD_PAGE );
+    195          	WriteTW88(OSD_BITBLTSOURCEW64, w64);
+    196          }
+    197          
+    198          DWORD OsdBltGetSourceMemoryStart(void)
+    199          {
+    200          	DWORD addr;
+    201          
+    202          	WriteTW88( 0xff, OSD_PAGE );
+    203          	addr = ReadTW88( OSD_BITBLTSOURCE );
+    204          	addr = (addr<<8) + ReadTW88( OSD_BITBLTSOURCE+1 );
+    205          	addr = (addr<<8) + ReadTW88( OSD_BITBLTSOURCE+2 );
+    206          
+    207          	return addr;
+    208          }
+    209          
+    210          void OsdBltSourceXY(WORD x, WORD y)
+    211          {
+    212          	BYTE index = OSD_BITBLTSOURCEXY;
+    213          		
+    214          	WriteTW88( 0xff, OSD_PAGE );
+    215          	WriteTW88(index++, (BYTE)(x>>8));
+    216          	WriteTW88(index++, (BYTE)x);
+    217          	WriteTW88(index++, (BYTE)(y>>8));
+    218          	WriteTW88(index,   (BYTE)y);
+    219          }
+    220          void OsdBltSize(WORD w, WORD h)
+    221          {
+    222          	BYTE index = OSD_BITBLTSIZE;
+    223          	
+    224          	WriteTW88( 0xff, OSD_PAGE );
+    225          	WriteTW88(index++, (BYTE)(w>>8));
+    226          	WriteTW88(index++, (BYTE)w);
+    227          	WriteTW88(index++, (BYTE)(h>>8));
+    228          	WriteTW88(index,   (BYTE)h);
+    229          }
+    230          void OsdBltDestMemoryStart(DWORD start)
+    231          {
+    232          	BYTE index = OSD_BITBLTDEST;
+    233          	
+    234          	WriteTW88( 0xff, OSD_PAGE );
+    235          	WriteTW88(index++, (BYTE)(start>>16));
+    236          	WriteTW88(index++, (BYTE)(start>>8));
+    237          	WriteTW88(index,   (BYTE)start);
+    238          }
+    239          void OsdBltDestMemoryW64(BYTE w64)
+    240          {
+    241          	WriteTW88( 0xff, OSD_PAGE );
+    242          	WriteTW88(OSD_BITBLTDESTW64, w64);
+    243          }
+    244          #if		1
+    245          DWORD OsdBltGetDestMemoryStart(void)
+    246          {
+    247          	DWORD addr;
+    248          
+    249          	WriteTW88( 0xff, OSD_PAGE );
+    250          	addr = ReadTW88( OSD_BITBLTDEST );
+    251          	addr = (addr<<8) + ReadTW88( OSD_BITBLTDEST+1 );
+    252          	addr = (addr<<8) + ReadTW88( OSD_BITBLTDEST+2 );
+    253          
+    254          	return addr;
+    255          }
+    256          
+    257          BYTE OsdBltGetDestMemoryW64(void)
+    258          {
+    259          	WriteTW88( 0xff, OSD_PAGE );
+    260          	return ReadTW88( OSD_BITBLTDEST+3 );
+    261          }
+    262          #endif	
+    263          
+    264          void OsdBltDestXY(WORD x, WORD y)
+    265          {	
+    266          	BYTE index = OSD_BITBLTDESTXY;
+    267          
+    268          	WriteTW88( 0xff, OSD_PAGE );
+    269          	WriteTW88(index++, (BYTE)(x>>8));
+    270          	WriteTW88(index++, (BYTE)x);
+    271          	WriteTW88(index++, (BYTE)(y>>8));
+    272          	WriteTW88(index,   (BYTE)y);
+    273          }
+    274          void OsdBltColor(WORD color)
+    275          {
+    276          	BYTE index = OSD_BITBLTCOLOR;
+    277          
+    278          	WriteTW88( 0xff, OSD_PAGE );
+    279          	WriteTW88(index++, (BYTE)(color>>8));
+    280          	WriteTW88(index,   (BYTE)color);
+    281          }
+    282          
+    283          
+    284          void OsdSourceColor( BYTE index, WORD color)
+    285          {
+    286          	index = OSD_SOURCECOLOR + index*2;
+    287          
+    288          	WriteTW88( 0xff, OSD_PAGE );
+    289          	WriteTW88(index++, (BYTE)(color>>8));
+    290          	WriteTW88(index,   (BYTE)color);
+    291          }
+    292          
+    293          void OsdTargetColor( BYTE index, WORD color)
+    294          {
+    295          	index = OSD_TARGETCOLOR + index*2;
+    296          
+    297          	WriteTW88( 0xff, OSD_PAGE );
+    298          	WriteTW88(index++, (BYTE)(color>>8));
+    299          	WriteTW88(index,   (BYTE)color);
+    300          }
+    301          
+    302          
+    303          void OsdNoWriteColor( BYTE index, WORD color)
+    304          {
+    305          	index = OSD_NOWRITECOLOR + index*2;
+    306          
+    307          	WriteTW88( 0xff, OSD_PAGE );
+    308          	WriteTW88(index++, (BYTE)(color>>8));
+    309          	WriteTW88(index,   (BYTE)color);
+    310          }
+    311          
+    312          #if		0
+    313          
+    314          void OsdWaitWindowBlank(BYTE winno, BYTE cnt)
+    315          {
+    316          	BYTE i, j;
+    317          
+    318          	if ( winno == 0 ) j = 1;
+    319          	else if ( winno == 1 ) j =2;
+    320          	else j = 8;
+    321           	WriteTW88( 0xff, OSD_PAGE );
+    322          	for(i=0; i<cnt; i++) {
+    323          		while( (ReadTW88(0xf0) & j)==0 );	
+    324          		while( (ReadTW88(0xf0) & j)!=0 );
+    325          	}
+    326          }
+    327          
+    328          void OsdWaitOSDBlank(BYTE cnt)
+    329          {
+    330          	BYTE i;
+    331          
+    332           	WriteTW88( 0xff, OSD_PAGE );
+    333          	WriteTW88(0xf0, 0x10);			// clear to 0
+    334          
+    335          	for(i=0; i<cnt; i++) {
+    336          		while( (ReadTW88(0xf0) & 0x10)==0 );	
+    337          	}
+    338          }
+    339          #endif
+    340          
+    341          void OsdWaitDisplayBlank(BYTE cnt)
+    342          {/*
+    343          	BYTE i;
+    344          	WORD count=0;
+    345          
+    346           	WriteTW88( 0xff, OSD_PAGE );
+    347          	WriteTW88(0xf0, 0x20);			// clear to 0
+    348          
+    349          	for(i=0; i<cnt; i++) {
+    350          		while( (ReadTW88(0xf0) & 0x20)==0 )
+    351          		{
+    352          			count++;
+    353          			if(count>5000) break;
+    354          		}
+    355          	}*/  //tiger remove
+    356          }
+    357          
+    358          void OsdStart(BYTE en)
+    359          {
+    360          	WriteTW88(OSD_START, en);
+    361          }
+    362          
+    363          
+    364          BYTE OsdCpuBusy(void)
+    365          {
+    366          	//BYTE page;
+    367          
+    368          	//page=ReadTW88(0xff); 
+    369          	WriteTW88(0xff, 0x0f);
+    370          	if( ReadTW88(0x04) & 0x01 ) {
+    371          		//WriteTW88(0xff, page);
+    372          		return 1;
+    373          	}
+    374          
+    375          	//delay(2);
+    376          	//WriteTW88(0xff, page);
+    377          	return 0;
+    378          }
+    379          BYTE OsdOpBusy(void)
+    380          {
+    381          	//BYTE page;
+    382          
+    383          	//page=ReadTW88(0xff); 
+    384          	WriteTW88(0xff, OSD_PAGE);
+    385          	if( ReadTW88(OSD_START) & 0x80 ) {
+    386          		//Printf("!");
+    387          		//WriteTW88(0xff, page);
+    388          		return 1;
+    389          	}
+    390          
+    391          	//Printf("?");
+    392          
+    393          	//delay(2);
+    394          	//WriteTW88(0xff, page);
+    395          	return 0;
+    396          }
+    397          
+    398          static void OSDHardwareEnable(void)
+    399          {
+    400          	BYTE val;
+    401          	WriteTW88( 0xff, OSD_PAGE );
+    402          	
+    403          	val = ReadTW88(0x03)|0x40;
+    404          	WriteTW88(0x03,val);
+    405          
+    406          }
+    407          //=============================================================================
+    408          //		Load Bitmap Image to XY	from SPI
+    409          //=============================================================================
+    410          //
+    411          void OsdLoadBmpXYFromSPI_8bit( struct _RLE_HEADER *p, DWORD spiaddr, WORD sx, WORD sy )
+    412          {        
+    413          	//data BYTE xdata *osddata = (BYTE xdata *)0xc002;
+    414                  BYTE sbits, mode;
+    415          	DWORD cnt = p->size,i;//,i=0;
+    416          
+    417          	WriteTW88( 0xff, OSD_PAGE );
+    418          	//--- Init RLE
+    419          	if( p->cp & 0x0f ) {
+    420          		if ( p->cp < 0x90 )	 {
+    421          			WriteTW88( OSD_RLEDATACNT, p->cp );
+    422          		}
+    423          		else   {
+    424          			WriteTW88( OSD_RLEDATACNT, p->cp & 0x0F );		// 16bit mode
+    425          		}
+    426          		WriteTW88( OSD_RLECTRL, 0x02 );		// PktEn=0, RstRLE=1, Enable=0	==> Reset
+    427          		WriteTW88( OSD_RLECTRL, 0x11 );		// PktEn=1, RstRLE=0, Enable=1	==> Enable
+    428          	}
+    429          	else WriteTW88( OSD_RLECTRL, 0x00 );	// PktEn=0, RstRLE=0, Enable=0	==> Bypass
+    430          /*
+    431          	if( p->cp & 0x0f ) 
+    432          	{
+    433          		if ((p->cp&0x0f)!=0x00)
+    434          		{
+    435          			WriteTW88( OSD_RLECTRL, 0x02 );		// PktEn=0, RstRLE=1, Enable=0	==> Reset
+    436          			WriteTW88( OSD_RLECTRL, 0x11 );		// PktEn=1, RstRLE=0, Enable=1	==> Enable
+    437          			WriteTW88( OSD_RLEDATACNT, p->cp );
+    438          		}
+    439          		else   
+    440          		{
+    441          			WriteTW88( OSD_RLEDATACNT, 0 );		// 16bit mode
+    442          		}
+    443          	}
+    444          	else WriteTW88( OSD_RLECTRL, 0x00 );	// PktEn=0, RstRLE=0, Enable=0	==> Bypass
+    445          */
+    446          	//--- Source data bits/pixel
+    447          	switch( p->c & 0x0f ) {
+    448          		case 1: 	sbits = SOURCE1BIT;	break;
+    449          		case 2: 	sbits = SOURCE2BIT;	break;
+    450          		case 4: 	sbits = SOURCE4BIT;	break;
+    451          		default: 	sbits = SOURCE0;	break;
+    452          	}
+    453          
+    454          	//--- Write Mode
+    455          	mode = ReadTW88( OSD_MODE ) & 0x3C; 		// clear WriteMode, Bit expansion
+    456          	WriteTW88( OSD_MODE, mode | sbits | CPUWRITE );	  	// set CPU write mode
+    457          	//mode = ReadTW88( OSD_MODE ) & 0x38; 		// clear WriteMode, Bit expansion
+    458          	//OsdWriteMode( mode | sbits);
+    459          
+    460          	OsdBltDestXY(sx, sy+WIN1_BUFF);
+    461          	OsdBltSize(p->w, p->h);
+    462          
+    463          	OSDHardwareEnable();
+    464          	//--- Start Writing Data	
+    465          	OsdStart(1);
+    466          
+    467          	//--- Using SPI-DMA
+    468          	SPI_ReadData2Reg( spiaddr, 0x700+2, cnt);//-0x40 );//OSD_PAGE+2, cnt );//test
+    469          
+    470          	//--- End of Writing
+    471          	WriteTW88( 0xff, OSD_PAGE ); 			// ### Don't miss this !!!
+    472          	while( OsdCpuBusy() )
+    473          	{
+    474          		i++;
+    475          		if(i>1000) break;
+    476          	}
+    477          	i = 0;		
+    478          	while( OsdOpBusy() )
+    479          	{
+    480          		i++;
+    481          		if(i>1000) break;
+    482          	}
+    483          	OsdStart(0);
+    484          
+    485          	WriteTW88( OSD_RLECTRL, 0x00 );			// PktEn=0, RstRLE=0, Enable=0	==> Bypass
+    486          }
+    487          
+    488          //=============================================================================
+    489          //		Load Bitmap Image to XY	from SPI
+    490          //=============================================================================
+    491          //
+    492          void OsdLoadBmpXYFromSPI( struct _RLE_HEADER *p, DWORD spiaddr, WORD sx, WORD sy )
+    493          {
+    494          	//data BYTE xdata *osddata = (BYTE xdata *)0xc002;
+    495          	BYTE sbits, mode;
+    496          	DWORD cnt = p->size,i;//,i=0;
+    497          
+    498          	WriteTW88( 0xff, OSD_PAGE );
+    499          	//--- Init RLE
+    500          /*	if( p->cp & 0x0f ) {
+    501          		if ( p->cp < 0x90 )	 {
+    502          			WriteTW88( OSD_RLEDATACNT, p->cp );
+    503          		}
+    504          		else   {
+    505          			WriteTW88( OSD_RLEDATACNT, p->cp & 0x0F );		// 16bit mode
+    506          		}
+    507          		WriteTW88( OSD_RLECTRL, 0x02 );		// PktEn=0, RstRLE=1, Enable=0	==> Reset
+    508          		WriteTW88( OSD_RLECTRL, 0x11 );		// PktEn=1, RstRLE=0, Enable=1	==> Enable
+    509          	}
+    510          	else WriteTW88( OSD_RLECTRL, 0x00 );	// PktEn=0, RstRLE=0, Enable=0	==> Bypass
+    511          */
+    512          	if( p->cp & 0x0f ) 
+    513          	{
+    514          		if ((p->cp&0x0f)!=0x00)
+    515          		{
+    516          			WriteTW88( OSD_RLECTRL, 0x02 );		// PktEn=0, RstRLE=1, Enable=0	==> Reset
+    517          			WriteTW88( OSD_RLECTRL, 0x11 );		// PktEn=1, RstRLE=0, Enable=1	==> Enable
+    518          			WriteTW88( OSD_RLEDATACNT, p->cp& 0x0F );
+    519          		}
+    520          		else   
+    521          		{
+    522          			WriteTW88( OSD_RLEDATACNT, 0 );		// 16bit mode
+    523          		}
+    524          	}
+    525          	else WriteTW88( OSD_RLECTRL, 0x00 );	// PktEn=0, RstRLE=0, Enable=0	==> Bypass
+    526          
+    527          	//--- Source data bits/pixel
+    528          	switch( p->c & 0x0f ) {
+    529          		case 1: 	sbits = SOURCE1BIT;	break;
+    530          		case 2: 	sbits = SOURCE2BIT;	break;
+    531          		case 4: 	sbits = SOURCE4BIT;	break;
+    532          		default: 	sbits = SOURCE0;	break;
+    533          	}
+    534          
+    535          	//--- Write Mode
+    536          	//mode = ReadTW88( OSD_MODE ) & 0x3C; 		// clear WriteMode, Bit expansion
+    537          	//WriteTW88( OSD_MODE, mode | sbits | CPUWRITE );	  	// set CPU write mode
+    538          	mode = ReadTW88( OSD_MODE ) & 0x38; 		// clear WriteMode, Bit expansion
+    539          	OsdWriteMode( mode | sbits);
+    540          
+    541          	OsdBltDestXY(sx+WIN4_OFFSET, sy);//OsdBltDestXY(sx, sy);
+    542          	OsdBltSize(p->w, p->h);
+    543          
+    544          	OSDHardwareEnable();
+    545          	//--- Start Writing Data	
+    546          	OsdStart(1);
+    547          
+    548          	//--- Using SPI-DMA
+    549          	SPI_ReadData2Reg( spiaddr, 0x700+2, cnt);//-0x40 );//OSD_PAGE+2, cnt );//test
+    550          
+    551          	//--- End of Writing
+    552          	WriteTW88( 0xff, OSD_PAGE ); 			// ### Don't miss this !!!
+    553          	/*while( OsdCpuBusy() )
+    554          	{
+    555          		i++;
+    556          		if(i>1000) break;
+    557          	}*/
+    558          	i = 0;		
+    559          	while( OsdOpBusy() )
+    560          	{
+    561          		i++;
+    562          		if(i>1000) break;
+    563          	}
+    564          
+    565          	OsdStart(0);
+    566          
+    567          	WriteTW88( OSD_RLECTRL, 0x00 );			// PktEn=0, RstRLE=0, Enable=0	==> Bypass
+    568          }
+    569          #if		1
+    570          
+    571          //=============================================================================
+    572          //		Load 8bit Bitmap Image to 16bit window XY with Transparent from SPI
+    573          //=============================================================================
+    574          //
+    575          void OsdLoadTransBmpXYFromSPI( struct _RLE_HEADER *p, DWORD spiaddr, WORD sx, WORD sy )
+    576          {
+    577          	//data BYTE xdata *osddata = (BYTE xdata *)0xc002;
+    578          	BYTE sbits, mode;
+    579          	DWORD cnt = p->size;
+    580          
+    581          //	Printf("\nLoad 8bit Bitmap to XY from SPI [%06lx] to (%04x, %04x) with 16bit transparent", spiaddr, sx, sy );
+    582          //	Printf(" size[%ld] ", p->size );
+    583          
+    584          	WriteTW88( 0xff, OSD_PAGE );
+    585          	//--- Init RLE
+    586          	if( p->cp & 0x0f ) {
+    587          		if ( p->cp < 0x90 )
+    588          			WriteTW88( OSD_RLEDATACNT, p->cp );
+    589          		else   {
+    590          			WriteTW88( OSD_RLEDATACNT, p->cp & 0x0F );		// 16bit mode
+    591          		}
+    592          		WriteTW88( OSD_RLECTRL, 0x02 );		// PktEn=0, RstRLE=1, Enable=0	==> Reset
+    593          		WriteTW88( OSD_RLECTRL, 0x11 );		// PktEn=1, RstRLE=0, Enable=1	==> Enable
+    594          	}
+    595          	else WriteTW88( OSD_RLECTRL, 0x00 );	// PktEn=0, RstRLE=0, Enable=0	==> Bypass
+    596          
+    597          
+    598          	//--- Source data bits/pixel
+    599          	switch( p->c & 0x0f ) {
+    600          		case 1: 	sbits = SOURCE1BIT;	break;
+    601          		case 2: 	sbits = SOURCE2BIT;	break;
+    602          		case 4: 	sbits = SOURCE4BIT;	break;
+    603          		default: 	sbits = SOURCE0;	break;
+    604          	}
+    605          	//sbits = 3;
+    606          
+    607          	//--- Write Mode
+    608          	mode = ReadTW88( OSD_MODE ) & SOURCE_;
+    609          	mode = ReadTW88( OSD_MODE ) & 0x3C; 		// clear WriteMode, Bit expansion
+    610          	WriteTW88( OSD_MODE, mode | sbits | CPUWRITE );	  	// set CPU write mode
+    611          	//OsdWriteMode( mode | sbits );
+    612          	//OsdWriteMode( 0x03 );
+    613          
+    614          	OsdBltDestXY(sx, sy);
+    615          	OsdBltSize(p->w, p->h);
+    616          
+    617          	//--- Start Writing Data	
+    618          	OsdStart(1);
+    619          
+    620          	//--- Using SPI-DMA
+    621          	SPI_ReadData2Reg( spiaddr, OSD_PAGE+2, cnt );
+    622          
+    623          	//--- End of Writing
+    624          	WriteTW88( 0xff, OSD_PAGE ); 			// ### Don't miss this !!!
+    625          	//while( OsdCpuBusy() );// Printf("@");
+    626          	//while( OsdOpBusy() );// Printf("&");
+    627          	OsdStart(0);
+    628          
+    629          	WriteTW88( OSD_RLECTRL, 0x00 );			// PktEn=0, RstRLE=0, Enable=0	==> Bypass
+    630          }
+    631          //=============================================================================
+    632          //		Load Bitmap Image to Linear address	from SPI
+    633          //=============================================================================
+    634          //	Call OsdWriteMode() before this function is called !!!
+    635          //
+    636          
+    637          void OsdLoadBmpLinearFromSPI( struct _RLE_HEADER *p, DWORD spiaddr, DWORD ddraddr)
+    638          {
+    639          	BYTE sbits, mode;
+    640          	
+    641          	WORD w, h, w64;
+    642          	DWORD addr_temp;
+    643          	DWORD cnt = p->size;
+    644          	DWORD count;
+    645          
+    646          	WriteTW88( 0xff, OSD_PAGE );
+    647          	//--- Recalc W, H
+    648          	addr_temp = OsdBltGetDestMemoryStart();
+    649          	w64 = (WORD)OsdBltGetDestMemoryW64();
+    650          
+    651          	//Printf(" \nDestMemoryStart");  	PutDW(addr_temp);
+    652          	//Printf(" \nW64 ");			  	PutW(w64);
+    653          
+    654          
+    655          	w = 800;//w64 * 64;
+    656          	h = 480;//( (DWORD)p->w*p->h + w-1 ) / w;
+    657          
+    658          	//--- Init RLE
+    659          	if( p->cp & 0x0f ) {
+    660          		if ( p->cp < 0x90 )
+    661          			WriteTW88( OSD_RLEDATACNT, p->cp );
+    662          		else   {
+    663          			WriteTW88( OSD_RLEDATACNT, p->cp & 0x0F );		// 16bit mode
+    664          		}
+    665          		WriteTW88( OSD_RLECTRL, 0x02 );		// PktEn=0, RstRLE=1, Enable=0	==> Reset
+    666          		WriteTW88( OSD_RLECTRL, 0x11 );		// PktEn=1, RstRLE=0, Enable=1	==> Enable
+    667          	}
+    668          	else WriteTW88( OSD_RLECTRL, 0x00 );	// PktEn=0, RstRLE=0, Enable=0	==> Bypass
+    669          
+    670          	//--- Source data bits/pixel
+    671          	switch( p->c & 0x0f ) {
+    672          		case 1: 	sbits = SOURCE1BIT;	break;
+    673          		case 2: 	sbits = SOURCE2BIT;	break;
+    674          		case 4: 	sbits = SOURCE4BIT;	break;
+    675          		default: 	sbits = SOURCE0;	break;
+    676          	}
+    677          
+    678          	//--- Write Mode
+    679          	//mode = ReadTW88( OSD_MODE ) & SOURCE_;
+    680          	//mode = ReadTW88( OSD_MODE ) & 0x3C; 		// clear WriteMode, Bit expansion
+    681          	//WriteTW88( OSD_MODE, mode | sbits | CPUWRITE );	  	// set CPU write mode
+    682          	//OsdWriteMode( mode | sbits );
+    683          	mode=ReadTW88(OSD_MODE)&0x38;
+    684          	WriteTW88( OSD_MODE, mode | sbits | CPUWRITE );	  	// set CPU write mode
+    685          	//WriteTW88( OSD_MODE,mode|0x00|0x00|sbits); //MCU WRITE |1 byte per pixel |  Bit expansion
+    686          
+    687          	OsdBltDestMemoryStart(ddraddr);
+    688          	OsdBltDestMemoryW64(w64);
+    689          	
+    690          	OsdBltDestXY(0, 0);
+    691          	OsdBltSize(w, h);
+    692          //	Printf("\nFinished OsdBltSize()");
+    693          	//--- Start Write Data	
+    694          /*
+    695          	count=0;
+    696          	WriteTW88(0xf0, 0x20);			// clear to 0
+    697          	while( (ReadTW88(0xf0) & 0x20)==0 )
+    698          	{
+    699          		count++;
+    700          		if(count > 5000) break;
+    701          	}	*/
+    702          	
+    703          	OsdStart(1);
+    704          
+    705          	//--- Using SPI-DMA
+    706          //	Printf("\nB4 SPI_ReadData2Reg(): count:%ld", cnt);
+    707          	SPI_ReadData2Reg( spiaddr, 0x700+2, cnt );
+    708          //	Printf("\nSPI_ReadData2Rege()");
+    709          
+    710          	//--- End of Writing
+    711          	WriteTW88( 0xff, OSD_PAGE ); 			// ### Don't miss this !!!
+    712          	count=0;
+    713          	while( OsdCpuBusy() )
+    714          	{
+    715          		count++;
+    716          		if(count>5000) break;
+    717          	}
+    718          	count= 0;			
+    719          	while( OsdOpBusy() )
+    720          	{
+    721          		count++;
+    722          		if(count>5000) break;
+    723          	}		
+    724          	OsdStart(0);
+    725          
+    726          	WriteTW88( OSD_RLECTRL, 0x00 );			// PktEn=0, RstRLE=0, Enable=0	==> Bypass
+    727          
+    728          	//--- Restore Dest Memory
+    729          //	Printf("\nB4 OsdBltDestMemoryStart()");
+    730          	OsdBltDestMemoryStart(addr_temp);
+    731          //	Printf("\nB4 OsdBltDestMemoryW64()");
+    732          	OsdBltDestMemoryW64(w64);
+    733          //	Printf("\nFinished OsdLoadBmpLinearFromSPI()");
+    734          
+    735          }
+    736          
+    737          //=============================================================================
+    738          //		Load LUT
+    739          //=============================================================================
+    740          void OsdLoadLUT( BYTE winno, BYTE *ptr)
+    741          {
+    742          	WORD i;
+    743          	//BYTE r,g,b,val;
+    744          
+    745          	WriteTW88( 0xff, OSD_PAGE );
+    746          	WriteTW88( OSD_LUT_WINNO, winno<<6 );
+    747          
+    748          	for(i=0; i<256; i++) {
+    749          		WriteTW88( OSD_LUT_INDEX, i );
+    750          		WriteTW88( OSD_LUT_R, *ptr++ );
+    751          		WriteTW88( OSD_LUT_G, *ptr++ );
+    752          		WriteTW88( OSD_LUT_B, *ptr++ );
+    753          		WriteTW88( OSD_LUT_ATTR, *ptr++ );
+    754          /*
+    755          		val=0;
+    756          		b=*ptr++;
+    757          		g=*ptr++;
+    758          		r=*ptr++;
+    759          		if(b < 0x30 && b == r && g > 0xD0)
+    760          			val = 0x7F;
+    761          		WriteTW88( OSD_LUT_INDEX, i );
+    762          		WriteTW88( OSD_LUT_B, b);
+    763          		WriteTW88( OSD_LUT_G, g );
+    764          		WriteTW88( OSD_LUT_R, r );
+    765          		WriteTW88( OSD_LUT_ATTR, val );
+    766          		ptr++;	*/
+    767          
+    768          	}
+    769          }
+    770          
+    771          void LoadLUT_8Bit(BYTE WinNO,BYTE* ptr)
+    772          {
+    773          	U16 i,count=256;
+    774          	struct _PALETTEENTRY *lut;
+    775          	lut = (struct _PALETTEENTRY*)ptr;
+    776          
+    777          	WriteTW88( 0xff, OSD_PAGE );
+    778          	WriteTW88( OSD_LUT_CONTROL, WinNO<<6 );
+    779          
+    780          	for(i=0; i<count; i++) {
+    781          		WriteTW88( OSD_LUT_ADDRINDEX, i );
+    782          		WriteTW88( OSD_LUT_DATAB, lut ->data0);
+    783          		WriteTW88( OSD_LUT_DATAG, lut ->data1);
+    784          		WriteTW88( OSD_LUT_DATAR, lut ->data2);
+    785          		WriteTW88( OSD_LUT_DATAATTR, lut->data3);
+    786          		lut++;
+    787          	}
+    788          }
+    789          #endif
+    790          
+    791          void OsdLoadFontLut( BYTE winno)
+    792          {
+    793          	WORD i;
+    794          
+    795          	WriteTW88( 0xff, OSD_PAGE );
+    796          	WriteTW88( OSD_LUT_WINNO, winno<<6 );
+    797          
+    798          	WriteTW88( OSD_LUT_INDEX, 0 );
+    799          	WriteTW88( OSD_LUT_R, 0 );
+    800          	WriteTW88( OSD_LUT_G, 0 );
+    801          	WriteTW88( OSD_LUT_B, 0 );
+    802          	WriteTW88( OSD_LUT_ATTR, 0 );
+    803          
+    804          	for(i=1; i<256; i++) {
+    805          		WriteTW88( OSD_LUT_INDEX, i );
+    806          		WriteTW88( OSD_LUT_R, 0xFF );
+    807          		WriteTW88( OSD_LUT_G, 0xFF );
+    808          		WriteTW88( OSD_LUT_B, 0xFF );
+    809          		WriteTW88( OSD_LUT_ATTR, 0 );
+    810          	}
+    811          }
+    812          
+    813          //=============================================================================
+    814          //		Block Fill / Block TransferXY / Block Transfer Linear
+    815          //=============================================================================
+    816          //	Call OsdWriteMode() before this function is called !!!
+    817          //
+    818          void OsdBlockFill(WORD dx, WORD dy, WORD w, WORD h, WORD color)
+    819          {
+    820          	BYTE	mode;
+    821          	DWORD i = 0;//,j = 0;
+    822          
+    823          	WriteTW88( 0xff, OSD_PAGE );
+    824          
+    825          	OsdBltDestXY(dx, dy);
+    826          	OsdBltSize(w, h);
+    827          	OsdBltColor(color);
+    828          	
+    829          	//--- Write Mode
+    830          	//OsdWriteMode( BLOCKFILL | BLT_NO | CONV_DIS | wbits | SOURCE0 );
+    831          	mode = ReadTW88( OSD_MODE ) & 0x3F; 		// clear WriteMode
+    832          	WriteTW88( OSD_MODE, mode | BLOCKFILL );	  	// set CPU write mode
+    833          
+    834          	WriteTW88(0xf0, 0x20);			// clear to 0
+    835          	/*while( (ReadTW88(0xf0) & 0x20)==0 )
+    836          	{//RGB没有信号时会特别慢
+    837          		j++;
+    838          		if(j == 2000) break;
+    839          	}	*/
+    840          
+    841          	OsdStart(1);
+    842          	i=0;
+    843          	while( OsdOpBusy() )
+    844          	{
+    845          		i++;
+    846          		if(i>2000) break;	
+    847          	}
+    848          	OsdStart(0);
+    849          	
+    850          	//Printf("\nBlock Fill Done ");
+    851          		
+    852          }
+    853          void	InitStartAdr(BYTE winno)
+    854          {
+    855          	DWORD start;
+    856          	switch(winno){
+    857          	 	case 0:		start = WIN0_DDR_START;		break;
+    858          	 	case 1:		start = WIN1_DDR_START;		break;
+    859          	 	case 4:		start = WIN4_DDR_START;		break;
+    860          	}
+    861          	OsdBltSourceMemoryStart( start );					//单元
+    862          	OsdBltDestMemoryStart( start );
+    863          
+    864          	//-----Define BitBlit Window
+    865          	if(winno == 4){
+    866          		OsdBltSourceMemoryW64( g_Hx64_16Bit );
+    867          		OsdBltDestMemoryW64( g_Hx64_16Bit );
+    868          	}else{
+    869          		OsdBltSourceMemoryW64( g_Hx64_8Bit );
+    870          		OsdBltDestMemoryW64( g_Hx64_8Bit );
+    871          	}
+    872          }
+    873          void OsdBlockTransfer(BYTE win,WORD sx, WORD sy, WORD dx, WORD dy, WORD w, WORD h)
+    874          {
+    875          	BYTE	mode;
+    876          	DWORD i;	
+    877          	switch(win)
+    878          		{
+    879          	 	case 0:		
+    880          			InitStartAdr(0);		
+    881          			//WriteTW88( 0xff, OSD_PAGE );			
+    882          			//OsdWriteMode( CPUWRITE | BLT_SELECTIVE | CONV_DIS | PIXEL8 );
+    883          			//OsdNoWriteColor( 0, 2 );			// set black as No Write color			
+    884          			break;
+    885          //________________________***___________________________________________//			
+    886          	 	case 1:		
+    887          			InitStartAdr(1);		
+    888          			WriteTW88( 0xff, OSD_PAGE );			
+    889          			OsdWriteMode( CPUWRITE | BLT_SELECTIVE | CONV_DIS | PIXEL8 );
+    890          			OsdNoWriteColor( 0, 2 );			// set black as No Write color			
+    891          			break;	 	
+    892          	 	case 4:
+    893          			InitStartAdr(4);	
+    894          			break;
+    895          		}	
+    896          	WriteTW88( 0xff, OSD_PAGE );
+    897          
+    898          	//sx=(sx/8)*8;//test
+    899          	OsdBltSourceXY(sx, sy);
+    900          	OsdBltDestXY(dx, dy);
+    901          	OsdBltSize(w, h);
+    902          	
+    903          	//--- Write Mode
+    904          	//OsdWriteMode( BLOCKTRANS | BLT_NO | CONV_DIS | wbits | SOURCE0 );
+    905          	mode = ReadTW88( OSD_MODE ) & 0x3F; 		// clear WriteMode
+    906          	WriteTW88( OSD_MODE, mode | BLOCKTRANS );	  	// set CPU write mode
+    907          
+    908          	OsdStart(1);
+    909          	i=0;
+    910          	while( OsdOpBusy() )
+    911          	{
+    912          		i++;
+    913          		if(i>2000) break;	
+    914          	}       
+    915          	OsdStart(0);	
+    916          }
+    917          #if		1
+    918          void OsdBlockTransferLinear( DWORD addr, WORD dx, WORD dy, WORD w, WORD h)
+    919          {
+    920          	DWORD addr_temp,i;
+    921          	BYTE	mode;
+    922          
+    923          	addr_temp = WIN4_DDR_START;	//OsdBltGetSourceMemoryStart();
+    924          
+    925          	OsdBltSourceMemoryStart(addr);
+    926          	OsdBltSourceXY(0, 0);
+    927          
+    928          	OsdBltDestXY(dx, dy);
+    929          	OsdBltSize(w, h);
+    930          	
+    931          	//--- Write Mode
+    932          	//OsdWriteMode( BLOCKTRANSL | BLT_NO | CONV_DIS | wbits | SOURCE0 );
+    933          	mode = ReadTW88( OSD_MODE ) & 0x3F; 		// clear WriteMode
+    934          	WriteTW88( OSD_MODE, mode | BLOCKTRANSL );	  	// set CPU write mode
+    935          
+    936          	OsdStart(1);
+    937          	i=0;
+    938          	while( OsdOpBusy() )
+    939          	{
+    940          		i++;
+    941          		if(i>2000) break;	
+    942          	}       	OsdStart(0);	
+    943          
+    944          	OsdBltSourceMemoryStart(addr_temp);
+    945          }
+    946          
+    947          
+    948          
+    949          //=============================================================================
+    950          //		set special expansion for block transfer
+    951          //		mode 0: disable
+    952          //			 2: rgb565, 4: rgb4444, 6:rgb1555
+    953          //=============================================================================
+    954          void OsdSpecialExpansion( BYTE mode )
+    955          {
+    956          	WriteTW88( 0xff, OSD_PAGE );
+    957          	if ( mode ) {
+    958          		mode += 0x50;
+    959          	}
+    960          	else mode = 0x40;
+    961          	WriteTW88( OSD_SPECIAL, mode );		// 0x703
+    962          }
+    963          
+    964          //=============================================================================
+    965          //		Load 8bit to 16bit color extensionwith transparent
+    966          //=============================================================================
+    967          //void Osd16bitTransparent( BYTE wbits )
+    968          //{
+    969          //	wbits = 0;
+    970          /*
+    971          	OsdLoadFontTransparent( wbits );
+    972          
+    973          	WriteTW88( 0xff, OSD_PAGE );
+    974          	OsdBltSourceMemoryStart( OSDTP8_DDR_START );				// set source memory
+    975          
+    976          	WriteTW88( 0xff, OSD_PAGE );
+    977          //	WriteTW88( 0x0E, 0x00 ); WriteTW88( 0x0F, 0x1F ); // set Block Fill Color : BLUE
+    978          //	WriteTW88( 0x0E, 0x42 ); WriteTW88( 0x0F, 0x10 ); // set Block Fill Color : grey
+    979          	WriteTW88( 0x0E, 0x7f ); WriteTW88( 0x0F, 0xff ); // set Block Fill Color : WHTIE
+    980          	WriteTW88( 0x20, 0x78 ); WriteTW88( 0x21, 0x00 ); // set bit expansion table 0 to RED
+    981          //	WriteTW88( 0x20, 0xc1 ); WriteTW88( 0x21, 0xc0 ); // set bit expansion table 0 to grey
+    982          
+    983          	WriteTW88( 0xff, OSD_PAGE );
+    984          	WriteTW88( 0xc0, 0x03 ); // set Win4 format to RGB565
+    985          	
+    986          	// set 16bit pixel
+    987          	// set bit expansion none
+    988          	// clear special Expansion
+    989          	// format to RGB565
+    990          	// Write Mode to Blcok Fill
+    991          	WriteTW88( OSD_MODE, 0xb0 );
+    992          	//WriteTW88( OSD_SPECIAL, 0x42 );
+    993          	WriteTW88( OSD_SPECIAL, 0x46 );
+    994          	OsdStart(1); // start 
+    995          	WriteTW88( 0xff, OSD_PAGE ); 			// ### Don't miss this !!!
+    996          	while( OsdCpuBusy() ) Printf("@");
+    997          	while( OsdOpBusy() ) Printf("&");
+    998          	OsdStart(0);
+    999          
+   1000          	WriteTW88(0x75, 0x80);	
+   1001          	WriteTW88( 0xff, OSD_PAGE );
+   1002          	// set 16bit pixel
+   1003          	// set bit expansion 4,8
+   1004          	// set special Expansion
+   1005          	// format to RGB565
+   1006          	// Write Mode to Blcok Transfer
+   1007          	WriteTW88( 0x00, 0xf3 );
+   1008          	//WriteTW88( 0x03, 0x52 );
+   1009          	WriteTW88( 0x03, 0x56 );
+   1010          	OsdStart(1); // start 
+   1011          	WriteTW88( 0xff, OSD_PAGE ); 			// ### Don't miss this !!!
+   1012          	while( OsdCpuBusy() ) Printf("@");
+   1013          	while( OsdOpBusy() ) Printf("&");
+   1014          	OsdStart(0);
+   1015          
+   1016          	OsdWinEnable( 0, 0 );
+   1017          	OsdWinEnable( 1, 0 );
+   1018          	OsdWinEnable( 4, 3 );
+   1019          */
+   1020          //}
+   1021          #endif
+   1022          
+   1023          //=============================================================================
+   1024          //		Global Alpha
+   1025          //=============================================================================
+   1026          void	WinGlobalAlphaEnalbe(BYTE winno,BYTE alpha)
+   1027          {
+   1028          	BYTE index = OsdWinBase[winno] + OSDWIN_ENABLE;
+   1029          	BYTE dat;
+   1030          	
+   1031          	WriteTW88( 0xff, OSD_PAGE );
+   1032          	dat = ReadTW88(index);
+   1033          	
+   1034          	dat &= 0xDF;	//Clear Bit5
+   1035          	dat |= 0x10;	//Set   Bit4
+   1036          
+   1037          	WriteTW88(index, dat);
+   1038          	WriteTW88(OsdWinBase[winno] + OSDWIN_ALPHA, alpha);
+   1039          }
+   1040          
+   1041          //=============================================================================
+   1042          //		Global Alpha
+   1043          //=============================================================================
+   1044          void	WinGlobalAlphaDisalbe(BYTE winno)
+   1045          {
+   1046          	BYTE index = OsdWinBase[winno] + OSDWIN_ENABLE;
+   1047          	BYTE dat;
+   1048          	
+   1049          	WriteTW88( 0xff, OSD_PAGE );
+   1050          	dat = ReadTW88(index);
+   1051          	
+   1052          	dat |= 0x20;	//Set Bit5
+   1053          	dat |= 0x10;	//Set Bit4
+   1054          
+   1055          	WriteTW88(index, dat);
+   1056          	WriteTW88(OsdWinBase[winno] + OSDWIN_ALPHA, 0x7F);
+   1057          }
+   1058          
+   1059          #if 	0
+   1060          //=============================================================================
+   1061          //		Set Mirror
+   1062          //=============================================================================
+   1063          void OsdMirror( BYTE on )
+   1064          {
+   1065          	BYTE i;
+   1066          
+   1067          	//--- Set Conversion Color
+   1068          	WriteTW88( 0xff, OSD_PAGE );
+   1069          	i = ReadTW88( 0x78 );
+   1070          	if ( on ) 
+   1071          		i |= 0x10;
+   1072          	else
+   1073          		i &= 0xEF;
+   1074          	WriteTW88( 0x78, i );
+   1075          }
+   1076          //=============================================================================
+   1077          //		Set Flip
+   1078          //=============================================================================
+   1079          void OsdFlip( BYTE on )
+   1080          {
+   1081          	BYTE i;
+   1082          
+   1083          	//--- Set Conversion Color
+   1084          	WriteTW88( 0xff, OSD_PAGE );
+   1085          	i = ReadTW88( 0x78 );
+   1086          	if ( on ) 
+   1087          		i |= 0x20;
+   1088          	else
+   1089          		i &= 0xDF;
+   1090          	WriteTW88( 0x78, i );
+   1091          }
+   1092          //=============================================================================
+   1093          //		Animation: Call in main loop
+   1094          //=============================================================================
+   1095          void Animation(void)
+   1096          {
+   1097          	BYTE i, page, val=0;
+   1098          	struct st_animation *ani;
+   1099          	static BYTE vlast=0;
+   1100          
+   1101          	if( !AnimationON ) return;
+   1102          
+   1103          	//----- Check V Blank
+   1104          	page = ReadTW88(0xff);
+   1105          	WriteTW88( 0xff, OSD_PAGE );
+   1106          	val = ReadTW88(0xf0) & 0x01;
+   1107          
+   1108          	if ( !vlast ) {
+   1109          		vlast = val;
+   1110          		goto ret;
+   1111          		//return;
+   1112          	}
+   1113          	if ( val ) 
+   1114          		goto ret;
+   1115          		//return; 
+   1116          	vlast = val;
+   1117          
+   1118          	//----- Animation
+   1119          
+   1120          	OsdWriteMode( BLOCKTRANS | BLT_NO | CONV_DIS | PIXEL8 | SOURCE0 );
+   1121          
+   1122          	for(i=0; i<MAX_ANIMATION; i++) {
+   1123          		ani = &AnimationData[i];
+   1124          		if( ani->active ) {
+   1125          			if( --ani->vcnt==0 ) {
+   1126          				ani->vcnt = ani->speed;
+   1127          				//=========================
+   1128          				OsdBlockTransfer( ani->srcx[ani->current], ani->srcy[ani->current], ani->x, ani->y, ani->w, ani->h );
+   1129          				//=========================
+   1130          				ani->current++;
+   1131          				if( ani->current>=ani->max ) ani->current = 0;
+   1132          			}
+   1133          		}
+   1134          	}
+   1135          
+   1136          ret:
+   1137          	WriteTW88(0xff,page);
+   1138          
+   1139          }
+   1140          #endif
+   1141          
+   1142          //*****************************************************************************
+   1143          //				Initialize OSD
+   1144          //*****************************************************************************
+   1145          #define WIN0_START		0L
+   1146          #define WIN0_BUFX		(1024*2)
+   1147          #define WIN0_BUFY		(800*2)
+   1148          #if	0
+   1149          void OsdInit(BYTE winno,WORD w,WORD h)	
+   1150          {	
+   1151          	WriteTW88(0xff, OSD_PAGE);
+   1152          	WriteTW88(0x78, 0x02);	// Update right away
+   1153          
+   1154          	//----- Define Window 
+   1155          	OsdWinBuffer(winno, WIN0_START, WIN0_BUFX/64, WIN0_BUFY/64);		//显存
+   1156          	OsdWinBufferOffsetXY(winno, 0, 0);
+   1157          	OsdWinScreen(winno, 0, 0, PNL_W, PNL_H);						  	//窗口大小
+   1158          
+   1159           
+   1160          	//-----Define BitBlit Window
+   1161          	OsdBltSourceMemoryStart( WIN0_START );				//单元
+   1162          	OsdBltSourceMemoryW64( WIN0_BUFX/64 );
+   1163          
+   1164          	OsdBltDestMemoryStart( WIN0_START );
+   1165          	OsdBltDestMemoryW64( WIN0_BUFX/64 );
+   1166          }
+   1167          #else
+   1168          void OsdInit_16Bit(BYTE winno,WORD w,WORD h)		
+   1169          {
+   1170          	DWORD start;
+   1171          	WORD bufX,bufY;
+   1172          
+   1173          	WriteTW88(0xff, OSD_PAGE);
+   1174          	WriteTW88(0x78, 0x02);	// Update right away
+   1175          
+   1176          	start = WIN4_DDR_START;
+   1177          	bufX = 2048;//w*2 + 64;
+   1178          	bufY = 2048;//h*2 + 64;
+   1179          	//bufX =w*2 + 64;
+   1180          	//bufY =h*2 + 64;
+   1181          	
+   1182          	//----- Define Window 
+   1183          	OsdWinBuffer(winno, start, bufX/64, bufY/64);		//显存
+   1184          	OsdWinBufferOffsetXY(winno, 0, 0);
+   1185          	OsdWinScreen(winno, 0, 0, w, h);					//窗口大小
+   1186          
+   1187           
+   1188          	//-----Define BitBlit Window
+   1189          	OsdBltSourceMemoryStart( start );					//单元
+   1190          	OsdBltSourceMemoryW64( bufX/64 );
+   1191          
+   1192          	OsdBltDestMemoryStart( start );
+   1193          	OsdBltDestMemoryW64( bufX/64 );
+   1194          
+   1195          	g_Hx64_16Bit = bufX/64;
+   1196          }
+   1197          
+   1198          
+   1199          void OsdInit_8Bit(BYTE winno,WORD w,WORD h)		
+   1200          {
+   1201          	DWORD start;
+   1202          	WORD bufX,bufY;
+   1203          
+   1204          	WriteTW88(0xff, OSD_PAGE);
+   1205          	WriteTW88(0x78, 0x02);	// Update right away
+   1206          
+   1207          	switch(winno){
+   1208          	 	case 0:		start = WIN0_DDR_START;		break;
+   1209          	 	case 1:		start = WIN1_DDR_START;		break;
+   1210          	}
+   1211          	bufX = 2048;//w*2;
+   1212          	bufY = 2048;//h*2;
+   1213          	//bufX = w*2;
+   1214          	//bufY = h*2;
+   1215          	
+   1216          	//----- Define Window 
+   1217          	OsdWinBuffer(winno, start, bufX/64, bufY/64);		//显存
+   1218          	OsdWinBufferOffsetXY(winno, 0, 0);
+   1219          	OsdWinScreen(winno, 0, 0, w, h);					//窗口大小
+   1220          
+   1221           
+   1222          	//-----Define BitBlit Window
+   1223          	OsdBltSourceMemoryStart( start );					//单元
+   1224          	OsdBltSourceMemoryW64( bufX/64 );
+   1225          
+   1226          	OsdBltDestMemoryStart( start );
+   1227          	OsdBltDestMemoryW64( bufX/64 );
+   1228          
+   1229          	g_Hx64_8Bit = bufX/64;
+   1230          }
+   1231          
+   1232          
+   1233          
+   1234          #endif
+   1235          
+   1236          
+   1237          
+   1238          
+   1239          
+   1240          
+   1241          #define		ARIALINDEX_SPI_START			0x7E0000
+   1242          #define		ARIAL8bitFont_SPI_START			0x7F0000
+   1243          
+   1244          const struct _RLE_HEADER Arrial_Header[] = {    // File Header
+   1245              0x54, 0x57, 0x01, 0x43, 3863, 0, 2510,0 };  
+   1246          
+   1247          //=============================================================================
+   1248          //		Load Fonts MVBoli from linear addressing 8bit mode
+   1249          //=============================================================================
+   1250          void OsdLoadFontArial(void)
+   1251          {
+   1252          	//WORD	x, y, w, h;
+   1253          	BYTE i;
+   1254          	BYTE sbits, mode;
+   1255          	BYTE Font_W,Font_H;
+   1256          	DWORD adr,spiaddr;
+   1257          	WORD fs;
+   1258          	
+   1259          	//WORD  w64;
+   1260          	//DWORD addr_temp;
+   1261          
+   1262          	//--- Set Expansion Color
+   1263          	WriteTW88( 0xff, OSD_PAGE );
+   1264          	WriteTW88( 0x10, 0x00 );		// 0 -> 0x00 -> 0x00
+   1265          	WriteTW88( 0x11, 0xff );		// 1 -> 0x01 -> 0xFF
+   1266          
+   1267          	OsdWriteMode( CPUWRITE | BLT_NO | CONV_DIS | PIXEL8 );
+   1268          
+   1269          	//OsdLoadBmpLinearFromSPI( Arrial_Header, ARIAL8bitFont_SPI_START, LINEAR_DDR_START );
+   1270          	WriteTW88( 0xff, OSD_PAGE );
+   1271          
+   1272          	//--- Init RLE
+   1273          	if( Arrial_Header->cp & 0x0f ) {
+   1274          		WriteTW88( OSD_RLECTRL, 0x02 );		// PktEn=0, RstRLE=1, Enable=0	==> Reset
+   1275          		WriteTW88( OSD_RLECTRL, 0x11 );		// PktEn=1, RstRLE=0, Enable=1	==> Enable
+   1276          		WriteTW88( OSD_RLEDATACNT, Arrial_Header->cp );
+   1277          	}else
+   1278          		WriteTW88( OSD_RLECTRL, 0x00 );	// PktEn=0, RstRLE=0, Enable=0	==> Bypass
+   1279          
+   1280          	//--- Source data bits/pixel
+   1281          	switch( Arrial_Header->c & 0x0f ) {
+   1282          		case 1: 	sbits = SOURCE1BIT;	break;
+   1283          		case 2: 	sbits = SOURCE2BIT;	break;
+   1284          		case 4: 	sbits = SOURCE4BIT;	break;
+   1285          		default: 	sbits = SOURCE0;	break;
+   1286          	}
+   1287          
+   1288          	WriteTW88(0x10,0x00); 
+   1289          	WriteTW88(0x11,0x01);
+   1290          
+   1291          	mode=ReadTW88(OSD_MODE)&0x38;
+   1292          	//WriteTW88( OSD_MODE, mode | sbits | CPUWRITE );	  	// set CPU write mode
+   1293          	WriteTW88( OSD_MODE,mode|0x00|0x04|sbits); //MCU WRITE |1 byte per pixel |  Bit expansion
+   1294          
+   1295          
+   1296          	SPI_ReadData2xdata( ARIALINDEX_SPI_START, SPI_Buffer, HEARDER_INFO_LEN );
+   1297          	//Printf("\nLoad Font Index: ");
+   1298          	for(i = 0;i<128;i++){
+   1299          		//Put(SPI_Buffer[i],16);//Printf(" ");
+   1300          	}
+   1301           
+   1302          	adr=113;
+   1303          	Font_W = 16;
+   1304          	Font_H=33;
+   1305          	fs=66;
+   1306          
+   1307          	Font_W = (Font_W+7)>>3<<3;
+   1308          
+   1309          	//--- Recalc W, H
+   1310          	OsdBltDestXY(10, 10);
+   1311          	OsdBltSize(Font_W, Font_H);
+   1312          	spiaddr = ARIAL8bitFont_SPI_START + adr;
+   1313          
+   1314          
+   1315          
+   1316          	OsdBltDestMemoryStart(WIN1_DDR_START);
+   1317          	
+   1318          //	Printf("\nFinished OsdBltSize()");
+   1319          	//--- Start Write Data	
+   1320          	OSDHardwareEnable();
+   1321          	OsdStart(1);
+   1322          
+   1323          	//--- Using SPI-DMA
+   1324          //	Printf("\nB4 SPI_ReadData2Reg(): count:%ld", cnt);
+   1325          	SPI_ReadData2Reg( spiaddr, OSD_PAGE+2, fs );
+   1326          //	Printf("\nSPI_ReadData2Rege()");
+   1327          
+   1328          	//--- End of Writing
+   1329          	WriteTW88( 0xff, OSD_PAGE ); 			// ### Don't miss this !!!
+   1330          	//while( OsdCpuBusy() );// Printf("@");
+   1331          	//while( OsdOpBusy() );// Printf("&");
+   1332          	OsdStart(0);
+   1333          
+   1334          	WriteTW88( OSD_RLECTRL, 0x00 );			// PktEn=0, RstRLE=0, Enable=0	==> Bypass
+   1335          
+   1336          	//--- Restore Dest Memory
+   1337          //	Printf("\nB4 OsdBltDestMemoryStart()");
+   1338          	//OsdBltDestMemoryStart(addr_temp);
+   1339          //	Printf("\nB4 OsdBltDestMemoryW64()");
+   1340          	//OsdBltDestMemoryW64(w64);
+   1341          //	Printf("\nFinished OsdLoadBmpLinearFromSPI()");
+   1342          }
+   1343          
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       16  If_Windown_Display
+             16 -> ReadTW88
+             16 -> WriteTW88
+       16  InitStartAdr
+             16 -> OsdBltDestMemoryStart
+             16 -> OsdBltDestMemoryW64
+             16 -> OsdBltSourceMemoryStart
+             16 -> OsdBltSourceMemoryW64
+       16  LoadLUT_8Bit
+             16 -> WriteTW88
+        8  OSDHardwareEnable
+              8 -> ReadTW88
+              8 -> WriteTW88
+        8  Osd16Format
+              8 -> ReadTW88
+              8 -> WriteTW88
+       32  OsdBlockFill
+             32 -> OsdBltColor
+             32 -> OsdBltDestXY
+             32 -> OsdBltSize
+             32 -> OsdOpBusy
+             32 -> OsdStart
+             32 -> ReadTW88
+             32 -> WriteTW88
+       32  OsdBlockTransfer
+             32 -> InitStartAdr
+             32 -> OsdBltDestXY
+             32 -> OsdBltSize
+             32 -> OsdBltSourceXY
+             32 -> OsdNoWriteColor
+             32 -> OsdOpBusy
+             32 -> OsdStart
+             32 -> OsdWriteMode
+             32 -> ReadTW88
+             32 -> WriteTW88
+       24  OsdBlockTransferLinear
+             24 -> OsdBltDestXY
+             24 -> OsdBltSize
+             24 -> OsdBltSourceMemoryStart
+             24 -> OsdBltSourceXY
+             24 -> OsdOpBusy
+             24 -> OsdStart
+             24 -> ReadTW88
+             24 -> WriteTW88
+       16  OsdBltColor
+             16 -> WriteTW88
+       16  OsdBltDestMemoryStart
+             16 -> WriteTW88
+        8  OsdBltDestMemoryW64
+              8 -> WriteTW88
+       16  OsdBltDestXY
+             16 -> WriteTW88
+        8  OsdBltGetDestMemoryStart
+              8 -> ReadTW88
+              8 -> WriteTW88
+        8  OsdBltGetDestMemoryW64
+              8 -> ReadTW88
+              8 -> WriteTW88
+        8  OsdBltGetSourceMemoryStart
+              8 -> ReadTW88
+              8 -> WriteTW88
+       16  OsdBltSize
+             16 -> WriteTW88
+       16  OsdBltSourceMemoryStart
+             16 -> WriteTW88
+        8  OsdBltSourceMemoryW64
+              8 -> WriteTW88
+       16  OsdBltSourceXY
+             16 -> WriteTW88
+        8  OsdCpuBusy
+              8 -> ReadTW88
+              8 -> WriteTW88
+       32  OsdInit_16Bit
+             32 -> OsdBltDestMemoryStart
+             32 -> OsdBltDestMemoryW64
+             32 -> OsdBltSourceMemoryStart
+             32 -> OsdBltSourceMemoryW64
+             32 -> OsdWinBuffer
+             32 -> OsdWinBufferOffsetXY
+             32 -> OsdWinScreen
+             32 -> WriteTW88
+       32  OsdInit_8Bit
+             32 -> OsdBltDestMemoryStart
+             32 -> OsdBltDestMemoryW64
+             32 -> OsdBltSourceMemoryStart
+             32 -> OsdBltSourceMemoryW64
+             32 -> OsdWinBuffer
+             32 -> OsdWinBufferOffsetXY
+             32 -> OsdWinScreen
+             32 -> WriteTW88
+       40  OsdLoadBmpLinearFromSPI
+             40 -> OsdBltDestMemoryStart
+             40 -> OsdBltDestMemoryW64
+             40 -> OsdBltDestXY
+             40 -> OsdBltGetDestMemoryStart
+             40 -> OsdBltGetDestMemoryW64
+             40 -> OsdBltSize
+             40 -> OsdCpuBusy
+             40 -> OsdOpBusy
+             40 -> OsdStart
+             40 -> ReadTW88
+             40 -> SPI_ReadData2Reg
+             40 -> WriteTW88
+       32  OsdLoadBmpXYFromSPI
+             32 -> OSDHardwareEnable
+             32 -> OsdBltDestXY
+             32 -> OsdBltSize
+             32 -> OsdOpBusy
+             32 -> OsdStart
+             32 -> OsdWriteMode
+             32 -> ReadTW88
+             32 -> SPI_ReadData2Reg
+             32 -> WriteTW88
+       32  OsdLoadBmpXYFromSPI_8bit
+             32 -> OSDHardwareEnable
+             32 -> OsdBltDestXY
+             32 -> OsdBltSize
+             32 -> OsdCpuBusy
+             32 -> OsdOpBusy
+             32 -> OsdStart
+             32 -> ReadTW88
+             32 -> SPI_ReadData2Reg
+             32 -> WriteTW88
+       24  OsdLoadFontArial
+             24 -> OSDHardwareEnable
+             24 -> OsdBltDestMemoryStart
+             24 -> OsdBltDestXY
+             24 -> OsdBltSize
+             24 -> OsdStart
+             24 -> OsdWriteMode
+             24 -> ReadTW88
+             24 -> SPI_ReadData2Reg
+             24 -> SPI_ReadData2xdata
+             24 -> WriteTW88
+        8  OsdLoadFontLut
+              8 -> WriteTW88
+       16  OsdLoadLUT
+             16 -> WriteTW88
+       32  OsdLoadTransBmpXYFromSPI
+             32 -> OsdBltDestXY
+             32 -> OsdBltSize
+             32 -> OsdStart
+             32 -> ReadTW88
+             32 -> SPI_ReadData2Reg
+             32 -> WriteTW88
+       16  OsdNoWriteColor
+             16 -> WriteTW88
+        8  OsdOpBusy
+              8 -> ReadTW88
+              8 -> WriteTW88
+       16  OsdSourceColor
+             16 -> WriteTW88
+        8  OsdSpecialExpansion
+              8 -> WriteTW88
+        8  OsdStart
+              8 -> WriteTW88
+       16  OsdTargetColor
+             16 -> WriteTW88
+        0  OsdWaitDisplayBlank
+        8  OsdWin01Enable
+              8 -> WriteTW88
+        8  OsdWin01Undisable
+              8 -> WriteTW88
+       24  OsdWinBuffer
+             24 -> WriteTW88
+       16  OsdWinBufferMem
+             16 -> WriteTW88
+       16  OsdWinBufferOffsetXY
+             16 -> WriteTW88
+        8  OsdWinDisplay
+              8 -> WriteTW88
+       16  OsdWinEnable
+             16 -> ReadTW88
+             16 -> WriteTW88
+       24  OsdWinScreen
+             24 -> WriteTW88
+       16  OsdWinStart
+             16 -> WriteTW88
+       16  OsdWinTransparent
+             16 -> ReadTW88
+             16 -> WriteTW88
+        8  OsdWriteMode
+              8 -> WriteTW88
+       16  WinGlobalAlphaDisalbe
+             16 -> ReadTW88
+             16 -> WriteTW88
+       16  WinGlobalAlphaEnalbe
+             16 -> ReadTW88
+             16 -> WriteTW88
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable11
+       4  ??DataTable13
+       4  ??DataTable13_1
+       4  ??DataTable13_2
+       4  ??DataTable13_3
+     416  AnimationData
+       1  AnimationON
+      20  Arrial_Header
+      88  If_Windown_Display
+     100  InitStartAdr
+      84  LoadLUT_8Bit
+      30  OSDHardwareEnable
+      36  Osd16Format
+     118  OsdBlockFill
+     168  OsdBlockTransfer
+     106  OsdBlockTransferLinear
+      42  OsdBltColor
+      56  OsdBltDestMemoryStart
+      24  OsdBltDestMemoryW64
+      72  OsdBltDestXY
+      42  OsdBltGetDestMemoryStart
+      18  OsdBltGetDestMemoryW64
+      42  OsdBltGetSourceMemoryStart
+      72  OsdBltSize
+      56  OsdBltSourceMemoryStart
+      24  OsdBltSourceMemoryW64
+      72  OsdBltSourceXY
+      28  OsdCpuBusy
+     132  OsdInit_16Bit
+     150  OsdInit_8Bit
+     288  OsdLoadBmpLinearFromSPI
+     236  OsdLoadBmpXYFromSPI
+     258  OsdLoadBmpXYFromSPI_8bit
+     280  OsdLoadFontArial
+     116  OsdLoadFontLut
+      86  OsdLoadLUT
+     222  OsdLoadTransBmpXYFromSPI
+      50  OsdNoWriteColor
+      28  OsdOpBusy
+      50  OsdSourceColor
+      36  OsdSpecialExpansion
+      14  OsdStart
+      50  OsdTargetColor
+       2  OsdWaitDisplayBlank
+      20  OsdWin01Enable
+      20  OsdWin01Undisable
+       8  OsdWinBase
+      98  OsdWinBuffer
+      68  OsdWinBufferMem
+      82  OsdWinBufferOffsetXY
+      24  OsdWinDisplay
+      64  OsdWinEnable
+     160  OsdWinScreen
+      82  OsdWinStart
+      64  OsdWinTransparent
+      24  OsdWriteMode
+     128  SPI_Buffer
+      64  WinGlobalAlphaDisalbe
+      68  WinGlobalAlphaEnalbe
+       1  g_Hx64_16Bit
+       1  g_Hx64_8Bit
+       1  g_Page
+       4  g_Transp_Color
+
+ 
+   552 bytes in section .bss
+     8 bytes in section .data
+    20 bytes in section .rodata
+ 4 134 bytes in section .text
+ 
+ 4 134 bytes of CODE  memory
+    20 bytes of CONST memory
+   560 bytes of DATA  memory
+
+Errors: none
+Warnings: none
