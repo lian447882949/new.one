@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/aoretech/!svn/ver/12387/TD/BNT4000G-I/LCD/2.1.1/bootloader/SOFTWARE/FWLib/LIB/USB
+END
+usb_core.c
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/aoretech/!svn/ver/12387/TD/BNT4000G-I/LCD/2.1.1/bootloader/SOFTWARE/FWLib/LIB/USB/usb_core.c
+END
+usb_int.c
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/aoretech/!svn/ver/12387/TD/BNT4000G-I/LCD/2.1.1/bootloader/SOFTWARE/FWLib/LIB/USB/usb_int.c
+END
+usb_mem.c
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/aoretech/!svn/ver/12387/TD/BNT4000G-I/LCD/2.1.1/bootloader/SOFTWARE/FWLib/LIB/USB/usb_mem.c
+END
+usb_regs.c
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/aoretech/!svn/ver/12387/TD/BNT4000G-I/LCD/2.1.1/bootloader/SOFTWARE/FWLib/LIB/USB/usb_regs.c
+END
+usb_init.c
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/aoretech/!svn/ver/12387/TD/BNT4000G-I/LCD/2.1.1/bootloader/SOFTWARE/FWLib/LIB/USB/usb_init.c
+END
